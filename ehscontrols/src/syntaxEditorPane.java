@@ -176,8 +176,10 @@ public class syntaxEditorPane extends JTextPane implements DocumentListener,KeyL
 		public void setScrollPane(SEPScrollPane sp) {this.sp = sp;}
 		public SEPScrollPane getScrollPane() {return sp;}
 		public void gotoLine() {
-			//int gotoLine = getPropValue("Enter Line Number","Line Number (1-"+String.valueOf(getMaxLineNumber())+"):",getCurrentRow()+1);
-			int gotoLine = 0;
+			String r = supportFunctions.getDataAsDialog(null,"Enter Line Number",
+					"Line Number (1-"+String.valueOf(getMaxLineNumber())+"):",
+					String.valueOf(getCurrentRow()+1));
+			int gotoLine = Integer.parseInt(r);
 			if (gotoLine > 0 && gotoLine < getMaxLineNumber()+1) {
 				int pos = 1; // 1st documentPos is 1
 				gotoLine = gotoLine - 1; // make zero based

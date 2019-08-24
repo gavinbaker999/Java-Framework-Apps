@@ -151,8 +151,7 @@ public class transTableDrawingItem extends drawingItem {
 		public void editor() {
 			String[] titles = new String[]{"Text","Trans Text","Flags"};			
 			String[] defaults = new String[] {getText(),getTransText(),getFlags()};
-			//String[] data = getDataAsDialog("Edit Trans Table Element",titles,defaults);
-			String[] data = null;
+			String[] data = supportFunctions.getDataAsDialog("Edit Trans Table Element",titles,defaults);
 			if (data != null) {
 				text = data[0];
 				transtext = data[1];

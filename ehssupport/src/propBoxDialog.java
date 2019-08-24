@@ -104,58 +104,52 @@ import javax.naming.*;
 //import javax.xml.xquery.XQResultSequence;
 //import com.saxonica.xqj.SaxonXQDataSource;
 
-public class statusCanvasDialog extends JDialog implements TableModelListener {
-
-		// this is an inner classs so it has access to the 'props' variable ...
-		public class statusCanvasTableCellRenderer extends DefaultTableCellRenderer {
-			public Component getTableCellRendererComponent(JTable table,Object value,boolean isSelected,
-                                                 boolean hasFocus,int row,int column) {
-				Component c = super.getTableCellRendererComponent(table, value,isSelected, hasFocus,row, column);
-			
-				statusCanvasProp tmp = (statusCanvasProp)props.elementAt(row);
-				if (tmp.getComboOpts() != null) {
-					JComboBox cb = new JComboBox();
-					String[] opts = tmp.getComboOpts();
-					String propValue = tmp.getValue();
-					cb.addItem(propValue);
-					for (int i=0;i<opts.length;i++) {
-						if (!propValue.equals(opts[i])) {cb.addItem(opts[i]);}
-					}
-					c = cb;
-				}
-			
-				return c;
-			}
-		}
-		// this is an inner classs so it has access to the 'props' variable ...
-		public class JTableStatusCanvas extends JTableExtra {
-		
-			public JTableStatusCanvas(DefaultTableModel m,String[] tips) {
-				super(m,tips); 
-			}
-			public TableCellEditor getCellEditor(int row, int column)
-			{	
-				int modelColumn = convertColumnIndexToModel( column );
-				statusCanvasProp tmp = (statusCanvasProp)props.elementAt(row);
-				if (tmp.getComboOpts() != null) {
-					JComboBox comboBox1 = new JComboBox( tmp.getComboOpts() );
-					return new DefaultCellEditor( comboBox1 );
-				}
-
-				return super.getCellEditor(row, column); 
-			}
-		}
-
-		private JTableStatusCanvas statusTable; 
-		private statusCanvasTableModel statusTableM;  
+public class propBoxDialog extends JDialog implements TableModelListener {
+		private JButton	OKBut,CANCELBut;
+		private JTableX statusTable; 
+		private statusCanvasTableModel statusTableM;
 		private String[] colNames = {"Name","Value"};
 		private Vector	props = new Vector();
-		private	statusCanvasDialogListener target = null;
-		private String title = "";
-		
+		private	boolean bOK = false;
+		private	String id;
+		private String title;
+		private propBoxDialogListener target = null;
+		private int charWidth = 10;
+		private int charHeight = 10;
+
+		public void addPropBoxDialogListener(propBoxDialogListener pbdl) {target = pbdl;}
+		public void removePropBoxDialogListener() {target = null;}
+		public void saveAsXML(String name) {
+			configurationSettings settings = new configurationSettings();
+			settings.openConfigurationSettings(name+"_"+id);
+			for (int j=0;j<props.size();j++) {
+				statusCanvasProp tmp = (statusCanvasProp)props.elementAt(j);
+				settings.setConfigurationSetting(tmp.getName(),tmp.getValue());
+			}
+			settings.closeConfigurationSettings();
+		}
+		public void loadAsXML(String name) {
+			configurationSettings settings = new configurationSettings();
+			settings.openConfigurationSettings(name+"_"+id);
+			for (int j=0;j<props.size();j++) {
+				statusCanvasProp tmp = (statusCanvasProp)props.elementAt(j);
+				tmp.setValue(settings.getConfigurationSetting(tmp.getName(),""));
+			}
+			settings.closeConfigurationSettings();
+		}
+		public void createComboBoxRender(String[] options,int rowNumber) {
+			JComboBox cb = new JComboBox();
+			//TableColumn tc = statusTable.getColumnModel().getColumn(colNumber);
+			
+			for (int i=0;i<options.length;i++) {
+				cb.addItem(options[i]);
+			}
+			//tc.setCellEditor(new DefaultCellEditor(cb));
+			statusTable.getRowEditorModel().addEditorForRow(rowNumber,new DefaultCellEditor(cb));
+		}
+		public JTable getStatusTable() {return statusTable;}
+		public boolean isOK() {return bOK;}
 		public Vector getProps() {return props;}
-		public void addStatusCanvasDialogListener(statusCanvasDialogListener dcu) {target = dcu;}
-		public void removeStatusCanvasDialogListener() {target = null;}
 		public void tableChanged(TableModelEvent evt) {
 			int row = evt.getFirstRow();
 			int column = evt.getColumn();
@@ -163,21 +157,13 @@ public class statusCanvasDialog extends JDialog implements TableModelListener {
 			if (row == -1 || column == -1) {return;}
 			//TRACE("tableChanged: row="+String.valueOf(row)+", column="+String.valueOf(column),4);
 			// get and set table data using getValueAt(row,column) and setValueAt(row,column)
-			// we need to cast them to the appropriate data types as stored as type Object
+			// we need to cast them to the apporiate data types as stored as type Object
 			statusCanvasProp tmp = (statusCanvasProp)props.elementAt(row);
 			Object o =  statusTable.getValueAt(row,column);
 			tmp.setValue((String)o);
-			
 			if (target != null) {
-				target.propTableUpdated(title,(String)statusTable.getValueAt(row,0),(String)(o));
+				target.propChanged(title,tmp,(String)o);
 			}
-		}
-		public void setComboOptsByName(String name,String[] opts) {
-			for (int j=0;j<props.size();j++) {
-				statusCanvasProp tmp = (statusCanvasProp)props.elementAt(j);
-				if (name.equals(tmp.getName())) {tmp.setComboOpts(opts);}
-			}
-			statusTableM.setProps(props);
 		}
 		public void setEnabledPropByName(String name,boolean enable) {
 			for (int j=0;j<props.size();j++) {
@@ -194,15 +180,9 @@ public class statusCanvasDialog extends JDialog implements TableModelListener {
 			return "";
 		}
 		public void setPropByName(String name,String value) {
-			int tableRow = -1;
 			for (int j=0;j<props.size();j++) {
 				statusCanvasProp tmp = (statusCanvasProp)props.elementAt(j);
-				if (name.equals(tmp.getName())) {tmp.setValue(value);tableRow = j;}
-			}
-			if (tableRow != -1) {
-				statusTableM.setProps(props);
-				statusTableM.setValueAt((Object)value,tableRow,1);
-				statusTableM.fireTableDataChanged();
+				if (name.equals(tmp.getName())) {tmp.setValue(value);}
 			}
 		}
 		public String[][] buildStatusCanvasTableCells() {
@@ -218,43 +198,77 @@ public class statusCanvasDialog extends JDialog implements TableModelListener {
 			return(cells);
 		}
 		
-		public statusCanvasDialog(Frame parent,String msg,Vector p1) {
-			super(parent,msg,false);
+		public propBoxDialog(Frame parent,String msg,Vector v,String id,propBoxDialogListener pbdl) {
+			super(parent,msg,true);
 			
-			title = msg;
-			
-			String[] columnToolTips = {
-				"The name of the property",
-				"The value of the property"};
-
-			target = null;
-			props = p1;
+			this.target = pbdl;
+			this.id = id;
+			this.title = msg;
+			props = v;
 			String[][]data = buildStatusCanvasTableCells();
 			statusTableM = new statusCanvasTableModel(data,colNames);
 			statusTableM.addTableModelListener(this);
 			statusTableM.setProps(props);
-			statusTable = new JTableStatusCanvas(statusTableM,columnToolTips);
-
-			// 1 because thats the value column
-			TableColumn tc1 = statusTable.getColumnModel().getColumn(1);
-			tc1.setCellRenderer(new statusCanvasTableCellRenderer());
-	
-			TableColumn tc = statusTable.getColumn(colNames[0]);
-			tc.setPreferredWidth(50); // set all three widths to get a fixed size column
-			tc.setMaxWidth(50);
-			tc.setMinWidth(50);
-			statusTable.sizeColumnsToFit(JTable.AUTO_RESIZE_OFF); // needed because bug in JVM
-			statusTable.setPreferredScrollableViewportSize(new Dimension(200,160));
+			statusTable = new JTableX(statusTableM);
+			statusTable.setPreferredScrollableViewportSize(new Dimension(250,(charHeight*props.size()))); // 100 GDB 20102016
 			JScrollPane statusTablePane = new JScrollPane(statusTable);
 			
+	        // create a RowEditorModel... this is used to hold the extra
+	        // information that is needed to deal with row specific editors
+	        RowEditorModel rm = new RowEditorModel();
+	        // tell the JTableX which RowEditorModel we are using
+	        statusTable.setRowEditorModel(rm);
+	        
+			for(int i=0;i<props.size();i++) {
+				statusCanvasProp tmp = (statusCanvasProp)props.elementAt(i);
+				if (tmp.isCombo()) {createComboBoxRender(tmp.getComboOpts(),i);}
+			}
+			
 			JPanel p = new JPanel();
+			p.setBackground(Color.gray);
+			p.setLayout(new BoxLayout(p,BoxLayout.Y_AXIS));
+			p.add(Box.createRigidArea(new Dimension(charWidth,(int) (1.5*charHeight))));
 			p.add(statusTablePane);
-			add(p);
+			p.add(Box.createRigidArea(new Dimension(charWidth,(int) (1.5*charHeight))));
+			JPanel p1 = new JPanel();
+			p1.setBackground(Color.gray);
+			p1.setLayout(new BoxLayout(p1,BoxLayout.X_AXIS));
+			OKBut = new JButton("Ok");
+			p1.add(OKBut);
+			CANCELBut = new JButton("Cancel");
+			p1.add(CANCELBut);
+			JPanel p3 = new JPanel();
+			p3.setBackground(Color.gray);
+			p3.setLayout(new BoxLayout(p3,BoxLayout.Y_AXIS));
+			p3.add(p);
+			p3.add(p1);
+			add(p3);
+
+			ActionListener OKTask = new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					bOK = true;
+					dispose();
+			   }
+			};
+			OKBut.addActionListener(OKTask);
+			ActionListener CANCELTask = new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					for (int j=0;j<props.size();j++) {
+						statusCanvasProp tmp = (statusCanvasProp)props.elementAt(j);
+						tmp.setValue(tmp.getIntValue());
+					}
+					dispose();
+			   }
+			};
+			CANCELBut.addActionListener(CANCELTask);
 	   	    addComponentListener(new ComponentAdapter() {
 				public void componentMoved(ComponentEvent evt) {
+					//savePosition(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "stc");
 				}
 			});
+			bOK = false;
 			pack();
+			//loadPosition(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "stc");
 			setVisible(true);
 		}
 		
