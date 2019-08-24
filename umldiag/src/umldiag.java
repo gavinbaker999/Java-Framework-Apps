@@ -1412,7 +1412,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					int useCaseIndex = stringIndex(umlDiagram.getUseCaseNames(),eOld.getAttribute("conn"));
 					int useCaseTextIndex = stringIndex("blank,communicates,uses,extends",eOld.getAttribute("conntext"));
 					String[] defaults = new String[] {eOld.getAttribute("name"),eOld.getAttribute("description"),getEnumValues(actorType.NONE)+",##"+String.valueOf(actorTypeIndex),umlDiagram.getUseCaseNames()+",##"+String.valueOf(useCaseIndex),"blank,communicates,uses,extends"+",##"+String.valueOf(useCaseTextIndex)};
-					String[] data = getDataAsDialog("Add UML Use Case Actor",titles,defaults);
+					String[] data = supportFunctions.getDataAsDialog("Add UML Use Case Actor",titles,defaults);
 					if (data != null) {
 						eNew = umlDiagram.getUseCaseDocument().createElement("actor");
 						eNew.setAttribute("name",data[0]);
@@ -1439,7 +1439,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					int useCaseIndex = stringIndex(umlDiagram.getUseCaseNames(),eOld.getAttribute("conn"));
 					int useCaseTextIndex = stringIndex("blank,communicates,uses,extends",eOld.getAttribute("conntext"));
 					String[] defaults = new String[] {"","",umlDiagram.getUseCaseNames()+",##"+String.valueOf(useCaseIndex),"blank,communicates,uses,extends"+",##"+String.valueOf(useCaseTextIndex)};
-					String[] data = getDataAsDialog("Add UML Use Case",titles,defaults);
+					String[] data = supportFunctions.getDataAsDialog("Add UML Use Case",titles,defaults);
 					if (data != null) {
 						eNew = umlDiagram.getUseCaseDocument().createElement("usecase");
 						eNew.setAttribute("name",data[0]);
@@ -1581,7 +1581,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				int sequenceIndex = stringIndex(sequenceNames,eOld.getAttribute("conn"));
 				int sequenceConnTypeIndex = stringIndex(sequenceConnTypes,eOld.getAttribute("conntype"));
 				String[] defaults = new String[] {eOld.getAttribute("name"),eOld.getAttribute("description"),getEnumValues(sequenceType.NONE)+",##"+String.valueOf(sequenceTypeIndex),sequenceNames+",##"+String.valueOf(sequenceIndex),sequenceConnTypes+",##"+String.valueOf(sequenceConnTypeIndex)};
-				String[] data = getDataAsDialog("Add UML Sequence",titles,defaults);
+				String[] data = supportFunctions.getDataAsDialog("Add UML Sequence",titles,defaults);
 				if (data != null) {
 					org.w3c.dom.Element eNew = umlDiagram.getSequenceDocument().createElement("sequence");
 					eNew.setAttribute("name",data[0]);
@@ -1723,8 +1723,8 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				int stateIndex = stringIndex(stateNames,eOld.getAttribute("conn"));
 				int stateConnTypeIndex = stringIndex(stateConnTypes,eOld.getAttribute("conntype"));
 				String[] defaults = new String[] {eOld.getAttribute("name"),eOld.getAttribute("description"),getEnumValues(stateType.NONE)+",##"+String.valueOf(stateTypeIndex),stateNames+",##"+String.valueOf(stateIndex),stateConnTypes+",##"+String.valueOf(stateConnTypeIndex)};
-				String[] data = getDataAsDialog("Add UML State",titles,defaults);
-				if (data != null) {
+				String[] data = supportFunctions.getDataAsDialog("Add UML State",titles,defaults);
+				if (data != null) { 
 					org.w3c.dom.Element eNew = umlDiagram.getStateDocument().createElement("state");
 					eNew.setAttribute("name",data[0]);
 					eNew.setAttribute("description",data[1]);
@@ -2164,7 +2164,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			   return false;
 		   } 
 			public boolean printPageSetupOverride(Graphics2D g2d,PageFormat format,Dimension size) {
-				String tmp = getPropValue("Scaling Factor","Scaling Factor","1");
+				String tmp = supportFunctions.getPropValue("Scaling Factor","Scaling Factor","1");
 				float fScalingFactor = new java.lang.Double(tmp.trim()).floatValue();
 				g2d.scale(fScalingFactor,fScalingFactor);
 				return true;
@@ -2868,7 +2868,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		public void addActor() {
 			String[] titles = new String[]{"Name","Description","Type","Connection","Conn Text"};			
 			String[] defaults = new String[] {"","",getEnumValues(actorType.NONE),getUseCaseNames(),"blank,communicates,uses,extends"};
-			String[] data = getDataAsDialog("Add UML Use Case Actor",titles,defaults);
+			String[] data = supportFunctions.getDataAsDialog("Add UML Use Case Actor",titles,defaults);
 			if (data != null) {
 				org.w3c.dom.Element e = umlDiagram.getUseCaseDocument().createElement("actor");
 				e.setAttribute("name",data[0]);
@@ -2890,7 +2890,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			if (umlDiagram.getDiagramType() == UMLDiagramType.STATE) {	
 				String[] titles = new String[]{"Title"};
 				String[] defaults = new String[]{umlDiagram.getStateDiagramTitle()};
-				String[] data = getDataAsDialog("State Diagram Title",titles,defaults);
+				String[] data = supportFunctions.getDataAsDialog("State Diagram Title",titles,defaults);
 				if (data != null) {
 					umlDiagram.setStateDiagramTitle(data[0]);
 				}
@@ -2911,7 +2911,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			if (umlDiagram.getDiagramType() == UMLDiagramType.USECASE) {
 				String[] titles = new String[]{"Title"};
 				String[] defaults = new String[]{umlDiagram.getUseCaseDiagramTitle()};
-				String[] data = getDataAsDialog("Use Case Diagram Title",titles,defaults);
+				String[] data = supportFunctions.getDataAsDialog("Use Case Diagram Title",titles,defaults);
 				if (data != null) {
 					umlDiagram.setUseCaseDiagramTitle(data[0]);
 				}
@@ -2930,7 +2930,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			if (umlDiagram.getDiagramType() == UMLDiagramType.SEQUENCE) {	
 				String[] titles = new String[]{"Title"};
 				String[] defaults = new String[]{umlDiagram.getSequenceDiagramTitle()};
-				String[] data = getDataAsDialog("Sequence Diagram Title",titles,defaults);
+				String[] data = supportFunctions.getDataAsDialog("Sequence Diagram Title",titles,defaults);
 				if (data != null) {
 					umlDiagram.setSequenceDiagramTitle(data[0]);
 				}
@@ -2950,7 +2950,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		public void addUseCase() {
 			String[] titles = new String[]{"Name","Description","Connection","Conn Text"};
 			String[] defaults = new String[] {"","",getUseCaseNames(),"blank,communicates,uses,extends"};
-			String[] data = getDataAsDialog("Add UML Use Case",titles,defaults);
+			String[] data = supportFunctions.getDataAsDialog("Add UML Use Case",titles,defaults);
 			if (data != null) {
 				org.w3c.dom.Element e = umlDiagram.getUseCaseDocument().createElement("usecase");
 				e.setAttribute("name",data[0]);
@@ -2987,7 +2987,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 			String[] titles = new String[]{"Name","Description","Type","Connection","Connection Type"};			
 			String[] defaults = new String[] {"","",getEnumValues(stateType.NONE),stateNames,stateConnTypes};
-			String[] data = getDataAsDialog("Add UML Sequence",titles,defaults);
+			String[] data = supportFunctions.getDataAsDialog("Add UML Sequence",titles,defaults);
 			if (data != null) {
 				addState1(data[0],data[1],data[2],data[3],data[4]);
 				// recalculate cords and connectors
@@ -3028,7 +3028,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 			String[] titles = new String[]{"Name","Description","Type","Connection","Connection Type"};			
 			String[] defaults = new String[] {"","",getEnumValues(sequenceType.NONE),sequenceNames,sequenceConnTypes};
-			String[] data = getDataAsDialog("Add UML Sequence",titles,defaults);
+			String[] data = supportFunctions.getDataAsDialog("Add UML Sequence",titles,defaults);
 			if (data != null) {
 				addSequence1(data[0],data[1],data[2],data[3],data[4]);
 				// recalculate cords and connectors
@@ -4426,7 +4426,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		public void editor() {
 			String[] titles = new String[]{"Text","Trans Text","Flags"};			
 			String[] defaults = new String[] {getText(),getTransText(),getFlags()};
-			String[] data = getDataAsDialog("Edit Trans Table Element",titles,defaults);
+			String[] data = supportFunctions.getDataAsDialog("Edit Trans Table Element",titles,defaults);
 			if (data != null) {
 				text = data[0];
 				transtext = data[1];
@@ -8516,84 +8516,6 @@ public class XslTransformer {
 		   }	
 	}
 
-	public propBoxDialog displayPropBoxDialog(String msg,Vector props,String id) {
-		Frame top = supportFunctions.getTopLevelParent(this);		
-		propBoxDialog d = new propBoxDialog(top,msg,props,id,null);
-		return d;
-	}
-	public propBoxDialog displayPropBoxDialog(String msg,Vector props) {
-		Frame top = supportFunctions.getTopLevelParent(this);		
-		propBoxDialog d = new propBoxDialog(top,msg,props,"",null);
-		return d;
-	}
-	public String[] getDataAsDialog(String title,String[] fields,String[] defaults) {
-		return getDataAsDialog(title,fields,defaults,null);
-	}	
-	public String[] getDataAsDialog(String title,String[] fields,String[] defaults,propBoxDialogListener pbdl) {
-		Vector props = new Vector();
-		int index = 0;
-		
-		statusCanvasProp csp;
-		csp = new statusCanvasProp(" ",""); // simulates a blank line
-		props.addElement(csp);
-
-		for(int i=0;i<fields.length;i++) {
-			if (defaults[i].indexOf(",") != -1) {
-				TRACE("getDataAsDialog:"+fields[i]+":"+defaults[i],4);
-				Vector v = supportFunctions.splitIntoTokens(defaults[i],",");
-				String[] s = new String[v.size()];
-				int sindex = 0;
-				for (int ii=0;ii<v.size();ii++) {
-					String tmp = (String)v.elementAt(ii);
-					if (tmp.startsWith("##")) {
-						try {
-							index = Integer.parseInt(tmp.substring(2));
-						} catch (Exception e) {}
-					} else {
-						s[sindex++] = tmp;						
-					}
-				}
-				if (sindex != v.size()) { // #bug 63 09/08/17
-					//supportFunctions.displayMessageDialog(null,"compacting array");
-					String[] stmp = new String[v.size()-1]; // remove last element
-					System.arraycopy(s, 0, stmp, 0, s.length-1);
-					s = stmp;
-				}
-				if (index >= s.length) {index = 0;}
-				csp = new statusCanvasProp(fields[i],s[index],s);				
-			} else {
-				csp = new statusCanvasProp(fields[i],defaults[i]);				
-			}
-			props.addElement(csp);
-		}
-		Frame top = supportFunctions.getTopLevelParent(this);		
-		propBoxDialog d = new propBoxDialog(top,title,props,"",pbdl);
-
-		if(d.isOK()) {
-			String[] data = new String[props.size()-1]; // ignore 1st property
-			for(int i=1;i<props.size();i++) {
-				statusCanvasProp prop = (statusCanvasProp)props.elementAt(i);
-				data[i-1] = prop.getValue();
-			}
-			return data;
-		}
-
-		return null;
-	}
-	
-	public String getPropValue(String title,String propName,String propDefault) {
-		Vector props = new Vector();
-		props.addElement(new statusCanvasProp(propName,propDefault));
-		propBoxDialog d = displayPropBoxDialog(title,props);
-		return d.getPropByName(propName);
-	}
-	public int getPropValue(String title,String propName,int propDefault) {
-		Vector props = new Vector();
-		props.addElement(new statusCanvasProp(propName,String.valueOf(propDefault)));
-		propBoxDialog d = displayPropBoxDialog(title,props);
-		return Integer.parseInt(d.getPropByName(propName));
-	}
-
 	public void multiColumnCanvasTest() {
 		multiColumnCanvasComponent c = new multiColumnCanvasComponent();
 		String[] colData1 = {"aaa","bbb"};
@@ -10187,7 +10109,7 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 						supportFunctions.getColorCode((String)v.elementAt(9)));
 			  }
 			  if (cmd.equalsIgnoreCase("Width")) {
-				dcStrokeWidth = getPropValue("Get Stroke Width","Stroke Width",dcStrokeWidth);
+				dcStrokeWidth = supportFunctions.getPropValue("Get Stroke Width","Stroke Width",dcStrokeWidth);
 				displayStatusText();
 			  }
 			  if (cmd.equalsIgnoreCase("Copy")) {
