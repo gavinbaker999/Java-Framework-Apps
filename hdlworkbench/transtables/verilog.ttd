@@ -1,0 +1,5 @@
+for,*,*,for,{newvarname}::p,in,{range},loop
+range,*,*,{expression},<to|downto::p><<=|>=::p>,{expression}
+expression,*,*,{integer}|{varname}::p
+linelabel,*,*,linelabel
+

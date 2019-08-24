@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="template" basedir="." default="run">
+	<description>ANT build file for ${appname} application</description>
+<property name="classes.dir" value="bin"/>
+<property name="classpath.dir" value="..\classes"/>	
+	<target name="gitversioninfo"  description="Displays the git version details">
+
+    <exec executable="..\..\..\Program Files\Git\cmd\git" outputproperty="version.revisions">
+        <arg value="log"/>
+        <arg value="--oneline"/>
+    </exec>
+
+    <resourcecount property="version.revision" count="0" when="eq">
+        <tokens>
+            <concat>
+                <filterchain>
+                    <tokenfilter>
+                        <stringtokenizer delims="\r" />
+                    </tokenfilter>
+                </filterchain>
+            <propertyresource name="version.revisions" />
+            </concat>
+        </tokens>
+    </resourcecount>
+    <echo>Revision : ${version.revision}</echo>
+
+    <exec executable="..\..\..\Program Files\Git\cmd\git" outputproperty="version.hash">
+        <arg value="rev-parse"/>
+        <arg value="--short"/>
+        <arg value="HEAD"/>
+    </exec>
+    <echo>Hash : ${version.hash}</echo>
+
+    <exec executable="..\..\..\Program Files\Git\cmd\git" outputproperty="version.branch">
+        <arg value="rev-parse"/>
+        <arg value="--abbrev-ref"/>
+        <arg value="HEAD"/>
+    </exec>
+    <echo>Branch : ${version.branch}</echo>
+
+    <exec executable="..\..\..\Program Files\Git\cmd\git" outputproperty="version.diff">
+        <arg value="diff"/>
+    </exec>
+
+    <condition property="version.dirty" value="" else="-dirty">
+        <equals arg1="${version.diff}" arg2=""/>
+    </condition>
+
+    <tstamp>
+        <format property="version.date" pattern="yyyy-MM-dd.HH:mm:ss" locale="en,US"/>
+    </tstamp>
+    <echo>Date : ${version.date}</echo>
+
+    <property name="version" value="${version.revision}.${version.hash}.${version.branch}${version.dirty}.${version.date}" />
+
+    <echo>Version : ${version}</echo>
+		<replaceregexp file="src/${appname}.java"
+             match="!!!Git Version.*!!!"
+             replace="!!!Git Version : ${version}!!!"
+			 flags="gi"
+             byline="true"/>
+
+    <echo file="version.properties" append="false">version = ${version}</echo>
+
+</target>
+	<target name ="projtransfer" depends="init,gitversioninfo,fbs,updateebook" description="Transfer project files">
+</target>
+	<target name ="init" description="Perform Inital Build Tasks">
+	<echo message="${appname} Build File, (c) End House Software 2012-2019"/>	
+	<record name="buildlog.txt"/>
+		<splash/>
+		<tstamp>
+			<format property="build.date" pattern="d-MMMM-yyyy hh:mm aa" locale="en,UK"/>
+		</tstamp>
+		<buildnumber file="${appname}build.number"/>
+		<replaceregexp file="src/${appname}.java"
+                         match="@@@.*@@@"
+                         replace="@@@Build Date: ${build.date} Build Number: ${build.number}@@@"
+			 flags="gi"
+                         byline="true"/>
+	</target>
+	<target name ="ehsjarinit" description="Perform Inital Build Tasks">
+	<echo message="EHS JAR Build File, (c) End House Software 2012-2019"/>	
+	<record name="buildlog.txt"/>
+		<splash/>
+		<tstamp>
+			<format property="build.date" pattern="d-MMMM-yyyy hh:mm aa" locale="en,UK"/>
+		</tstamp>
+	</target>
+	<target name="fbs" if="frameworkbs" depends="init" description="Update the Framework Build Number">
+		<replaceregexp file="src/${appname}.java"
+                         match="###.*###"
+                         replace="###JAVA Framework (${frameworkbs})###"
+			 flags="gi"
+                         byline="true"/>
+	<echo message="${appname}: Framework ID Updated - ${frameworkbs}"/>	
+	</target>
+	<target name="backupdb" description="Backup Databases">
+		<exec dir="." executable="perl.exe">
+			<arg line="-w c:\Users\Gavin\development\scripts\perl\dbbackup.pl"/>
+		</exec>
+	</target>
+	<target name="resetbuildnumber" description="Resets the Build Number">
+		<delete file="${appname}build.number" verbose="true"/>
+	</target>
+	<target name="jar" description="Create the Application JAR">
+		<delete file="${appname}.jar" verbose="true"/>
+		<jar destfile="${appname}.jar">
+			<fileset dir="bin"/>
+			<zipfileset src="../classes/ehscomplier.jar" prefix="ehscomplier"/>
+			<zipfileset src="../classes/ehssupport.jar" prefix="ehssupport"/>
+			<zipfileset src="../classes/ehscontrols.jar" prefix="ehscontrols"/>
+			<zipfileset src="../classes/ehsgraphicalcanvas.jar" prefix="ehsgraphicalcanvas"/>
+    			<manifest>
+        <attribute name="Implementation-Vendor" value="End House Software"/>
+        <attribute name="Implementation-Title" value="${appname}"/>
+      			<attribute name="Main-Class"
+                 		value="${mainclass}"/>
+    			</manifest>
+		</jar>
+	</target>
+	<target name="updateebook" description="Copy Source Files to EBook">
+		<echo message="Creating JAVA Source text files..."/>	
+		<copy overwrite="true" file="../umldiag/src/umldiag.java" tofile="../umldiag.txt"/>
+		<copy overwrite="true" file="../hdlworkbench/src/hdlworkbench.java" tofile="../hdlworkbench.txt"/>
+		<copy overwrite="true" file="../template/src/template.java" tofile="../template.txt"/>
+	</target>
+<target name="compile" depends="init" description="Compiles Source Files">
+<mkdir dir="${classes.dir}"/>
+<javac srcdir="src" destdir="${classes.dir}">
+	<classpath>
+		<pathelement path="${classpath.dir}"/>
+	</classpath>
+</javac>
+	</target>
+<target name="generateehssupportjar" depends="ehsjarinit" description="Generates the EHS support JAR">
+<mkdir dir="ehssupport/${classes.dir}"/>
+<javac srcdir="ehssupport/src" destdir="ehssupport/${classes.dir}"/>
+		<delete file="classes/ehssupport.jar" verbose="true"/>
+		<jar destfile="classes/ehssupport.jar">
+			<fileset dir="ehssupport/bin"/>
+			<zipfileset src="classes/sendgrid-java.jar"/>
+			<zipfileset src="classes/mysql-connector-java-5.0.8-bin.jar"/>
+	</jar>
+</target>
+<target name="compileehsjars" description="Compiles EHS JAR Source Files">
+<mkdir dir="ehscomplier/${classes.dir}"/>
+<javac srcdir="ehscomplier/src" destdir="ehscomplier/${classes.dir}"/>
+<mkdir dir="ehscontrols/${classes.dir}"/>
+<javac srcdir="ehscontrols/src" destdir="ehscontrols/${classes.dir}"/>
+<mkdir dir="ehsgraphicalcanvas/${classes.dir}"/>
+<javac srcdir="ehsgraphicalcanvas/src" destdir="ehsgraphicalcanvas/${classes.dir}"/>
+</target>
+<target name="generateehsjars" depends="generateehssupportjar,compileehsjars" description="Generates EHS JAR Files">
+		<delete file="classes/ehscomplier.jar" verbose="true"/>
+		<jar destfile="classes/ehscomplier.jar">
+			<fileset dir="ehscomplier/bin"/>
+	</jar>
+		<delete file="classes/ehscontrols.jar" verbose="true"/>
+		<jar destfile="classes/ehscontrols.jar">
+			<fileset dir="ehscontrols/bin"/>
+	</jar>
+		<delete file="classes/ehsgraphicalcanvas.jar" verbose="true"/>
+		<jar destfile="classes/ehsgraphicalcanvas.jar">
+			<fileset dir="ehsgraphicalcanvas/bin"/>
+	</jar>
+</target>
+</project>
+

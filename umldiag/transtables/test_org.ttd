@@ -1,0 +1,2 @@
+newclasstemplate,<class scope="*a" , >,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,class,{deftemplatename}@@name="*7"*8@@x,<,{templatetype}@@type="*7"*8@@x,>,{obrace}##extends##implements@@x##extends="##implements="@@y##r+1##r+1,{classinterfacename}##{comma}##{obrace}##entends##implements@@*7##*6##"##extends="##implements="@@r+0##r+0##y##r+0##r+0
+package,<package scope="*a",/>,package,{packagename}@@name="*7"*8@@x,;

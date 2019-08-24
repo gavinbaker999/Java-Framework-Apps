@@ -1,0 +1,66 @@
+BODY {
+	FONT: 100% "Lucida Grande", "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif
+}
+BODY.m {
+	FONT: 100% "Lucida Grande", "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif
+}
+BODY.l {
+	FONT-SIZE: 110%
+}
+BODY.xl {
+	FONT-SIZE: 120%
+}
+BODY.xxl {
+	FONT-SIZE: 130%
+}
+BODY.s {
+	FONT: 86% "Lucida Grande", "Trebuchet MS", Verdana, sans-serif
+}
+FIELDSET {
+	BORDER-RIGHT: #666666 1px solid; BORDER-TOP: #666666 1px solid; BORDER-LEFT: #666666 1px solid; BORDER-BOTTOM: #666666 1px solid; BACKGROUND-COLOR: #cccccc
+}
+LEGEND {
+	FONT-WEIGHT: bolder
+}
+LABEL {
+	DISPLAY: block
+}
+INPUT:focus {
+	COLOR: #000000; BACKGROUND-COLOR: #ffffcc
+}
+.ehstitle {
+	BORDER-RIGHT: navy 3px solid; PADDING-RIGHT: 4px; BORDER-TOP: navy 3px solid; PADDING-LEFT: 4px; PADDING-BOTTOM: 4px; MARGIN: 2px; BORDER-LEFT: navy 3px solid; COLOR: white; PADDING-TOP: 4px; BORDER-BOTTOM: navy 3px solid; FONT-STYLE: italic; BACKGROUND-COLOR: blue; TEXT-ALIGN: center
+}
+.dropcapital {
+	FONT-SIZE: 75pt; FLOAT: left; FONT-FAMILY: "Cushing Book"
+}
+.error {
+	FONT-WEIGHT: bold; colr: red
+}
+H1 {
+	FONT-WEIGHT: normal; FONT-SIZE: 22pt; MARGIN: 0px
+}
+H2 {
+	FONT-WEIGHT: normal; FONT-SIZE: 18pt; MARGIN: 0px
+}
+H3 {
+	FONT-WEIGHT: normal; FONT-SIZE: 14pt; MARGIN: 0px
+}
+#menu UL {
+	MARGIN: 0px; LIST-STYLE-TYPE: none; paddng: 0
+}
+#menu UL LI {
+	
+}
+#menu UL LI A {
+	PADDING-RIGHT: 1em; PADDING-LEFT: 1em; FONT-WEIGHT: bold; PADDING-BOTTOM: 0.2em; COLOR: #ffffff; PADDING-TOP: 0.2em; FONT-FAMILY: Arial,Helvetica; BACKGROUND-COLOR: #cc0000; TEXT-DECORATION: none
+}
+#menu UL LI A:hover {
+	COLOR: #ffffff; BACKGROUND-COLOR: #990000
+}
+TR.alt TD {
+	BACKGROUND: #ecf6fc
+}
+TR.over TD {
+	BACKGROUND: #bcd4ec
+}

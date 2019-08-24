@@ -1,0 +1,4 @@
+FOR,FOR,{newvarname}::P,IN,{RANGE},LOOP
+RANGE,{EXPRESSION},<to|downto::P><<=|>=::P>,{EXPRESSION}
+EXPRESSION,{INTEGER}|{varname}::P
+

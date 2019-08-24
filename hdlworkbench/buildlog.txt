@@ -1,0 +1,26 @@
+
+gitversioninfo:
+     [echo] Revision : 79
+     [echo] Hash : e7b9d1e
+     [echo] Branch : master
+     [echo] Date : 2018-08-24.16:46:16
+     [echo] Version : 79.e7b9d1e.master-dirty.2018-08-24.16:46:16
+
+fbs:
+     [echo] hdlworkbench: Framework ID Updated - Version 1.41-RC3
+
+updatelocalrepo:
+     [echo] Updating local GIT repo ...
+     [copy] Copying 1 file to C:\Users\Gavin\git\eclipse_workspace\appdata\hdlworkbench
+     [copy] Copying 1 file to C:\Users\Gavin\git\eclipse_workspace\appdata\template
+     [copy] Copying 1 file to C:\Users\Gavin\git\eclipse_workspace\appdata\umldiag
+     [copy] Copying 1 file to C:\Users\Gavin\git\eclipse_workspace\appdata\rapierchat
+     [copy] Copying 1 file to C:\Users\Gavin\git
+     [copy] Copying 1 file to C:\Users\Gavin\git
+     [copy] Copying 1 file to C:\Users\Gavin\git
+     [copy] Copying 1 file to C:\Users\Gavin\git
+
+projtransfer:
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL

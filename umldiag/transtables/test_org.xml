@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<transtable>
+    <ttkeyword keyword='newclasstemplate'>
+        <ttentry flags='z' groupid='1' poststring='' prestring='' syntax='{access}' transtext='access=&quot;*7&quot;*8'>
+        </ttentry>
+        <ttentry flags='z' groupid='2' poststring='' prestring='' syntax='{exaccess}' transtext='exaccess=&quot;*7&quot;*8'>
+        </ttentry>
+        <ttentry flags='x' groupid='3' poststring='' prestring='' syntax='class' transtext='*c'>
+        </ttentry>
+        <ttentry flags='x' groupid='4' poststring='' prestring='' syntax='{deftemplatename}' transtext='name=&quot;*7&quot;*8'>
+        </ttentry>
+        <ttentry flags='x' groupid='5' poststring='' prestring='' syntax='&lt;' transtext='*c'>
+        </ttentry>
+        <ttentry flags='x' groupid='6' poststring='' prestring='' syntax='{templatetype}' transtext='type=&quot;*7&quot;*8'>
+        </ttentry>
+        <ttentry flags='x' groupid='7' poststring='' prestring='' syntax='&gt;' transtext='*c'>
+        </ttentry>
+        <ttentry flags='y' groupid='8' poststring='' prestring='' syntax='{obrace}' transtext='x'>
+        </ttentry>
+        <ttentry flags='r+1' groupid='8' poststring='' prestring='' syntax='extends' transtext='extends=&quot;'>
+        </ttentry>
+        <ttentry flags='r+1' groupid='8' poststring='' prestring='' syntax='implements' transtext='implements=&quot;'>
+        </ttentry>
+        <ttentry flags='r+0' groupid='9' poststring='' prestring='' syntax='{classinterfacename}' transtext='*7'>
+        </ttentry>
+        <ttentry flags='r+0' groupid='9' poststring='' prestring='' syntax='{comma}' transtext='*6'>
+        </ttentry>
+        <ttentry flags='y' groupid='9' poststring='' prestring='' syntax='{obrace}' transtext='&quot;'>
+        </ttentry>
+        <ttentry flags='r+0' groupid='9' poststring='' prestring='' syntax='entends' transtext='extends=&quot;'>
+        </ttentry>
+        <ttentry flags='r+0' groupid='9' poststring='' prestring='' syntax='implements' transtext='implements=&quot;'>
+        </ttentry>
+    </ttkeyword>
+    <ttkeyword keyword='package'>
+        <ttentry flags='x' groupid='1' poststring='' prestring='' syntax='package' transtext='*c'>
+        </ttentry>
+        <ttentry flags='x' groupid='2' poststring='' prestring='' syntax='{packagename}' transtext='name=&quot;*7&quot;*8'>
+        </ttentry>
+        <ttentry flags='x' groupid='3' poststring='' prestring='' syntax=';' transtext='*c'>
+        </ttentry>
+    </ttkeyword>
+</transtable>
+

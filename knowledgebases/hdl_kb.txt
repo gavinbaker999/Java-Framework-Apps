@@ -1,0 +1,40 @@
+HDL Work Bench
+FAQ File for HDL Work Bench
+ 
+1. Who is End House Software?
+End House Software was formed in 1989, to supply free and low cost software and services to the market. More information can be found at the EHS website - x10hosting.endhousesoftware.com. 
+ 
+2. Where can I get the latest version of the software?
+The latest version of the software can always found on the EHS website. If the software is distributed as a Java applet, you are always running the latest version.
+ 
+3. What is the licence agreement in effect for running the software?
+All software can be freely distributed and copied as long as all copyright messages remain intact.
+ 
+4. How can I be notified when a new version becomes available?
+Join the EHS mailing list, information can be found on the EHS website.  
+ 
+5. How can I report bugs or make comments about the software?
+Use the 'Project Tracker' application available via the EHS website.
+ 
+6. What are the system requirements for running the software?
+All software is Microsoft Windows XP, Windows 7 and Windows 8 compatible. Some software may need additional software install, such as Microsoft .NET runtime. Java applets will run on any operating system that has a Java plugin installed. 
+ 
+7. How much of the standard does the software cover?
+Answer 7
+ 
+8. What files are created by the HDL Work Bench application?
+Answer 8
+ 
+9. What VHDL keywords are supported?
+Answer 9.
+ 
+10. What VHDL language constructs are supported?
+Answer 10.
+ 
+11. What are the developments planned for the software?
+A verilog compiler.
+   
+12. Why do I sometimes have to enter my username and password when I start the application?
+This is for the case when your unique number changes and needs to be recalculated.
+   
+   

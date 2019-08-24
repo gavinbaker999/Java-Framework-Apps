@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<callingtree>
+    <languageblock lang='java'>
+        <entrypoints data='main'>
+        </entrypoints>
+        <eventhandlers data='actionPerformed'>
+        </eventhandlers>
+        <looping data=''>
+        </looping>
+        <branching data=''>
+        </branching>
+        <vardef data='([a-zA-Z0-9_\[\]]+)\s+([a-zA-Z0-9\s,]+)[=;]'>
+        </vardef>
+		<varassign data='^\s*([a-zA-Z0-9_\[\]]+)\s*='>
+		</varassign>
+		<funccalls data='([a-zA-Z0-9_\.]+)\s*\((.*)\)'>
+        </funccalls>
+    </languageblock>
+    <currentblock lang='java'>
+    </currentblock>
+</callingtree>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<umldata>
+
+
+	<function scope="Mtest" access="public" exaccess="static" returntype="void" name="main" parameters="String[] args" />
+
+
+
+	<class scope="Mtest" access="public" name="one" extends="ClosableFrame" >
+		<variable scope="Mtest::Cone" access="private" type="int" name="var1" defaultvalue="" />
+		<variable scope="Mtest::Cone" access="private" type="two" name="var2" defaultvalue="" />
+		<variable scope="Mtest::Cone" access="private" type="Vector" name="var3" defaultvalue="" />
+		<variable scope="Mtest::Cone" access="private" type="int[]" name="var4" defaultvalue="" />
+		<variable scope="Mtest::Cone" access="private" type="two[]" name="var5" defaultvalue="" />
+		<variable scope="Mtest::Cone" access="private" exaccess="static" type="int" name="var6" defaultvalue="" />
+	
+		<variable scope="Mtest::Cone" access="private" type="int" name="var7" defaultvalue="" />
+		<variable scope="Mtest::Cone" access="private" type="int" name="var8" defaultvalue="" />
+		<variable scope="Mtest::Cone" access="public" type="int" name="var103" defaultvalue="" />
+		<function scope="Mtest::Cone" access="public" returntype="void" name="func4" parameters="" />
+	
+	
+	
+	
+		<function scope="Mtest::Cone" access="public" returntype="void" name="func1" parameters="" />
+	</class>
+	<class scope="Mtest" access="public" name="two"  >
+		<function scope="Mtest::Ctwo" access="public" returntype="void" name="func2" parameters="" />
+		<function scope="Mtest::Ctwo" access="public" returntype="void" name="func3" parameters="" />
+	</class>
+	<class scope="Mtest" access="public" name="three"  >
+		<variable scope="Mtest::Cthree" access="private" type="int" name="var1" defaultvalue="" />
+	</class>
+	<class scope="Mtest" access="public" name="four" extends="three" >
+		<variable scope="Mtest::Cfour" access="private" type="int" name="var1" defaultvalue="" />
+	</class>
+	<class scope="Mtest" access="public" name="Node" type="T"  >
+	</class>
+</umldata>

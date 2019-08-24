@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<umltypes>
+<template name="Node" scope="test" subscope="Mtest" type="T" />
+<type name="int" scope="test" subscope="Cone" variable="var1" class="Builtin" contains="" array="no" />
+<type name="two" scope="test" subscope="Cone" variable="var2" class="Application" contains="" array="no" />
+<type name="Vector" scope="test" subscope="Cone" variable="var3" class="Container" contains="two" array="yes" />
+<type name="int[]" scope="test" subscope="Cone" variable="var4" class="Builtin" contains="" array="yes" />
+<type name="two[]" scope="test" subscope="Cone" variable="var5" class="Application" contains="" array="yes" />
+<type name="int" scope="test" subscope="Cone" variable="var6" class="Builtin" contains="" array="no" />
+<type name="int" scope="test" subscope="Cone" variable="var7" class="Builtin" contains="" array="no" />
+<type name="int" scope="test" subscope="Cone" variable="var8" class="Builtin" contains="" array="no" />
+<type name="int" scope="test" subscope="Cone" variable="var103" class="Builtin" contains="" array="no" />
+<type name="int" scope="test" subscope="Cthree" variable="var1" class="Builtin" contains="" array="no" />
+<type name="int" scope="test" subscope="Cfour" variable="var1" class="Builtin" contains="" array="no" />
+</umltypes>

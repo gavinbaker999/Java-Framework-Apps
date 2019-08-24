@@ -1,0 +1,25 @@
+<?xml version="1.0">
+<hdldrawingitems>
+	<config date="20/07/16" time ="19:01" basepath ="../../eclipse_workspace/appdata/hdlworkbench" />
+	<entity name="testnand" path ="vhdlfiles">
+		<port name="in1" mode="in" type="bit" />
+		<port name="in2" mode="in" type="bit" />
+		<port name="out1" mode="out" type="bit" />
+		<allports name="in1,in,bit;in2,in,bit;out1,out,bit" />
+	</entity>
+	<entity name="nandgate" path ="vhdlfiles">
+		<port name="in1" mode="in" type="bit" />
+		<port name="in2" mode="in" type="bit" />
+		<port name="out1" mode="out" type="bit" />
+		<allports name="in1,in,bit;in2,in,bit;out1,out,bit" />
+	</entity>
+	<connection name="connection0" fromentity="nandgate" toentity="testnand" fromport=" in1 " toport=" in1 " />
+	<connection name="connection1" fromentity="nandgate" toentity="testnand" fromport=" in2 " toport=" in2 " />
+	<connection name="connection2" fromentity="nandgate" toentity="testnand" fromport=" out1 " toport=" out1 " />
+	<connlist name="connlist0" entity="nandgate" port=" in1 " clist="testnand: in1 " />
+	<connlist name="connlist1" entity="testnand" port=" in1 " clist="nandgate: in1 " />
+	<connlist name="connlist2" entity="nandgate" port=" in2 " clist="testnand: in2 " />
+	<connlist name="connlist3" entity="testnand" port=" in2 " clist="nandgate: in2 " />
+	<connlist name="connlist4" entity="nandgate" port=" out1 " clist="testnand: out1 " />
+	<connlist name="connlist5" entity="testnand" port=" out1 " clist="nandgate: out1 " />
+</hdldrawingitems>

@@ -1,0 +1,1 @@
+	public enum timeUnits {SECS,MILLISECS,MICROSECS,NANOSECS};

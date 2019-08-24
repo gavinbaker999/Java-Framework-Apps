@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<umlconnectors>
+	<connector id="0" start="four" end="three" array="no" type="HEIR" variable=""/>
+
+	<connector id="1" start="one" end="two" array="no" type="AREG" variable="var2"/>
+
+	<connector id="2" start="one" end="two" array="yes" type="AREG" variable="var5"/>
+
+	<connector id="3" start="one" end="two" array="yes" type="AREG" variable="var3"/>
+
+</umlconnectors>

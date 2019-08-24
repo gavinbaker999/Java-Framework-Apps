@@ -1,0 +1,50 @@
+<html>
+<head>
+<script src="../../scripts/common.js" type="text/javascript"></script>
+<script src="../../scripts/jquery.js" type="text/javascript"></script>
+<link rel="stylesheet" href="../../css/ehs_default.css" type="text/css" media="screen">
+</head>
+<body>
+<?
+include("../../scripts/common.php");
+include("../support/simlib.php");
+include("../support/vhdlstandardfuncs.php");
+$link = mysql_connect('localhost', 'root', 'joide33');
+mysql_select_db('endhousesoftware_com_-_endhousesoftware');
+function internalSimulate($module) {testnand();}
+function testnand() {
+	}
+function nandgate() {
+	function two($in1,$in2) {
+		createSignal("nandgate","a","in","bit",0,"");
+		createSignal("nandgate","b","in","bit",0,""0"");
+		if (getSignal("nandgate","in1")=='1' && getSignal("nandgate","in2")=='1') {
+			processSignal("nandgate","out","'0';");
+			} else {
+			processSignal("nandgate","out","'1';");
+			}
+		}
+	}
+function initSignals() {
+	createSignal("nandgate","out1","out","bit",1,"0");
+	createSignal("nandgate","in2","in","bit",1,"0");
+	createSignal("nandgate","in1","in","bit",1,"0");
+	createForce("testnand","inb",50,0,0);
+	createForce("testnand","ina",50,0,0);
+	createForce("testnand","inb",0,1,0);
+	createForce("testnand","ina",0,1,0);
+	createSSMap("nandgate","in1:in bit;in2:in bit;out1:out bit","testnand","in1,in2,out1");
+	createSignal("testnand","out1","out","bit",1,"0");
+	createSignal("testnand","in2","in","bit",1,"0");
+	createSignal("testnand","in1","in","bit",1,"0");
+}
+function storeProcessNames() {
+	createSPMap("nandgate","two","in2");
+	createSPMap("nandgate","two","in1");
+	addProcessName("nandgate","two","in1,in2");
+}
+simulate($_GET["entity"]);
+mysql_close($link);
+?>
+</body>
+</html>

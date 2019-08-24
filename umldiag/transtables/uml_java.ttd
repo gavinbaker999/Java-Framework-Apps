@@ -1,0 +1,44 @@
+// place holder list: *0 special, *1 - *4 normal,
+// *5 place token into linex1, *6 comma, *7 line token
+// *8 space, *9 module name, *a completeScope(), *b current scope, *c empty string, *d ::
+// trans text: x no trans text
+// flag holder list: x don't care, r repeat, y finish processing, z optional token
+none,*,*,none
+integer,*,*,integer
+comma,*,*,comma
+enumname,*,*,enumname
+enumitem,*,*,enumitem
+obrace,*,*,obrace
+cbrace,*,*,cbrace
+access,*,*,access
+exaccess,*,*,exaccess
+templatetype,*,*,templatetype
+deftemplatename,*,*,deftemplatename
+vartype,*,*,vartype
+funcrettype,*,*,funcrettype
+paramater,*,*,paramater
+classname,*,*,classname
+defclassname,*,*,defclassname
+definterfacename,*,*,definterfacename
+defvarname,*,*,defvarname
+deffuncname,*,*,deffuncname
+deffuncname1,*,*,deffuncname1
+varname,*,*,varname
+funcname,*,*,funcname
+interfacename,*,*,interfacename
+classinterfacename,*,*,classinterfacename
+defaultvalue,*,*,defaultvalue
+popscopefunc,*,*,popscopefunc
+packagename,*,*,packagename
+popscopeclass,*,*,popscopeclass@@</class>@@x
+popscopeinterface,*,*,popscopeinterface@@</interface>@@x
+newclasstemplate,<class scope="*a" , >,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,class,{deftemplatename}@@name="*7"*8@@x,<,{templatetype}@@type="*7"*8@@x,>,{obrace}##extends##implements@@x##extends="##implements="@@y##r+1##r+1,{classinterfacename}##{comma}##{obrace}##entends##implements@@*7##*6##"##extends="##implements="@@r+0##r+0##y##r+0##r+0
+newtemplatevar,<variable scope="*a" , >,>,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,{none}@@class="*7"*8@@x,<,{templatetype}@@type="*7"*8@@x,>,{deftemplatename}@@name="*7"*8@@x,;##=@@defaultvalue=""##defaultvalue="@@y##x,{defaultvalue}@@"@@x,;
+newclass,<class scope="*a" , >,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,class,{defclassname}@@name="*7"*8@@x,{obrace}##extends##implements@@x##extends="##implements="@@y##r+1##r+1,{classinterfacename}##{comma}##{obrace}##entends##implements@@*7##*6##"##extends="##implements="@@r+0##r+0##y##r+0##r+0
+newinterface,<interface scope="*a" , >,{access}@@access="*7"*8@@z,interface,{definterfacename}@@name="*7"*8@@x,{obrace}@@x@@y
+newclassvar,<variable scope="*a" , />,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,{vartype}@@type="*7"*8@@x,{defvarname}@@name="*7"*8@@x,;##=@@defaultvalue=""##defaultvalue="@@y##x,{defaultvalue}@@"@@x,;@@x@@y
+newclassfunc,<function scope="*a" , />,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,{funcrettype}@@returntype="*7"*8@@x,{deffuncname}@@name="*7"*8parameters="@@x,(,{comma}##)##{paramater}@@:##"##x@@r+0##x##r+0,{obrace}@@x@@y
+newclassfuncps,<function scope="*a" , />,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,{funcrettype}@@returntype="*7"*8@@x,{deffuncname1}@@name="*7"*8parameters="@@x,(,{comma}##)##{paramater}@@:##"##x@@r+0##x##r+0,{obrace}@@x@@y
+package,<package scope="*a",/>,package,{packagename}@@name="*7"*8@@x,;
+newenum,<enum scope="*a" , >,{access}@@access="*7"*8@@z,{exaccess}@@exaccess="*7"*8@@z,enum,{enumname}@@name="*7"*8@@x,{obrace}@@items="@@x,{cbrace}##{comma}##=##{integer}##{enumitem}@@"##*6##*7##*7##*7@@x##r+0##r+0##r+0##r+0,;
+extenum,<class scope="*a" enum="yes" , >,{access}@@access="*7"*8@@,{exaccess}@@exaccess="*7"*8@@z,enum,{enumname}@@name="*7"*8@@x,{obrace}@@items="@@x,;##{comma}##{enumitem}@@"##*6##*7@@y##r+0##x,(@@(@@x,{paramater}@@x@@x,)@@)@@r-3

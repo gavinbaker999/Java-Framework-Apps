@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<callingtreedata>
+	<module data="test">
+	<lang="java">
+	<date data="01/02/18">
+	<time data="15:55">
+		<test>
+			<function entry="main" data="-">
+				<classcreate entry="one" data="-"/>
+				<functioncall entry="f.show" data="-"/>
+			</function>
+			<class entry="one" data="-">
+				<function entry="func4" data="-">
+					<functioncall entry="var3.elementAt" data="0"/>
+				</function>
+				<function entry="func1" data="-"/>
+				<function entry="func5" data="-"/>
+			</class>
+			<class entry="two" data="-">
+				<function entry="func2" data="-"/>
+				<function entry="func3" data="-"/>
+				<class entry="inner" data="-"/>
+			</class>
+			<class entry="three" data="-"/>
+			<class entry="four" data="-"/>
+			<classtemplate entry="Node<T>" data="-"/>
+		</test>
+</callingtreedata>
