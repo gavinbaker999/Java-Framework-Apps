@@ -122,7 +122,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	int			charHeight;
 
 	protected	registrationinfo systemUserReg;
-	protected	sounds		systemAudioClips;
 	protected	JToolBar	roomToolbar;
 	
 	protected	AppletContext	ac;
@@ -135,7 +134,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 
 	protected 	helpDialog helpDlg = null;
 
-	protected	int maxSoundID;
 	protected	javax.swing.Action help,about;
 			
 	protected String machineID = "";
@@ -145,7 +143,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	 int		TRACELEVEL = 4;
 	
 	protected	static final int		sysThreadSleep = 1000;
-	protected	static final int		systemSoundThreadPrioity = 8;
 	protected	static final int		systemMsgThreadPrioity = 7;
 	
 	protected	static final int		windowXMax = 1600;
@@ -153,12 +150,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected   static final int 		defaultDialogX = 150;
 	protected	static final int 		defaultDialogY = 90;
 	
-	protected	static final int		roomPicture = 1;
 	protected	static final int		normalMsg = 0;
 	protected	static final int		imMsg = 1;
 	protected	static final int		defaultMenuX = 100;
 	protected	static final int		defaultMenuY =5;
-	protected	static final int		extraSounds = 10;	
 
 	protected	static final int		dcTypeUML = 10;
 	protected	static final int		dcTypeUMLSequence = 11;
@@ -327,7 +322,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		
 	}
 	public void applicationCode(String[] args) {	
-		boolean updateHelpSystem = false;
 		int argID = 0;
 		TRACELEVEL = 999;
 		boolean bDumpSymbols = false;
@@ -340,10 +334,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 			if (args[i].equals("status")) {
 				bStatus = true;
-			}
-			if (args[i].equals("updatehelp")) {
-				updateHelpSystem = true;
-				continue;
 			}
 			if (args[i].equals("about")) {
 				BufferedReader br = null;
@@ -424,7 +414,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				//System.out.println("\n" + mainTab.getCompiler().getAllSymbolTable().dumpSymbols());
 			}
 		} else {
-			System.out.println("Usage: java -jar umldiag.jar [status] [gui] [trace] [symboldump] [updatehelp] [about] filename\n");
+			System.out.println("Usage: java -jar umldiag.jar [status] [gui] [trace] [symboldump] [about] filename\n");
 		}
 		supportFunctions.getDBConn().disconnect();
 		System.exit(0);
@@ -473,7 +463,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	public void destroyApplication() {	
 		runThreads = false;
 		finishPerApplicationProcess();
-		systemAudioClips.unloadAllSounds();
 		supportFunctions.getDBConn().disconnect();
 	}
 	public void destroy() {
@@ -5522,7 +5511,6 @@ public void deleteFilename(String filename) {
 		systemUserReg.setDepts(v);
 		//systemUserReg.setPreRelease(true);
 		systemUserReg.registerUser();
-		systemAudioClips = new sounds();
 		
 		help = new helpAction();
 		about = new aboutAction();
@@ -5556,9 +5544,6 @@ public void deleteFilename(String filename) {
 		tabPane.add(systemUserReg.getAppName(),mainTab);
 		tabPane.addChangeListener(this);
 		contentPane.add(tabPane,"Center");
-
-		maxSoundID = 0;
-		systemAudioClips.createNumberSounds(maxSoundID + extraSounds);
 		
 		ciHelp = new customIcon();
 		int[] x5 = {6,10,10,6};
@@ -5709,198 +5694,6 @@ public void deleteFilename(String filename) {
 		   }
 	}
 	
-/**
- * Represents a Tree of Objects of generic type T. The Tree is represented as
- * a single rootElement which points to a List<Node<T>> of children. There is
- * no restriction on the number of children that a particular node may have.
- * This Tree provides a method to serialize the Tree into a List by doing a
- * pre-order traversal. It has several methods to allow easy updation of Nodes
- * in the Tree.
- */
-public class Tree<T> {
- 
-    private Node<T> rootElement;
-     
-    /**
-     * Default ctor.
-     */
-    public Tree() {
-        super();
-    }
- 
-    /**
-     * Return the root Node of the tree.
-     * @return the root element.
-     */
-    public Node<T> getRootElement() {
-        return this.rootElement;
-    }
- 
-    /**
-     * Set the root Element for the tree.
-     * @param rootElement the root element to set.
-     */
-    public void setRootElement(Node<T> rootElement) {
-        this.rootElement = rootElement;
-    }
-     
-    /**
-     * Returns the Tree<T> as a List of Node<T> objects. The elements of the
-     * List are generated from a pre-order traversal of the tree.
-     * @return a List<Node<T>>.
-     */
-    public java.util.List<Node<T>> toList() {
-        java.util.List<Node<T>> list = new ArrayList<Node<T>>();
-        walk(rootElement, list);
-        return list;
-    }
-     
-    /**
-     * Returns a String representation of the Tree. The elements are generated
-     * from a pre-order traversal of the Tree.
-     * @return the String representation of the Tree.
-     */
-    public String toString() {
-        return toList().toString();
-    }
-     
-    /**
-     * Walks the Tree in pre-order style. This is a recursive method, and is
-     * called from the toList() method with the root element as the first
-     * argument. It appends to the second argument, which is passed by reference     * as it recurses down the tree.
-     * @param element the starting element.
-     * @param list the output of the walk.
-     */
-    private void walk(Node<T> element, java.util.List<Node<T>> list) {
-        list.add(element);
-        for (Node<T> data : element.getChildren()) {
-            walk(data, list);
-        }
-    }
-}
-
-/**
- * Represents a node of the Tree<T> class. The Node<T> is also a container, and
- * can be thought of as instrumentation to determine the location of the type T
- * in the Tree<T>.
- */
-public class Node<T> {
- 
-    public T data;
-    public java.util.List<Node<T>> children;
- 
-    /**
-     * Default ctor.
-     */
-    public Node() {
-        super();
-    }
- 
-    /**
-     * Convenience ctor to create a Node<T> with an instance of T.
-     * @param data an instance of T.
-     */
-    public Node(T data) {
-        this();
-        setData(data);
-    }
-     
-    /**
-     * Return a list of the children of Node<T>. The Tree<T> is represented by a single
-     * root Node<T> whose children are represented by a List<Node<T>>. Each of
-     * these Node<T> elements in the List can have children. The getChildren()
-     * method will return a list of the children of a Node<T>.
-     * @return a list of the children of Node<T>
-     */
-    public java.util.List<Node<T>> getChildren() {
-        if (this.children == null) {
-            return new ArrayList<Node<T>>();
-        }
-        return this.children;
-    }
- 
-    /**
-     * Sets the children of a Node<T> object. See docs for getChildren() for
-     * more information.
-     * @param children the List<Node<T>> to set.
-     */
-    public void setChildren(java.util.List<Node<T>> children) {
-        this.children = children;
-    }
- 
-    /**
-     * Returns the number of immediate children of this Node<T>.
-     * @return the number of immediate children.
-     */
-    public int getNumberOfChildren() {
-        if (children == null) {
-            return 0;
-        }
-        return children.size();
-    }
-     
-    /**
-     * Adds a child to the list of children for this Node<T>. The addition of
-     * the first child will create a new List<Node<T>>.
-     * @param child a Node<T> object to set.
-     */
-    public void addChild(Node<T> child) {
-        if (children == null) {
-            children = new ArrayList<Node<T>>();
-        }
-        children.add(child);
-    }
-     
-    /**
-     * Inserts a Node<T> at the specified position in the child list. Will     * throw an ArrayIndexOutOfBoundsException if the index does not exist.
-     * @param index the position to insert at.
-     * @param child the Node<T> object to insert.
-     * @throws IndexOutOfBoundsException if thrown.
-     */
-    public void insertChildAt(int index, Node<T> child) throws IndexOutOfBoundsException {
-        if (index == getNumberOfChildren()) {
-            // this is really an append
-            addChild(child);
-            return;
-        } else {
-            children.get(index); //just to throw the exception, and stop here
-            children.add(index, child);
-        }
-    }
-     
-    /**
-     * Remove the Node<T> element at index index of the List<Node<T>>.
-     * @param index the index of the element to delete.
-     * @throws IndexOutOfBoundsException if thrown.
-     */
-    public void removeChildAt(int index) throws IndexOutOfBoundsException {
-        children.remove(index);
-    }
- 
-    public T getData() {
-        return this.data;
-    }
- 
-    public void setData(T data) {
-        this.data = data;
-    }
-     
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{").append(getData().toString()).append(",[");
-		int i = 0;
-		for (Node<T> e : getChildren()) {
-			if (i > 0) {
-				sb.append(",");
-			}
-			sb.append(e.toString());
-			i++;
-		}
-		sb.append("]").append("}");
-		return sb.toString();
-	}
-}
-
 	public void toggleHelp() {
 		   if (helpDlg == null) {
 		   	  helpDlg = displayHelpDialog();
@@ -7853,140 +7646,7 @@ public class Node<T> {
 		   }
 		   public boolean isCellEditable(int row,int column) {return false;}
 	}
-	
-	public class sounds {
-	
-		public class soundDesc {
-			protected	String		soundURL;
-			protected	AudioClip	soundAudioClip;
-			protected	boolean		soundPlaying;
-		
-			soundDesc(AudioClip a,String b,boolean c) {
-				soundURL = b;
-				soundAudioClip = a;
-				soundPlaying = c;
-			}
-			public void setAudioClip(AudioClip a) {soundAudioClip = a;}
-			public void setPlaying(boolean b) {soundPlaying = b;}
-			public void setSoundURL(String s) {soundURL = s;}
-		}	
-		private	Vector	acSounds = new Vector();
-		private soundDesc sd; 
-	
-
-		public void createNumberSounds(int num) {
-			// fudge the vector to contain num elements
-			for(int i=0;i<num;i++) {
-				sd = new soundDesc((AudioClip)null,"",false);
-				acSounds.add(sd);
-			}
-		}
-
-		public boolean loadAndPlaySound(final String soundURL, final int index) {
-		   return loadSound(soundURL,index,false,true);
-		}
-		public boolean loadAndPlaySoundDirect(final String soundURL) {
-		   return loadSound(soundURL,-1,false,true);
-		}
-		public boolean loadAndPlaySoundDirect(final String soundURL,boolean block) {
-		   return loadSound(soundURL,-1,block,true);
-		}
-		public boolean loadAndPlaySound(final String soundURL, final int index,boolean block) {
-		   return loadSound(soundURL,index,block,true);
-		}
-		
-		public boolean loadSound(String soundURL,int index) {
-			return loadSound(soundURL,index,false,false);
-		}
-		public boolean loadSound(String soundURL,int index,boolean block) {
-			return loadSound(soundURL,index,block,false);
-		}
-		public boolean loadSound(final String soundURL, final int index, boolean block, final boolean play) {
-			if(!block) {
-				Thread t = new Thread(new Runnable() {
-					public void run() {
-						TRACE("Starting loading sound " + soundURL,4);
-						AudioClip ac = getAudioClip(getCodeBase(),soundURL);
-						if (index != -1) {
-						   sd = new soundDesc(ac,soundURL,play);
-						   acSounds.setElementAt(sd,index);
-						}
-						TRACE("Finished loading sound " + soundURL,4);
-						if (play) {
-						   TRACE("Playing loaded sound " + soundURL,4);
-						   ac.play();
-						}
-					}
-				});
-				t.setPriority(systemSoundThreadPrioity);
-				t.setName("System load sound thread");
-				t.start();
-			} else {
-				AudioClip ac = getAudioClip(getCodeBase(),soundURL);
-				soundDesc sd = new soundDesc(ac,soundURL,false);
-				acSounds.setElementAt(sd,index);
-			}
-			return true;
-		}
-		public void unloadSound(int index) {
-			if (index < 0 || index > acSounds.size()-1) {return;}
-			acSounds.setElementAt((soundDesc)null,index);
-		}
-		public AudioClip getSoundClip(int index) {
-			if (index < 0 || index > acSounds.size()-1) {return (AudioClip)null;}
-			soundDesc sd = (soundDesc)acSounds.elementAt(index);
-			return sd.soundAudioClip;
-		}
-		public boolean getSoundPlaying(int index) {
-			if (index < 0 || index > acSounds.size()-1) {return false;}
-			soundDesc sd = (soundDesc)acSounds.elementAt(index);
-			return sd.soundPlaying;
-		}
-		public String getSoundURL(int index) {
-			if (index < 0 || index > acSounds.size()-1) {return "";}
-			soundDesc sd = (soundDesc)acSounds.elementAt(index);
-			return sd.soundURL;
-		}
-		public int getSoundIndex(String soundURL) {
-			for(int i=0;i<acSounds.size();i++) {
-				soundDesc sd = (soundDesc)acSounds.elementAt(i);
-				if (soundURL.equals(sd.soundURL)) {return i;}
-			}
-			return -1;
-		}
-		public void unloadAllSounds() {
-			for(int i=0;i<acSounds.size();i++) {
-				stopSound(i);
-			}
-			acSounds.removeAllElements();
-		}
-		public void playSound(int index) {
-			if (index < 0 || index > acSounds.size()-1) {return;}
-			soundDesc sd = (soundDesc)acSounds.elementAt(index);
-			if(!sd.soundPlaying) {
-				sd.soundPlaying = true;
-				sd.soundAudioClip.play();
-			}
-		}
-		public void stopSound(int index) {
-			if (index < 0 || index > acSounds.size()-1) {return;}
-			soundDesc sd = (soundDesc)acSounds.elementAt(index);
-			if(sd.soundPlaying) {
-				sd.soundPlaying = false;
-				sd.soundAudioClip.stop();
-			}
-		}
-		public void loopSound(int index) {
-			if (index < 0 || index > acSounds.size()-1) {return;}
-			soundDesc sd = (soundDesc)acSounds.elementAt(index);
-			if(!sd.soundPlaying) {
-				sd.soundPlaying = true;
-				sd.soundAudioClip.loop();
-			}
-		}
-
-	}
-		
+			
 	public JToolBar setupToolBar(boolean floatable) {
 		   JToolBar tBar = new JToolBar("");
 		   tBar.setFloatable(floatable);
@@ -8007,265 +7667,6 @@ public class Node<T> {
 		   }
 	}
 	
-	public class customAction extends AbstractAction {
-		   public customAction (String desc,customIcon ci) {
-		   		  super(desc);
-		   		  putValue(javax.swing.Action.SMALL_ICON,ci);
-		   		  putValue(javax.swing.Action.SHORT_DESCRIPTION,desc);
-		   }
-		   public void actionPerformed(ActionEvent evt) {
-		   }
-	}
-		
-	public String listSupportedTargetTypes()
-	{
-		String	strMessage = "";
-		AudioFileFormat.Type[]	aTypes = AudioSystem.getAudioFileTypes();
-		for (int i = 0; i < aTypes.length; i++)
-		{
-			if (i>0) {strMessage += ",";}
-			strMessage += aTypes[i].getExtension();
-		}
-		return strMessage;
-	}
-
-	public AudioFileFormat.Type findTargetType(String strExtension)
-	{
-		AudioFileFormat.Type[]	aTypes = AudioSystem.getAudioFileTypes();
-		for (int i = 0; i < aTypes.length; i++)
-		{
-			if (aTypes[i].getExtension().equals(strExtension))
-			{
-				return aTypes[i];
-			}
-		}
-		return null;
-	}
-
-	public boolean isPcm(AudioFormat.Encoding encoding)
-	{
-		return encoding.equals(AudioFormat.Encoding.PCM_SIGNED)
-			|| encoding.equals(AudioFormat.Encoding.PCM_UNSIGNED);
-	}
-
-	public Mixer.Info getMixerInfo(String strMixerName)
-	{
-		Mixer.Info[]	aInfos = AudioSystem.getMixerInfo();
-		for (int i = 0; i < aInfos.length; i++)
-		{
-			if (aInfos[i].getName().equals(strMixerName))
-			{
-				return aInfos[i];
-			}
-		}
-		return null;
-	}
-
-	public SourceDataLine getSourceDataLine(String strMixerName,AudioFormat audioFormat,int nBufferSize) {
-		   SourceDataLine line = null;
-		   DataLine.Info  info = new DataLine.Info(SourceDataLine.class,audioFormat,nBufferSize);
-		   try {
-		   	   if (strMixerName != null) {
-			   	  Mixer.Info mixerInfo = getMixerInfo(strMixerName);
-				  if (mixerInfo == null) {
-				  	 return null;
-				  }
-				  Mixer mixer = AudioSystem.getMixer(mixerInfo);
-				  line = (SourceDataLine)mixer.getLine(info);
-			   } else {
-			   	 line = (SourceDataLine)AudioSystem.getLine(info);
-			   }
-			   line.open(audioFormat,nBufferSize);
-		   }
-		   catch (LineUnavailableException e) {e.printStackTrace();}
-		   catch (Exception e) {e.printStackTrace();}
-		   return line;
-	}
-	
-	public TargetDataLine getTargetDataLine(String strMixerName,
-							AudioFormat audioFormat,
-							int nBufferSize)
-	{
-		TargetDataLine	targetDataLine = null;
-		DataLine.Info	info = new DataLine.Info(TargetDataLine.class,
-							 audioFormat, nBufferSize);
-		try
-		{
-			if (strMixerName != null)
-			{
-				Mixer.Info	mixerInfo = getMixerInfo(strMixerName);
-				if (mixerInfo == null)
-				{
-					return null;
-				}
-				Mixer	mixer = AudioSystem.getMixer(mixerInfo);
-				targetDataLine = (TargetDataLine) mixer.getLine(info);
-			}
-			else
-			{
-				targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
-			}
-
-			targetDataLine.open(audioFormat, nBufferSize);
-		}
-		catch (LineUnavailableException e) {e.printStackTrace();}
-		catch (Exception e) { e.printStackTrace(); }
-		return targetDataLine;
-	}
-	
-	public void playSoundToEnd(String soundFile) {
-		   int nInternalBufferSize = AudioSystem.NOT_SPECIFIED;
-		   try {
-		   	   URL u = new URL(soundFile);
-		   	   AudioInputStream ais = AudioSystem.getAudioInputStream(u);
-		   	   AudioFormat af = ais.getFormat();
-		   	   DataLine.Info info = new DataLine.Info(SourceDataLine.class,af,nInternalBufferSize);
-		  	   boolean isSupported = AudioSystem.isLineSupported(info);
-		   	   if (!isSupported) {
-		   	  	   int nSampleSizeInBits = 16;
-			  	   boolean bBigEndian = false;
-		   	  	   AudioFormat source = af;
-			  	   AudioFormat	target = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,source.getSampleRate(),
-					nSampleSizeInBits,source.getChannels(),source.getChannels() * (nSampleSizeInBits / 8),source.getSampleRate(),bBigEndian);
-			  	   ais = AudioSystem.getAudioInputStream(target, ais);
-			       af = ais.getFormat();
-		   	   }	  
-		  	   SourceDataLine line = getSourceDataLine(null,af,AudioSystem.NOT_SPECIFIED);
-		   	   if (line == null) {return;}
-		   	   line.start();
-		   	   int nBytesRead = 0;
-		   	   byte[] abData = new byte[128000];
-		   	   while (nBytesRead != -1) {
-				 nBytesRead = ais.read(abData,0,abData.length);
-		   		 if (nBytesRead >=0) {
-				 	int nBytesWritten = line.write(abData,0,nBytesRead);
-				 }
-			   }
-		   	   line.drain();
-		   	   line.close();
-		} catch (Exception e) {e.printStackTrace();}
-	}
-
-	public interface colorActionUtils {
-		public void colorSelected(Color c);
-	}
-	public class colorAction extends AbstractAction {
-		   private	Color	 		color;
-		   private	colorActionUtils	target;
-		   
-		   public colorAction(Color color) {
-			   target = null;
-		   	   this.color = color;
-			   putValue(javax.swing.Action.SMALL_ICON,new colorIcon(color));
-		   }
-		   public void actionPerformed(ActionEvent evt) {
-			   if (target != null) {target.colorSelected(color);}
-		   }
-		   public Color getColor() {return color;}
-		   public void removeColorActionListener() {target = null;}
-		   public void addColorActionListener(colorActionUtils cau) {target = cau;}
-	}
-	
-interface xslTransformerUtils {
-	// e.g. void transformer.setParameter("name","value");
-	// void transformer.clearParameters();
-	//
-	// String transformer.getOutputProperty(String name);
-	// void transformer.setOutputProperty(String name,String value);
-	// to clear a single property set value=null
-	//
-	public void preTransform(Transformer transformer);
-}
-
-/** Creates an XSLT transformer for processing an XML document.
- *  A new transformer, along with an style template are created 
- *  for each document transformation. The XSLT, DOM, and 
- *  SAX processors are based on system default parameters.
- */ 
-
-public class XslTransformer {
-  private TransformerFactory factory;
-  private xslTransformerUtils target;
-
-  public void addxslUtilsListener(xslTransformerUtils xtu) {target = xtu;}
-  public void removexslUtilsListener() {target = null;}
-  public XslTransformer() {
-    factory =  TransformerFactory.newInstance();
-    target = null;
-  }
-
-  /** Transform an XML and XSL document as <code>Reader</code>s,
-   *  placing the resulting transformed document in a 
-   *  <code>Writer</code>. Convenient for handling an XML 
-   *  documents as a String (<code>StringReader</code>) residing
-   *  in memory, not on disk. The output document could easily be
-   *  handled as a String (<code>StringWriter</code>) or as a
-   *  <code>JSPWriter</code> in a JavaServer page.
-   */
-
-  public void process(Reader xmlFile, Reader xslFile,
-                      Writer output)
-                throws TransformerException {
-    process(new StreamSource(xmlFile),
-            new StreamSource(xslFile),
-            new StreamResult(output));
-  }
-
-  /** Transform an XML and XSL document as <code>File</code>s,
-   *  placing the resulting transformed document in a 
-   *  <code>Writer</code>. The output document could easily 
-   *  be handled as a String (<code>StringWriter</code)> or as 
-   *  a <code>JSPWriter</code> in a JavaServer page.
-   */
-
-  public void process(File xmlFile, File xslFile,
-                      Writer output)
-                throws TransformerException {
-    process(new StreamSource(xmlFile),
-            new StreamSource(xslFile),
-            new StreamResult(output));
-  }
-
-  /** Transform an XML <code>File</code> based on an XSL 
-   *  <code>File</code>, placing the resulting transformed 
-   *  document in an <code>OutputStream</code>. Convenient for 
-   *  handling the result as a <code>FileOutputStream</code> or 
-   *  <code>ByteArrayOutputStream</code>.
-   */
-
-  public void process(File xmlFile, File xslFile,
-                      OutputStream out)
-                 throws TransformerException {
-    process(new StreamSource(xmlFile),
-            new StreamSource(xslFile),
-            new StreamResult(out));
-  }
-
-  /** Transform an XML source using XSLT based on a new template
-   *  for the source XSL document. The resulting transformed 
-   *  document is placed in the passed in <code>Result</code> 
-   *  object.
-   */
-
-  public void process(Source xml, Source xsl, Result result)
-                throws TransformerException {
-    try {
-      Templates template = factory.newTemplates(xsl);
-      Transformer transformer = template.newTransformer();
-      if (target != null) {
-	      target.preTransform(transformer);
-      }
-      transformer.transform(xml, result);
-    } catch(TransformerConfigurationException tce) {
-        throw new TransformerException(
-                    tce.getMessageAndLocation());
-    } catch (TransformerException te) {
-      throw new TransformerException(
-                  te.getMessageAndLocation());
-    }
-  }
-}
-
 	public String doStringTransform(String xmlText,String xsltText) {
 		return doTransform(new StreamSource(new StringReader(xmlText)),
 				new StreamSource(new StringReader(xsltText)));
@@ -8285,23 +7686,6 @@ public class XslTransformer {
 			trans.process(xml,xslt,out);
 		} catch(Exception e) {supportFunctions.displayMessageDialog(null,e.toString());}
 		return writer.toString();
-	}
-
-	// to make a memory XML data file persist call setFilename("...")
-	public class memoryXmlDataFile extends xmlDataFile {
-		private	String filename;
-		
-		memoryXmlDataFile() {
-			filename = supportFunctions.getTmpFilename();
-			openXMLDataFile(filename,"tmp");
-		}
-		protected void finalize() throws Throwable {
-			closeXMLDataFile();
-			if (getFilename().equals(filename)) {
-				deleteFilename(""+dataRelativePath+"/"+appDirectory+"/"+filename+".xml");
-			}
-			super.finalize();
-		}
 	}
  	 		
 	public String[] getFileSet(String name) {
