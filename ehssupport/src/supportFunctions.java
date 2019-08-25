@@ -131,6 +131,134 @@ public class supportFunctions extends Component {
 	public static void connectDatabase() {
 		dbConn = new mysqlJDBC();
 	}
+	public static String listSupportedTargetTypes()
+	{
+		String	strMessage = "";
+		AudioFileFormat.Type[]	aTypes = AudioSystem.getAudioFileTypes();
+		for (int i = 0; i < aTypes.length; i++)
+		{
+			if (i>0) {strMessage += ",";}
+			strMessage += aTypes[i].getExtension();
+		}
+		return strMessage;
+	}
+
+	public static AudioFileFormat.Type findTargetType(String strExtension)
+	{
+		AudioFileFormat.Type[]	aTypes = AudioSystem.getAudioFileTypes();
+		for (int i = 0; i < aTypes.length; i++)
+		{
+			if (aTypes[i].getExtension().equals(strExtension))
+			{
+				return aTypes[i];
+			}
+		}
+		return null;
+	}
+
+	public static boolean isPcm(AudioFormat.Encoding encoding)
+	{
+		return encoding.equals(AudioFormat.Encoding.PCM_SIGNED)
+			|| encoding.equals(AudioFormat.Encoding.PCM_UNSIGNED);
+	}
+
+	public static Mixer.Info getMixerInfo(String strMixerName)
+	{
+		Mixer.Info[]	aInfos = AudioSystem.getMixerInfo();
+		for (int i = 0; i < aInfos.length; i++)
+		{
+			if (aInfos[i].getName().equals(strMixerName))
+			{
+				return aInfos[i];
+			}
+		}
+		return null;
+	}
+
+	public static SourceDataLine getSourceDataLine(String strMixerName,AudioFormat audioFormat,int nBufferSize) {
+		   SourceDataLine line = null;
+		   DataLine.Info  info = new DataLine.Info(SourceDataLine.class,audioFormat,nBufferSize);
+		   try {
+		   	   if (strMixerName != null) {
+			   	  Mixer.Info mixerInfo = getMixerInfo(strMixerName);
+				  if (mixerInfo == null) {
+				  	 return null;
+				  }
+				  Mixer mixer = AudioSystem.getMixer(mixerInfo);
+				  line = (SourceDataLine)mixer.getLine(info);
+			   } else {
+			   	 line = (SourceDataLine)AudioSystem.getLine(info);
+			   }
+			   line.open(audioFormat,nBufferSize);
+		   }
+		   catch (LineUnavailableException e) {e.printStackTrace();}
+		   catch (Exception e) {e.printStackTrace();}
+		   return line;
+	}
+	
+	public static TargetDataLine getTargetDataLine(String strMixerName,
+							AudioFormat audioFormat,
+							int nBufferSize)
+	{
+		TargetDataLine	targetDataLine = null;
+		DataLine.Info	info = new DataLine.Info(TargetDataLine.class,
+							 audioFormat, nBufferSize);
+		try
+		{
+			if (strMixerName != null)
+			{
+				Mixer.Info	mixerInfo = getMixerInfo(strMixerName);
+				if (mixerInfo == null)
+				{
+					return null;
+				}
+				Mixer	mixer = AudioSystem.getMixer(mixerInfo);
+				targetDataLine = (TargetDataLine) mixer.getLine(info);
+			}
+			else
+			{
+				targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
+			}
+
+			targetDataLine.open(audioFormat, nBufferSize);
+		}
+		catch (LineUnavailableException e) {e.printStackTrace();}
+		catch (Exception e) { e.printStackTrace(); }
+		return targetDataLine;
+	}
+	
+	public static void playSoundToEnd(String soundFile) {
+		   int nInternalBufferSize = AudioSystem.NOT_SPECIFIED;
+		   try {
+		   	   URL u = new URL(soundFile);
+		   	   AudioInputStream ais = AudioSystem.getAudioInputStream(u);
+		   	   AudioFormat af = ais.getFormat();
+		   	   DataLine.Info info = new DataLine.Info(SourceDataLine.class,af,nInternalBufferSize);
+		  	   boolean isSupported = AudioSystem.isLineSupported(info);
+		   	   if (!isSupported) {
+		   	  	   int nSampleSizeInBits = 16;
+			  	   boolean bBigEndian = false;
+		   	  	   AudioFormat source = af;
+			  	   AudioFormat	target = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,source.getSampleRate(),
+					nSampleSizeInBits,source.getChannels(),source.getChannels() * (nSampleSizeInBits / 8),source.getSampleRate(),bBigEndian);
+			  	   ais = AudioSystem.getAudioInputStream(target, ais);
+			       af = ais.getFormat();
+		   	   }	  
+		  	   SourceDataLine line = getSourceDataLine(null,af,AudioSystem.NOT_SPECIFIED);
+		   	   if (line == null) {return;}
+		   	   line.start();
+		   	   int nBytesRead = 0;
+		   	   byte[] abData = new byte[128000];
+		   	   while (nBytesRead != -1) {
+				 nBytesRead = ais.read(abData,0,abData.length);
+		   		 if (nBytesRead >=0) {
+				 	int nBytesWritten = line.write(abData,0,nBytesRead);
+				 }
+			   }
+		   	   line.drain();
+		   	   line.close();
+		} catch (Exception e) {e.printStackTrace();}
+	}
 	public static void boxCenterText(Graphics g,Color back,String s1,String s2,int x,int y,int w,int h) {
 		boxCenterText(g,back,s1,s2,x,y,w,h,true);
 	}
