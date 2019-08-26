@@ -7027,7 +7027,6 @@ public void deleteFilename(String filename) {
 		}
 	}
 	
-
 	public class registrationinfo {
 		private boolean appUseDatabase;
 		private	boolean	appRemoteHosted;
