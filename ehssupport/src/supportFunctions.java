@@ -121,7 +121,6 @@ public class supportFunctions extends Component {
 	public static mysqlJDBC dbConn = null;
 	public static configurationSettings appConfigSetting = null;
 	
-
 	public static configurationSettings getAppConfigSettings() {return appConfigSetting;}
 	public static void createAppConfigSettings(String name) {
 		appConfigSetting = new configurationSettings();
@@ -130,6 +129,91 @@ public class supportFunctions extends Component {
 	public static mysqlJDBC getDBConn() {return dbConn;}
 	public static void connectDatabase() {
 		dbConn = new mysqlJDBC();
+	}
+	public static String displayLogonDialog() {
+		logonDialog d = new logonDialog(null);
+		return d.getUserName() + "," + d.getPassword();
+	}
+
+	public static MenuItem getMenuItem(Menu m,String label) {
+		for (int i=0;i<m.getItemCount();i++) {
+			if (label.equalsIgnoreCase(m.getItem(i).getLabel())) {return m.getItem(i);}
+		}
+		return (MenuItem)null;
+	}
+	
+/*	
+ public static String readFromJARFile(String filename)
+ 			throws IOException
+			{
+			  InputStream is = getClass().getResourceAsStream(filename);
+			  InputStreamReader isr = new InputStreamReader(is);
+			  BufferedReader br = new BufferedReader(isr);
+			  StringBuffer sb = new StringBuffer();
+			  String line;
+			  while ((line = br.readLine()) != null) 
+			  {
+			    sb.append(line);
+			  }
+			  br.close();
+			  isr.close();
+			  is.close();
+			  return sb.toString();
+			}
+*/
+
+	public static String stringPart(String token) {
+		if (token.length() == 0) {return (String)null;}
+		
+		int index = 0;
+		for (int i=0;i<token.length();i++) {
+			if (!Character.isDigit(token.charAt(i))) {break;}
+			index++;
+		}
+		if (index == token.length()-1) {return null;}
+		return token.substring(index);
+	}
+
+	public static int numberPart(String token) {
+		if (token.length() == 0) {return 0;}
+
+		int index = 0;
+		for (int i=0;i<token.length();i++) {
+			if (!Character.isDigit(token.charAt(i))) {break;}
+			index++;
+		}
+		if (index == token.length()-1) {return 0;}
+		return Integer.parseInt(token.substring(0,index));
+	}
+	
+	public static String selectCurrentWord(JTextField tf) {
+		   Vector v = getWordStartEndPos(tf.getText(),tf.getCaretPosition());
+		   tf.select(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1))+1);
+		   return tf.getSelectedText();
+	}
+	
+	public static void replaceCurrentWord(JTextField tf,String word) {
+		   String oldText = tf.getText();
+		   Vector v = getWordStartEndPos(tf.getText(),tf.getCaretPosition());
+		   String newText = oldText.substring(0,Integer.parseInt((String)v.elementAt(0))) + word + oldText.substring(Integer.parseInt((String)v.elementAt(1)),oldText.length());
+		   tf.setText(newText);		   
+	}	
+	
+	public static Vector getWordStartEndPos(String s,int spos) {
+	   Vector v = new Vector();
+	   if (spos<0 || spos>s.length()) {return v;}
+	   StringBuffer b = new StringBuffer(s);
+	   int index = 0;
+	   for (int i=spos;i>-1;i--) {
+	      if (b.charAt(i) == ' ') {index=i+1;break;}
+	   }
+	   v.addElement(String.valueOf(index));
+	   index = s.length()-1;
+	   for(int i=spos+1;i<s.length();i++) {
+	      if (b.charAt(i) == ' ') {index=i-1;break;}
+	   }	   
+	   v.addElement(String.valueOf(index));
+	   return v;
 	}
 	public static String listSupportedTargetTypes()
 	{
