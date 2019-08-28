@@ -114,6 +114,9 @@ import javax.naming.*;
 
 public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 {
+	protected static boolean	bRunAppWithGUI = false;
+	protected static final String		registrationEmail="endhousesoftware999@gmail.com";
+	protected static final String		adminEmail="endhousesoftware999@gmail.com";
 	public		boolean		bRemoteHosted = false;
 	public		String		dataRelativePath = "..";
 	
@@ -184,8 +187,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 
 	protected	static final String		IDENTITY_XSLT = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform'" + " version='1.0'>" + "<xsl:template match='/'><xsl:copy-of select='.'/>" + "</xsl:template></xsl:stylesheet>";
 
-	protected	static final String		registrationEmail="endhousesoftware999@gmail.com";
-	protected	static final String		adminEmail="endhousesoftware999@gmail.com";
 	protected	String		exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"documents/help.xml";
 	protected	static String			exFAQFile="";
 	protected	static final String		appDirectory = "hdlworkbench";
@@ -224,8 +225,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 	public		String		VHDLTransTableName = ""+dataRelativePath+"/" + appDirectory + "/transtables/vhdl.ttd";
 	public		String		VerilogTransTableName = ""+dataRelativePath+"/" + appDirectory + "/transtables/verilog.ttd";
 	
-	public		static boolean	bRunAppWithGUI = false;
-	 
 	protected 	MediaTracker			bilmt = new MediaTracker(this);
 	public		Component				lastPositionWindow = null;
 	
@@ -385,8 +384,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo("HDL Work Bench","HDL Work Bench (Application)","WB1000","01.63.0000.00","01/02/18","(c) End House Software 2007-2019",bRemoteHosted);
-		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
+		systemUserReg = new registrationinfo("HDL Work Bench","HDL Work Bench","WB1000","01.63.0000.00","01/02/18","(c) End House Software 2007-2019",bRemoteHosted);		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
@@ -2533,90 +2531,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		return hc;
 	}
 
-	public String stringPart(String token) {
-		if (token.length() == 0) {return (String)null;}
-		
-		int index = 0;
-		for (int i=0;i<token.length();i++) {
-			if (!Character.isDigit(token.charAt(i))) {break;}
-			index++;
-		}
-		if (index == token.length()-1) {return null;}
-		return token.substring(index);
-	}
-
-	public int numberPart(String token) {
-		if (token.length() == 0) {return 0;}
-
-		int index = 0;
-		for (int i=0;i<token.length();i++) {
-			if (!Character.isDigit(token.charAt(i))) {break;}
-			index++;
-		}
-		if (index == token.length()-1) {return 0;}
-		return Integer.parseInt(token.substring(0,index));
-	}
-	
-	public String selectCurrentWord(JTextField tf) {
-		   Vector v = getWordStartEndPos(tf.getText(),tf.getCaretPosition());
-		   tf.select(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1))+1);
-		   return tf.getSelectedText();
-	}
-	
-	public void replaceCurrentWord(JTextField tf,String word) {
-		   String oldText = tf.getText();
-		   Vector v = getWordStartEndPos(tf.getText(),tf.getCaretPosition());
-		   String newText = oldText.substring(0,Integer.parseInt((String)v.elementAt(0))) + word + oldText.substring(Integer.parseInt((String)v.elementAt(1)),oldText.length());
-		   tf.setText(newText);		   
-	}	
-	
-	public Vector getWordStartEndPos(String s,int spos) {
-	   Vector v = new Vector();
-	   if (spos<0 || spos>s.length()) {return v;}
-	   StringBuffer b = new StringBuffer(s);
-	   int index = 0;
-	   for (int i=spos;i>-1;i--) {
-	      if (b.charAt(i) == ' ') {index=i+1;break;}
-	   }
-	   v.addElement(String.valueOf(index));
-	   index = s.length()-1;
-	   for(int i=spos+1;i<s.length();i++) {
-	      if (b.charAt(i) == ' ') {index=i-1;break;}
-	   }	   
-	   v.addElement(String.valueOf(index));
-	   return v;
-	}
-
-	public String posSearchStr(String keywords) {
-		Vector v = supportFunctions.splitIntoTokens(keywords);
-		if (v.size()==0) {return "";}
-		String tmp = "POSITION('"+(String)v.elementAt(0)+"' IN sysEHSHelpText)>0";
-		if (v.size()==1) {return tmp;}
-		for (int i=1;i<v.size();i++) {
-			tmp = tmp + " AND POSITION('"+(String)v.elementAt(i)+"' IN sysEHSHelpText)>0";
-		}
-		return tmp;
-	}
-	
-	public void populateChoice(Choice c,Vector v) {
-		c.removeAll();
-		for (int i=0;i<v.size();i++) {
-			c.addItem((String)v.elementAt(i));
-		}
-	}
-	
-	public void tileImage(Graphics g,Component c,Image i) {
-		   Rectangle r = c.getBounds();
-		   int iw = i.getWidth(c);
-		   int ih = i.getHeight(c);
-		   if ((iw<=0) || (ih<=0)) {return;}
-		   for (int x=0;x<r.width;x+=iw) {
-		   	   for (int y=0;y<r.height;y+=ih) {
-			   	   g.drawImage(i,x,y,c);
-			   }
-		   }
-	}
-	
 	public void toggleHelp() {
 		   if (helpDlg == null) {
 		   	  helpDlg = displayHelpDialog();
@@ -3794,7 +3708,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 				int index = tokens.indexOf("for");
 				sname = "intsignal" + String.valueOf(noNameProcessesID++);
 				String timespec = (String)tokens.elementAt(index + 1);
-				tiggertime = entityName +":" + sname + ":" + numberPart(timespec) + ":" + stringPart(timespec); // module:signalname:time value:time unit
+				tiggertime = entityName +":" + sname + ":" + supportFunctions.numberPart(timespec) + ":" + supportFunctions.stringPart(timespec); // module:signalname:time value:time unit
 				writeDirectToOutput("\ncreateSignal('"+entityName+"','"+entityName+"','"+sname+"','out','bit,0,0,0,0,"+entityName+",,,0,0',0,'0');");
 				symbolTable.addSymbol(entityName,currentScope(),sname,String.valueOf(0),symType.SIGNAL,symClass.NONE);
 				writeWaitBlock(pname,sname,tiggertime,true);
@@ -6613,6 +6527,22 @@ public String doFileTransform(String xmlFilename,String xsltFilename) {
 		public void userLogOn(String userid) {;}
 		public void userLogOff(String userid) {;}
 		panelDialog helpDlg = null;
+		public void populateChoice(Choice c,Vector v) {
+			c.removeAll();
+			for (int i=0;i<v.size();i++) {
+				c.addItem((String)v.elementAt(i));
+			}
+		}
+		public void displayFAQ(String product) {
+			JTextArea ta = new JTextArea("",8,40);
+			ta.setBackground(new Color(255,255,170));
+			ta.setWrapStyleWord(true);
+			JPanel p = new JPanel();
+			JScrollPane sp = new JScrollPane(ta);
+			p.add(sp);
+			supportFunctions.displayTextFile(exFAQFile,ta);
+			supportFunctions.displayPanelDialog(null,p,product + " - FAQ");
+		}
 		public void sendReport(String email) {
 			final		Choice		deptCh,typeCh;
 			JButton		FAQBut,submitBut,OKBut;
@@ -6725,7 +6655,7 @@ public String doFileTransform(String xmlFilename,String xsltFilename) {
 			int id = getMachineUniqueID();
 			boolean bRegistered = loadRegistrationData(String.valueOf(id));
 			if (!bRegistered) {
-				Vector v = supportFunctions.splitIntoTokens(displayLogonDialog(),",");
+				Vector v = supportFunctions.splitIntoTokens(supportFunctions.displayLogonDialog(),",");
 				if (v.size() == 2) {
 					String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSRegID FROM sysehsregistrations WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUserName='"+(String)v.elementAt(0)+"' AND sysEHSRegPassword='"+(String)v.elementAt(1)+"' AND sysEHSRegActive=1","");
 					if (data.length() != 0) {
@@ -6890,77 +6820,6 @@ public String doFileTransform(String xmlFilename,String xsltFilename) {
 		multiColumnCanvasDialog d = new multiColumnCanvasDialog(null,"Test MCD",c);
 	}
 			 
-	public String displayLogonDialog() {
-		logonDialog d = new logonDialog(null);
-		return d.getUserName() + "," + d.getPassword();  
-	}
-	public class logonDialog extends positionDialog  implements ActionListener {
-		private JButton	butOK,butCancel;
-		private String username,password;
-		private	TextField usernameTF,passwordTF;
-
-		public logonDialog (Frame f) {
-			super(f,"User Logon",true);
-				  
-			username = "";
-			password = "";			
-				  
-		    JPanel butPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		    butOK = new JButton("Ok");
-		    butCancel = new JButton("Cancel");
-		    butOK.addActionListener(this);
-		    butCancel.addActionListener(this);
-		    butOK.setMinimumSize(new Dimension(10*charWidth,charHeight));
-		    butCancel.setMinimumSize(new Dimension(10*charWidth,charHeight));
-		    butPanel.add(butOK);
-		    butPanel.add(butCancel);
-		   
-			JPanel propSheetPanel = new JPanel();
-			propSheetPanel.setLayout(new GridLayout(0,2));
-			propSheetPanel.add(new JLabel("Username:"));
-			usernameTF = new TextField("",10);
-			propSheetPanel.add(usernameTF);			
-			propSheetPanel.add(new JLabel("Password:"));
-			passwordTF = new TextField("",10);
-			propSheetPanel.add(passwordTF);			
-			add(propSheetPanel,"Center");
-			add(butPanel,"South");
-		    
-			addWindowListener(new WindowAdapter() {
-				public void WindowClosing(WindowEvent evt) {
-					dispose();
-				}
-		    });
-		
-		    pack();
-		    setVisible(true);
-		}		
-	    public String getUserName() {return username;}
-		public String getPassword() {return password;}
-	    public void destroy() {
-	   		  dispose();
-	    }
-		public void actionPerformed(ActionEvent evt) {
-		   if (evt.getSource() == butOK) {
-				username = usernameTF.getText();
-				password = passwordTF.getText();
-				dispose();
-		   }
-		   if (evt.getSource() == butCancel) {
-				username = "";
-				password = "";			
-			    dispose();
-		   }
-	    }
-	}
-
-	public MenuItem getMenuItem(Menu m,String label) {
-		for (int i=0;i<m.getItemCount();i++) {
-			if (label.equalsIgnoreCase(m.getItem(i).getLabel())) {return m.getItem(i);}
-		}
-		return (MenuItem)null;
-	}
-	
 	public Color colorCommonDialog(Color c) {
 		return JColorChooser.showDialog(this,"Choose Color",c);
 	}
@@ -8748,11 +8607,11 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 				return menu;
 		  }
 		  public void customUpdateMenu(PopupMenu menu) {
-			getMenuItem(menu,"Paste").setEnabled(clipboardDrawingItems.size() != 0);
-			getMenuItem(menu,"Cut").setEnabled(selectedDrawingItems.size() != 0);
-			getMenuItem(menu,"Copy").setEnabled(selectedDrawingItems.size() != 0);
-			getMenuItem(menu,"Undo").setEnabled(undoIndex > -1);
-			getMenuItem(menu,"Redo").setEnabled(undoIndex > undoDrawingItems.size() - 1);
+			supportFunctions.getMenuItem(menu,"Paste").setEnabled(clipboardDrawingItems.size() != 0);
+			supportFunctions.getMenuItem(menu,"Cut").setEnabled(selectedDrawingItems.size() != 0);
+			supportFunctions.getMenuItem(menu,"Copy").setEnabled(selectedDrawingItems.size() != 0);
+			supportFunctions.getMenuItem(menu,"Undo").setEnabled(undoIndex > -1);
+			supportFunctions.getMenuItem(menu,"Redo").setEnabled(undoIndex > undoDrawingItems.size() - 1);
 			cbPictureFrame.setState(bDrawPictureFrame);		  
 		  }
 		  public void itemStateChanged(ItemEvent evt) {
@@ -8760,7 +8619,7 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 				  TRACE("Changed show picture frame state",4);
 				  bDrawPictureFrame = cbPictureFrame.getState();
 			  }
-			  if (evt.getSource() == cbItem) {
+			  if (evt.getSource() == cbItem) { 
 				  dcFilled = cbItem.getState();
 			  }
 			  if (evt.getSource() == cbGrid) {
@@ -9026,17 +8885,6 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 		  public void paint() {paint(getGraphics());}
 		  public void setSize(Dimension d) {dcMaxX=(int)d.getWidth();dcMaxY=(int)d.getHeight();dC.setSize(d);}
 		  public Dimension getSize() {return dC.getSize();}
-	}
-	
-	public void displayFAQ(String product) {
-		JTextArea ta = new JTextArea("",8,40);
-		ta.setBackground(new Color(255,255,170));
-		ta.setWrapStyleWord(true);
-		JPanel p = new JPanel();
-		JScrollPane sp = new JScrollPane(ta);
-		p.add(sp);
-		supportFunctions.displayTextFile(exFAQFile,ta);
-		supportFunctions.displayPanelDialog(null,p,product + " - FAQ");
 	}
 }
 
