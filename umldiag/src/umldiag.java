@@ -108,10 +108,6 @@ import javax.naming.*;
 
 public class umldiag extends JApplet implements ChangeListener,Runnable
 {
-	protected static boolean	bRunAppWithGUI = false;
-	protected static final String		registrationEmail="endhousesoftware999@gmail.com";
-	protected static final String		adminEmail="endhousesoftware999@gmail.com";
-	public		boolean		bRemoteHosted = false;
 	public		String		dataRelativePath = ".."; 
 
 	protected	Thread		systemThread1;
@@ -364,7 +360,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo("UML Work Bench","UML Work Bench (Application)","UD1000","02.51.0000.00","01/02/18","(c) End House Software 2007-2019",bRemoteHosted);
+		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","02.51.0000.00","01/02/18","(c) End House Software 2007-2019",ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
@@ -428,10 +424,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	public static void main(String[] args) {
 		for (int i=0;i<args.length;i++) {
 			if (args[i].equals("gui")) {
-				bRunAppWithGUI = true;
+				ehsConstants.bRunAppWithGUI = true;
 			}
 		}
-		if (bRunAppWithGUI) {
+		if (ehsConstants.bRunAppWithGUI) {
 			new appletframe(new umldiag(),windowXMax,windowYMax);
 		} else {
 			theApp = new appletframe(new umldiag());
@@ -477,67 +473,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		}
 	}	
 	  
-	public int getSystemVar(String name, int defValue) {
-		String data = "";
-		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",String.valueOf(defValue));
-		
-		TRACE("data (getSystemVar) is " + data + " length="+String.valueOf(data.length()),3);
-		if(data.length() == 0) {
-			setSystemVar(name,defValue);
-			return defValue;
-		}
-
-		int val = 0;
-		try {
-		   val = Integer.parseInt(data);
-		} catch(Exception e) {e.printStackTrace();}
-		return val;
-	}
-
-	public boolean getSystemVar(String name, boolean defValue) {
-		String data="";
-		data = supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",supportFunctions.valueOf(defValue));
-		
-		if(data.length() == 0) {
-			setSystemVar(name,defValue);
-			return defValue;
-		}
-
- 	    boolean ret = false;
-		try {
-		   if(Integer.parseInt(data) == 1) {ret = true;}
-		} catch (Exception e) {e.printStackTrace();}
-		
-		return ret;
-	}
-
-	public String getSystemVar(String name, String defValue) {
-		String data = "";
-		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",defValue);
-		
-		if(data.length() == 0) {
-			setSystemVar(name,defValue);
-			return defValue;
-		}
-
-		return data.trim();
-	}
-
-	public String setSystemVar(String name, String val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+val+"')","");
-		return val;
-	}
-
-	public int setSystemVar(String name, int val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+String.valueOf(val)+"')","");
-		return val;
-	}
-	
-	public boolean setSystemVar(String name, boolean val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+supportFunctions.valueOf(val)+"')","");
-		return val;
-	}
-
 	public helpDialog displayHelpDialog() {
 		   helpDialog d = new helpDialog(supportFunctions.getTopLevelParent(this));
 		   d.setLocation(defaultDialogX,defaultDialogY);
@@ -4848,7 +4783,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		public UMLCompiler getCompiler() {return compilier;}
 		mainCard() {
 			// for an application (no GUI) we do not want to init the GUI interface but still want access to the mainCard class functions
-			if (!bRunAppWithGUI) {return;}
+			if (!ehsConstants.bRunAppWithGUI) {return;}
 		
 			umlDiagram = new umlDiagramStruct(); // must be first thing created BEFORE scrollabecanvas
 			TRACE("init umlDiagram!!!",4);
@@ -5249,7 +5184,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			
 			//supportFunctions.displayMessageDialog(null,"Generation Complete");
 			msgD.setText("Creating Data Dictionary");
-			if (bRunAppWithGUI) {compilier.getSymbolTable().createSymbolDialog("Data Dictionary","Data Dictionary");}
+			if (ehsConstants.bRunAppWithGUI) {compilier.getSymbolTable().createSymbolDialog("Data Dictionary","Data Dictionary");}
 			msgD.setText("Creating Calling Tree");
 			umlDiagram.getUMLCallingTree().displayCallingTree();
 
@@ -5490,7 +5425,7 @@ public void deleteFilename(String filename) {
 		}
 				
 		public void init() {	
-		bRunAppWithGUI = true;
+		ehsConstants.bRunAppWithGUI = true;
 		TRACE("init() called",4);
 		
 		setLocation(0,0);
@@ -5502,7 +5437,7 @@ public void deleteFilename(String filename) {
 		contentPane = getContentPane();
 		tabPane = new JTabbedPane();
 
-		systemUserReg = new registrationinfo("UML Work Bench","UML Work Bench (Application)","UD1000","02.51.0000.00","01/02/18","(c) End House Software 2007-2019",bRemoteHosted);
+		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","02.51.0000.00","01/02/18","(c) End House Software 2007-2019",ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
 		String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSDeptName FROM sysehsdepartments","Admin,Enquiry,Techinical,Sales");
@@ -5521,7 +5456,7 @@ public void deleteFilename(String filename) {
 		helpMenu.add(about);
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);
-		if(getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
+		if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
 		
 		ac = getAppletContext();
 					   
@@ -5562,7 +5497,7 @@ public void deleteFilename(String filename) {
 		startPerApplicationProcess();
 		
 		parentFrame = supportFunctions.getTopLevelParent(this);
-		machineID = getMachineUniqueIDInternal();
+		machineID = supportFunctions.getMachineUniqueIDInternal("../" + appDirectory);
 		
 		String data1 = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSProdKBFilename FROM sysehsproducts WHERE sysEHSProdName='" + systemUserReg.getAppName() + "'","");
 		exFAQFile = dataRelativePath + "/knowledgebases/" + data1;
@@ -5572,30 +5507,6 @@ public void deleteFilename(String filename) {
 		umlDiagram.setupUseCaseData();	
 	}
 
-	public String getMachineUniqueIDInternal() {
-		if (systemUserReg.getAppRemotedHosted()) {return "1";}
-		
-		pseduoFile f = new pseduoFile(""+dataRelativePath+"/" + appDirectory + "/.licence");
-		String  s = f.loadFile();
-		if (s.length() != 0) {return s.trim();}
-		
-		int tmp = getSystemVar("muniquecount",0);
-		setSystemVar("muniquecount",tmp+1);
-
-		pseduoFile f1 = new pseduoFile(""+dataRelativePath+"/" + appDirectory + "/.licence");
-		f1.saveFile(String.valueOf(tmp));
-		f1.flush();
-		
-		return String.valueOf(tmp);
-	}
-	public String getMachineUniqueString() {
-		return getMachineUniqueIDInternal();
-	}
-	public int getMachineUniqueID() {
-		try {
-			return Integer.parseInt(getMachineUniqueIDInternal());
-		} catch (Exception e) {return 0;}
-	}
 	public int ehsHashCode(String s) {
 		int hc = 0;
 		for (int i=0;i<s.length();i++) {
@@ -6938,6 +6849,12 @@ public void deleteFilename(String filename) {
 		}
 	}
 	
+	public void doAppUpdate() {
+		   try {
+		   	   URL u = new URL(getCodeBase(),"../appupdater.php?appproduct="+systemUserReg.getAppName()+"&curbuildnum="+systemUserReg.getBuildNumber()+"&serialbase="+systemUserReg.getAppSerialBase()+"&directory="+dataRelativePath+"/umlwb/umlwbbuild.number");
+		   	   ac.showDocument(u,"_blank");
+		   } catch (Exception e) {e.printStackTrace();}
+	}
 	public class registrationinfo {
 		private boolean appUseDatabase;
 		private	boolean	appRemoteHosted;
@@ -6959,6 +6876,10 @@ public void deleteFilename(String filename) {
 		private Vector	rptStatus = new Vector();
 		private int	numAttemptsLeft,userCredit,features; 
 		private	userManager userMan;
+		private String buildDate = "";
+		private String frameworkBuildDate = "";
+		private String gitVersionInfo = "";
+		private String appDirectory = "";
 		
 	public class userManager {
 		public String[] getUserListByTag(String tag) {
@@ -6988,7 +6909,7 @@ public void deleteFilename(String filename) {
 			return tokens;
 		}
 	}
-		registrationinfo(String name,String description,String serialbase,String version,String date,String cr,boolean internet) {
+		registrationinfo(String ad,String name,String description,String serialbase,String version,String date,String cr,boolean internet,String bd,String fbd,String gvi) {
 			numAttemptsLeft = -1;
 			appUseDatabase = true;
 			appRemoteHosted = internet;
@@ -7008,7 +6929,15 @@ public void deleteFilename(String filename) {
 			clearRegistrationData();
 			supportFunctions.createAppConfigSettings(""+dataRelativePath+"/"+appDirectory+"/"+name+"_settings");
 			userMan = new userManager();
+			buildDate = bd;
+			frameworkBuildDate = fbd;
+			gitVersionInfo = gvi;
+			appDirectory = ad;
 		}
+		String getAppDirectory() {return appDirectory;}
+		String getBuildDate() {return buildDate;}
+		String getFrameworkBuildDate() {return frameworkBuildDate;}
+		String getGitVersionInfo() {return gitVersionInfo;}
 		public void setUserTag(String s) {
 			if (getUserRegistered()) {
 				String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSRegTag FROM sysehsregistrations WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegName='"+userName+"'","");
@@ -7399,7 +7328,7 @@ public void deleteFilename(String filename) {
 					//supportFunctions.displayMessageDialog(null,tmp1);
 					supportFunctions.getDBConn().executeSQLQuery(tmp1,"");
 					supportFunctions.mail(emailTF.getText(),"EHS Report Submitted","Thank you for submitting a report. It has been given ticket ID " + ticket + ". You do not need to reply to this email. Report data sent is " + ta.getText());
-					supportFunctions.mail(registrationEmail,"New EHS Report Created","Ticket: " + ticket + " Product:" + appName + " Description:" + ta.getText());
+					supportFunctions.mail(ehsConstants.registrationEmail,"New EHS Report Created","Ticket: " + ticket + " Product:" + appName + " Description:" + ta.getText());
 					msgD.destory();
 					msgD.dispose();
 					supportFunctions.displayMessageDialog(null,"Thank you for the report, it has been assigined ticket ID " + ticket + ". Please use this reference in any further communication.");
@@ -7418,7 +7347,7 @@ public void deleteFilename(String filename) {
 		public void registerUser() {
 			if (getUserRegistered()) {return;}
 			
-			int id = getMachineUniqueID();
+			int id = supportFunctions.getMachineUniqueID("../" + appDirectory);
 			boolean bRegistered = loadRegistrationData(String.valueOf(id));
 			if (!bRegistered) {
 				Vector v = supportFunctions.splitIntoTokens(supportFunctions.displayLogonDialog(),",");
@@ -7434,7 +7363,7 @@ public void deleteFilename(String filename) {
 				}
 			}
 			
-			if (!bRunAppWithGUI) {return;}
+			if (!ehsConstants.bRunAppWithGUI) {return;}
 			
 			if (splashJPG.equals("") && !bRegistered) {
 				JOptionPane.showMessageDialog(null,"This copy of "+ getAppName() + " is unregistered. Please see website to obtain a serial number.",getAppName(),JOptionPane.INFORMATION_MESSAGE);
@@ -7444,7 +7373,13 @@ public void deleteFilename(String filename) {
 				} else {
 					int major = getMajorVersionNumber();
 					int minor = getMinorVersionNumber();
-					displaySplashScreen(getAppName(),splashJPG,"Version "+String.valueOf(major)+"."+String.valueOf(minor),15);
+					String bt1 = "Unregistered";
+					String bt2 = "Serial Number: ";
+					if (getUserRegistered()) {
+						bt1 = getUserName();
+						bt2 = bt2 + getSerialNumber();
+					}
+					splashScreenDialog d = new splashScreenDialog(null,getAppName(),splashJPG,"Version "+String.valueOf(major)+"."+String.valueOf(minor),bt1,bt2,15);
 				}
 			}
 		}
@@ -7456,7 +7391,7 @@ public void deleteFilename(String filename) {
 				numAttemptsLeft = Integer.parseInt(serial.substring(12,14));
 				if (numAttemptsLeft == 0) {
 					supportFunctions.displayMessageDialog(null,"Sorry your trail licence has expired.");
-					supportFunctions.mail(registrationEmail,"Licence Expiry","A trail licence for "+name+" has expired.");
+					supportFunctions.mail(ehsConstants.registrationEmail,"Licence Expiry","A trail licence for "+name+" has expired.");
 					clearRegistrationData();
 					return;
 				} else {
@@ -7478,12 +7413,6 @@ public void deleteFilename(String filename) {
 			} else {
 				return true;
 			}
-		}
-		public void doAppUpdate() {
-			   try {
-			   	   URL u = new URL(getCodeBase(),"../appupdater.php?appproduct="+appName+"&curbuildnum="+getBuildNumber()+"&serialbase="+appSerialBase+"&directory="+dataRelativePath+"/umldiag/umldiagbuild.number");
-			   	   ac.showDocument(u,"_blank");
-			   } catch (Exception e) {e.printStackTrace();}
 		}
 		public String getGitVersionInfoString() {return gitVersionInfo.substring(3,gitVersionInfo.length()-3);}
 		public String getBuildString() {return buildDate.substring(3,buildDate.length()-3);}
@@ -7524,7 +7453,7 @@ public void deleteFilename(String filename) {
 		public positionDialog(Frame parent,String s,boolean b,String id) {
 			super(parent,s,b);
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,"0,0");
+			String tmp = supportFunctions.getSystemVar(id,"0,0");
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 			lastPositionWindow = this;
@@ -7537,7 +7466,7 @@ public void deleteFilename(String filename) {
 		public positionDialog(Frame parent,String id) {
 			super(parent);
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,"0,0");
+			String tmp = supportFunctions.getSystemVar(id,"0,0");
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 			lastPositionWindow = this;
@@ -7546,19 +7475,19 @@ public void deleteFilename(String filename) {
 			Point p = getPosition();
 			id = id.replaceAll(" ","");
 			String tmp = String.valueOf(p.x) + "," + String.valueOf(p.y);
-			setSystemVar(id,tmp);
+			supportFunctions.setSystemVar(id,tmp);
 		}
 		
 		public void loadPosition(String id) {
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,"0,0");
+			String tmp = supportFunctions.getSystemVar(id,"0,0");
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 		}
 
 		public void loadPosition(String id,String defaultPos) {
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,defaultPos);
+			String tmp = supportFunctions.getSystemVar(id,defaultPos);
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 		}
@@ -7652,15 +7581,14 @@ public void deleteFilename(String filename) {
 		v.copyInto(tmp);
 		return tmp;
 	}
-	public void displaySplashScreen(String title,String image,String extraText,int timeToDisplay) {
-		splashScreenDialog d = new splashScreenDialog(supportFunctions.getTopLevelParent(this),title,image,extraText,timeToDisplay);
-	}
 	public class splashScreenDialog extends JDialog implements pictureUtils {
 	    private	Timer 			tick;
 		private	int				timeoutSecs,currentSecs;
 		private	pictureCanvas 	splashCanvas;
 		public String 			title;
 		public String 			extraText;
+		public String 			bottomText1 = "";
+		public String			bottomText2 = "";
 		
 		public void pictureStart() {}
 		public void pictureFinish() {}
@@ -7688,11 +7616,9 @@ public void deleteFilename(String filename) {
 			FontMetrics fm2 = getFontMetrics(newFont2);
 			int height2 = fm2.getHeight();
 			int ascent2 = fm2.getAscent();
-			String s2 = "Unregistered";
-			if (systemUserReg.getUserRegistered()) {s2 = "Registered To: " + systemUserReg.getUserName();}
+			String s2 = bottomText1;
 			int y2 = splashCanvas.height() - (2 * height2);
-			String s3 = "Serial Number: ";
-			if (systemUserReg.getUserRegistered()) {s3 = s3 + systemUserReg.getSerialNumber();}
+			String s3 = bottomText2;
 			int y3 = splashCanvas.height() - height2;
 			
 			int botWidth = fm2.stringWidth(s2);
@@ -7717,11 +7643,13 @@ public void deleteFilename(String filename) {
 			
 			g2d.setFont(orgFont);
 		}
-		public splashScreenDialog(Frame parent,String title,String image,String extraText,int timeToDisplay) {
+		public splashScreenDialog(Frame parent,String title,String image,String extraText,String bt1,String bt2,int timeToDisplay) {
 			super(parent,title,true);
 
 			this.title = title;
 			this.extraText = extraText;
+			this.bottomText1 = bt1;
+			this.bottomText2 = bt2;
 			
 			timeoutSecs = 5;
 			currentSecs = 0;
@@ -8037,13 +7965,13 @@ public void deleteFilename(String filename) {
 						loadAsXML(name);
 						break;
 				}
-				String tmp = getSystemVar(getEntity() + "_dcbackcolor","white");
+				String tmp = supportFunctions.getSystemVar(getEntity() + "_dcbackcolor","white");
 				setBackgroundColor(supportFunctions.getColorCode(tmp));
 				
 				return true;
 		   }
 		   public void closeDrawingCanvas() {
-				setSystemVar(getEntity() + "_dcbackcolor",supportFunctions.getColorName(getBackgroundColor()));
+				supportFunctions.setSystemVar(getEntity() + "_dcbackcolor",supportFunctions.getColorName(getBackgroundColor()));
 				if (loadMode == DCLoadFromXML) {saveAsXML(getEntity());} else {saveDrawingItems();}
 				clearDrawingCanvas();
 				dcEntity = "entity"; // default value

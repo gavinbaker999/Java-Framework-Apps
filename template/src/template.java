@@ -100,16 +100,12 @@ import javax.naming.*;
 //import javax.xml.xquery.XQConnection;
 //impordt javax.xml.xquery.XQDataSource;
 //import javax.xml.xquery.XQException;
-//import javax.xml.xquery.XQPreparedExpression;
+//import javax.xml.xquery.XQPreparedExpression; 
 //import javax.xml.xquery.XQResultSequence;
 //import com.saxonica.xqj.SaxonXQDataSource;
 
 public class template extends JApplet implements ChangeListener,Runnable
 {
-	protected static boolean	bRunAppWithGUI = false;
-	protected static final String		registrationEmail="endhousesoftware999@gmail.com";
-	protected static final String		adminEmail="endhousesoftware999@gmail.com";
-	protected static boolean	bRemoteHosted = false;
 	protected static String	dataRelativePath = "..";
 	protected static final String	appDirectory = "template";
 	protected static final String	appClassName = "template";
@@ -273,7 +269,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo("JAVA Template","Template Application","TA1000","01.41.0000.00","01/02/18","(c) End House Software 2007-2019",bRemoteHosted);
+		systemUserReg = new registrationinfo(appDirectory,"JAVA Template","Template Application","TA1000","01.41.0000.00","01/02/18","(c) End House Software 2007-2019",ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
@@ -302,10 +298,10 @@ public class template extends JApplet implements ChangeListener,Runnable
 	public static void main(String[] args) {
 		for (int i=0;i<args.length;i++) {
 			if (args[i].equals("gui")) {
-				bRunAppWithGUI = true;
+				ehsConstants.bRunAppWithGUI = true;
 			}
 		}
-		if (bRunAppWithGUI) {
+		if (ehsConstants.bRunAppWithGUI) {
 			new appletframe(new template(),windowXMax,windowYMax);
 		} else {
 			theApp = new appletframe(new template());
@@ -355,67 +351,12 @@ public class template extends JApplet implements ChangeListener,Runnable
 		}
 	}	
 	  
-	public int getSystemVar(String name, int defValue) {
-		String data = "";
-		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",String.valueOf(defValue));
-		
-		TRACE("data (getSystemVar) is " + data + " length="+String.valueOf(data.length()),3);
-		if(data.length() == 0) {
-			setSystemVar(name,defValue);
-			return defValue;
-		}
-
-		int val = 0;
-		try {
-		   val = Integer.parseInt(data);
-		} catch(Exception e) {e.printStackTrace();}
-		return val;
+	public void doAppUpdate() {
+		   try {
+		   	   URL u = new URL(getCodeBase(),"../appupdater.php?appproduct="+systemUserReg.getAppName()+"&curbuildnum="+systemUserReg.getBuildNumber()+"&serialbase="+systemUserReg.getAppSerialBase()+"&directory="+dataRelativePath+"/template/templatebuild.number");
+		   	   ac.showDocument(u,"_blank");
+		   } catch (Exception e) {e.printStackTrace();}
 	}
-
-	public boolean getSystemVar(String name, boolean defValue) {
-		String data="";
-		data = supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",supportFunctions.valueOf(defValue));
-		
-		if(data.length() == 0) {
-			setSystemVar(name,defValue);
-			return defValue;
-		}
-
- 	    boolean ret = false;
-		try {
-		   if(Integer.parseInt(data) == 1) {ret = true;}
-		} catch (Exception e) {e.printStackTrace();}
-		
-		return ret;
-	}
-
-	public String getSystemVar(String name, String defValue) {
-		String data = "";
-		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",defValue);
-		
-		if(data.length() == 0) {
-			setSystemVar(name,defValue);
-			return defValue;
-		}
-
-		return data.trim();
-	}
-
-	public String setSystemVar(String name, String val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+val+"')","");
-		return val;
-	}
-
-	public int setSystemVar(String name, int val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+String.valueOf(val)+"')","");
-		return val;
-	}
-	
-	public boolean setSystemVar(String name, boolean val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+supportFunctions.valueOf(val)+"')","");
-		return val;
-	}
-
 	public class registrationinfo {
 		private boolean appUseDatabase;
 		private	boolean	appRemoteHosted;
@@ -437,6 +378,10 @@ public class template extends JApplet implements ChangeListener,Runnable
 		private Vector	rptStatus = new Vector();
 		private int	numAttemptsLeft,userCredit,features; 
 		private	userManager userMan;
+		private String buildDate = "";
+		private String frameworkBuildDate = "";
+		private String gitVersionInfo = "";
+		private String appDirectory = "";
 		
 	public class userManager {
 		public String[] getUserListByTag(String tag) {
@@ -466,7 +411,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 			return tokens;
 		}
 	}
-		registrationinfo(String name,String description,String serialbase,String version,String date,String cr,boolean internet) {
+		registrationinfo(String ad,String name,String description,String serialbase,String version,String date,String cr,boolean internet,String bd,String fbd,String gvi) {
 			numAttemptsLeft = -1;
 			appUseDatabase = true;
 			appRemoteHosted = internet;
@@ -486,7 +431,15 @@ public class template extends JApplet implements ChangeListener,Runnable
 			clearRegistrationData();
 			supportFunctions.createAppConfigSettings(""+dataRelativePath+"/"+appDirectory+"/"+name+"_settings");
 			userMan = new userManager();
+			buildDate = bd;
+			frameworkBuildDate = fbd;
+			gitVersionInfo = gvi;
+			appDirectory = ad;
 		}
+		String getAppDirectory() {return appDirectory;}
+		String getBuildDate() {return buildDate;}
+		String getFrameworkBuildDate() {return frameworkBuildDate;}
+		String getGitVersionInfo() {return gitVersionInfo;}
 		public void setUserTag(String s) {
 			if (getUserRegistered()) {
 				String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSRegTag FROM sysehsregistrations WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegName='"+userName+"'","");
@@ -877,7 +830,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 					//supportFunctions.displayMessageDialog(null,tmp1);
 					supportFunctions.getDBConn().executeSQLQuery(tmp1,"");
 					supportFunctions.mail(emailTF.getText(),"EHS Report Submitted","Thank you for submitting a report. It has been given ticket ID " + ticket + ". You do not need to reply to this email. Report data sent is " + ta.getText());
-					supportFunctions.mail(registrationEmail,"New EHS Report Created","Ticket: " + ticket + " Product:" + appName + " Description:" + ta.getText());
+					supportFunctions.mail(ehsConstants.registrationEmail,"New EHS Report Created","Ticket: " + ticket + " Product:" + appName + " Description:" + ta.getText());
 					msgD.destory();
 					msgD.dispose();
 					supportFunctions.displayMessageDialog(null,"Thank you for the report, it has been assigined ticket ID " + ticket + ". Please use this reference in any further communication.");
@@ -896,7 +849,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 		public void registerUser() {
 			if (getUserRegistered()) {return;}
 			
-			int id = getMachineUniqueID();
+			int id = supportFunctions.getMachineUniqueID("../" + appDirectory);
 			boolean bRegistered = loadRegistrationData(String.valueOf(id));
 			if (!bRegistered) {
 				Vector v = supportFunctions.splitIntoTokens(supportFunctions.displayLogonDialog(),",");
@@ -912,7 +865,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 				}
 			}
 			
-			if (!bRunAppWithGUI) {return;}
+			if (!ehsConstants.bRunAppWithGUI) {return;}
 			
 			if (splashJPG.equals("") && !bRegistered) {
 				JOptionPane.showMessageDialog(null,"This copy of "+ getAppName() + " is unregistered. Please see website to obtain a serial number.",getAppName(),JOptionPane.INFORMATION_MESSAGE);
@@ -922,7 +875,13 @@ public class template extends JApplet implements ChangeListener,Runnable
 				} else {
 					int major = getMajorVersionNumber();
 					int minor = getMinorVersionNumber();
-					displaySplashScreen(getAppName(),splashJPG,"Version "+String.valueOf(major)+"."+String.valueOf(minor),15);
+					String bt1 = "Unregistered";
+					String bt2 = "Serial Number: ";
+					if (getUserRegistered()) {
+						bt1 = getUserName();
+						bt2 = bt2 + getSerialNumber();
+					}
+					splashScreenDialog d = new splashScreenDialog(null,getAppName(),splashJPG,"Version "+String.valueOf(major)+"."+String.valueOf(minor),bt1,bt2,15);
 				}
 			}
 		}
@@ -934,7 +893,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 				numAttemptsLeft = Integer.parseInt(serial.substring(12,14));
 				if (numAttemptsLeft == 0) {
 					supportFunctions.displayMessageDialog(null,"Sorry your trail licence has expired.");
-					supportFunctions.mail(registrationEmail,"Licence Expiry","A trail licence for "+name+" has expired.");
+					supportFunctions.mail(ehsConstants.registrationEmail,"Licence Expiry","A trail licence for "+name+" has expired.");
 					clearRegistrationData();
 					return;
 				} else {
@@ -956,12 +915,6 @@ public class template extends JApplet implements ChangeListener,Runnable
 			} else {
 				return true;
 			}
-		}
-		public void doAppUpdate() {
-			   try {
-			   	   URL u = new URL(getCodeBase(),"../appupdater.php?appproduct="+appName+"&curbuildnum="+getBuildNumber()+"&serialbase="+appSerialBase+"&directory="+dataRelativePath+"/umldiag/umldiagbuild.number");
-			   	   ac.showDocument(u,"_blank");
-			   } catch (Exception e) {e.printStackTrace();}
 		}
 		public String getGitVersionInfoString() {return gitVersionInfo.substring(3,gitVersionInfo.length()-3);}
 		public String getBuildString() {return buildDate.substring(3,buildDate.length()-3);}
@@ -1221,7 +1174,7 @@ public void deleteFilename(String filename) {
 	}
 
 	public void init() {	
-		bRunAppWithGUI = true;
+		ehsConstants.bRunAppWithGUI = true;
 		setLocation(0,0);
 		setSize(windowXMax,windowYMax);
 		invalidate();
@@ -1231,13 +1184,13 @@ public void deleteFilename(String filename) {
 		contentPane = getContentPane();
 		tabPane = new JTabbedPane();
 
-		systemUserReg = new registrationinfo("JAVA Template","Template Application","TA1000","01.41.0000.00","01/02/18","(c) End House Software 2007-2019",bRemoteHosted);
+		systemUserReg = new registrationinfo(appDirectory,"JAVA Template","Template Application","TA1000","01.41.0000.00","01/02/18","(c) End House Software 2007-2019",ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
 		String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSDeptName FROM sysehsdepartments","Admin,Enquiry,Techinical,Sales");
 		Vector v = supportFunctions.splitIntoTokens(data);
 		systemUserReg.setDepts(v);
-		systemUserReg.setPreRelease(true);
+		systemUserReg.setPreRelease(true); 
 		systemUserReg.registerUser();
 		
 		help = new helpAction();
@@ -1250,7 +1203,7 @@ public void deleteFilename(String filename) {
 		helpMenu.add(about);
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);
-		if(getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
+		if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
 		
 		ac = getAppletContext();
 					   
@@ -1299,7 +1252,7 @@ public void deleteFilename(String filename) {
 		startPerApplicationProcess();
 		
 		parentFrame = supportFunctions.getTopLevelParent(this);
-		machineID = getMachineUniqueIDInternal();
+		machineID = supportFunctions.getMachineUniqueIDInternal("../" + appDirectory);
 
 		String data1 = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSProdKBFilename FROM sysehsproducts WHERE sysEHSProdName='" + systemUserReg.getAppName() + "'","");
 		exFAQFile = dataRelativePath + "/knowledgebases/" + data1;
@@ -1317,23 +1270,6 @@ public void deleteFilename(String filename) {
 		//d.show();
 		//filename = d.getFile(); OR
 		//d.getDirectory() + System.getProperty("file.separator") + fd.getFile();
-	}
-
-	public String getMachineUniqueIDInternal() {
-		if (systemUserReg.getAppRemotedHosted()) {return "1";}
-
-		int tmp = getSystemVar("muniquecount",0);
-		setSystemVar("muniquecount",tmp+1);
-		
-		return String.valueOf(tmp);
-	}
-	public String getMachineUniqueString() {
-		return getMachineUniqueIDInternal();
-	}
-	public int getMachineUniqueID() {
-		try {
-			return Integer.parseInt(getMachineUniqueIDInternal());
-		} catch (Exception e) {return 0;}
 	}
 
 	public int ehsHashCode(String s) {
@@ -2301,7 +2237,7 @@ public void deleteFilename(String filename) {
 		public positionDialog(Frame parent,String s,boolean b,String id) {
 			super(parent,s,b);
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,"0,0");
+			String tmp = supportFunctions.getSystemVar(id,"0,0");
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 			lastPositionWindow = this;
@@ -2314,7 +2250,7 @@ public void deleteFilename(String filename) {
 		public positionDialog(Frame parent,String id) {
 			super(parent);
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,"0,0");
+			String tmp = supportFunctions.getSystemVar(id,"0,0");
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 			lastPositionWindow = this;
@@ -2323,19 +2259,19 @@ public void deleteFilename(String filename) {
 			Point p = getPosition();
 			id = id.replaceAll(" ","");
 			String tmp = String.valueOf(p.x) + "," + String.valueOf(p.y);
-			setSystemVar(id,tmp);
+			supportFunctions.setSystemVar(id,tmp);
 		}
 		
 		public void loadPosition(String id) {
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,"0,0");
+			String tmp = supportFunctions.getSystemVar(id,"0,0");
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 		}
 
 		public void loadPosition(String id,String defaultPos) {
 			id = id.replaceAll(" ","");
-			String tmp = getSystemVar(id,defaultPos);
+			String tmp = supportFunctions.getSystemVar(id,defaultPos);
 			Vector v = supportFunctions.splitIntoTokens(tmp);
 			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
 		}
@@ -2429,126 +2365,7 @@ public String doFileTransform(String xmlFilename,String xsltFilename) {
 		v.copyInto(tmp);
 		return tmp;
 	}
-	
-	public void displaySplashScreen(String title,String image,String extraText,int timeToDisplay) {
-		splashScreenDialog d = new splashScreenDialog(supportFunctions.getTopLevelParent(this),title,image,extraText,timeToDisplay);
-	}
-	public class splashScreenDialog extends JDialog implements pictureUtils {
-	    private	Timer 			tick;
-		private	int				timeoutSecs,currentSecs;
-		private	pictureCanvas 	splashCanvas;
-		public String 			title;
-		public String 			extraText;
 		
-		public void pictureStart() {}
-		public void pictureFinish() {}
-		public void picturePaint(Graphics g){
-			Graphics2D g2d = (Graphics2D)g;
-			Font orgFont = g2d.getFont();
-			float size = g2d.getFont().getSize();
-			Font newFont = g2d.getFont().deriveFont(Font.BOLD,size + 20);
-			FontMetrics fm = getFontMetrics(newFont);
-			int width = fm.stringWidth(title);
-			int height = fm.getHeight();
-			int ascent = fm.getAscent();
-			int x = (splashCanvas.width() - width) / 2;
-			Font newFont1 = g2d.getFont().deriveFont(Font.BOLD,size + 10);
-			FontMetrics fm1 = getFontMetrics(newFont1);
-			int width1 = fm1.stringWidth(extraText);
-			int height1 = fm1.getHeight();
-			int ascent1 = fm1.getAscent();
-			int x1 = (splashCanvas.width() - width1) / 2;
-			int yGap = (splashCanvas.height() - (height + height1)) / 3;
-			int y = yGap + height;
-			int y1 = yGap + height + 10 + height1;
-			
-			Font newFont2 = g2d.getFont().deriveFont(Font.BOLD,size);
-			FontMetrics fm2 = getFontMetrics(newFont2);
-			int height2 = fm2.getHeight();
-			int ascent2 = fm2.getAscent();
-			String s2 = "Unregistered";
-			if (systemUserReg.getUserRegistered()) {s2 = "Registered To: " + systemUserReg.getUserName();}
-			int y2 = splashCanvas.height() - (2 * height2);
-			String s3 = "Serial Number: ";
-			if (systemUserReg.getUserRegistered()) {s3 = s3 + systemUserReg.getSerialNumber();}
-			int y3 = splashCanvas.height() - height2;
-			
-			int botWidth = fm2.stringWidth(s2);
-			if (botWidth < fm2.stringWidth(s3)) {botWidth = fm.stringWidth(s3);}
-			int topWidth = fm.stringWidth(title);
-			if (topWidth < fm1.stringWidth(extraText)) {topWidth = fm1.stringWidth(extraText);}
-	
-			g2d.setColor(Color.white);
-			g2d.fill3DRect(x - 5,y - height,topWidth + 5 + 5,height + 10 + height1 + 5,true);
-			g2d.setColor(Color.black);
-			g2d.setFont(newFont);
-			g2d.drawString(title,x,y);
-			g2d.setFont(newFont1);
-			g2d.drawString(extraText,x1,y1);
-			
-			g2d.setColor(Color.white);
-			g2d.fill3DRect(5,y2 - height2 - 5,botWidth + 5,(2 * height2) + 5 + 5,true);
-			g2d.setColor(Color.black);
-			g2d.setFont(newFont2);
-			g2d.drawString(s2,10,y2);
-			g2d.drawString(s3,10,y3);
-			
-			g2d.setFont(orgFont);
-		}
-		public splashScreenDialog(Frame parent,String title,String image,String extraText,int timeToDisplay) {
-			super(parent,title,true);
-
-			this.title = title;
-			this.extraText = extraText;
-			
-			timeoutSecs = 5;
-			currentSecs = 0;
-	
-			splashCanvas = new pictureCanvas(image);			
-			splashCanvas.addPictureListener(this);
-			
-			setTimeoutTick(timeToDisplay);
-			Panel splashPanel = new Panel(new FlowLayout(FlowLayout.LEFT));
-			splashPanel.add(splashCanvas);
-			setLayout(new BorderLayout());
-			add(splashPanel,"North");
-			Toolkit tk = Toolkit.getDefaultToolkit();
-			Dimension d = tk.getScreenSize();
-			setLocation((d.width - splashCanvas.width()) / 2,(d.height - splashCanvas.height())/2);
-			
-			addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent evt) {
-				tick.stop();
-				dispose();
-				}
-			});
-			
-		   ActionListener task = new ActionListener() {
-  				 public void actionPerformed(ActionEvent evt) {
-						timedDialogTick(currentSecs++);
-						if (currentSecs > timeoutSecs) {
-							timedDialogTmeout();
-							destroy();
-						}
-					 }
-			};
-		    tick = new Timer(1000,task);
-		    tick.start();
-
-		    pack();
-		    setVisible(true);
-		}	
-		public void setTimeoutTick(int i) {timeoutSecs = i;}
-		public int getTimeoutTick() {return timeoutSecs;}
-		public int getCurrentTick() {return currentSecs;}
-		public void timedDialogTmeout() {}
-		public void timedDialogTick(int tick) {}
-		public void destroy() {
-			tick.stop();
-			dispose();
-	   }
-	}
-	
 	public void testSyntaxEditorPane() {
 		syntaxEditorPaneDialog d = new syntaxEditorPaneDialog(supportFunctions.getTopLevelParent(this));
 		supportFunctions.displayMessageDialog(null,d.HDLTA.getRawText());
@@ -2840,13 +2657,13 @@ public String doFileTransform(String xmlFilename,String xsltFilename) {
 						loadAsXML(name);
 						break;
 				}
-				String tmp = getSystemVar(getEntity() + "_dcbackcolor","white");
+				String tmp = supportFunctions.getSystemVar(getEntity() + "_dcbackcolor","white");
 				setBackgroundColor(supportFunctions.getColorCode(tmp));
 				
 				return true;
 		   }
 		   public void closeDrawingCanvas() {
-				setSystemVar(getEntity() + "_dcbackcolor",supportFunctions.getColorName(getBackgroundColor()));
+				supportFunctions.setSystemVar(getEntity() + "_dcbackcolor",supportFunctions.getColorName(getBackgroundColor()));
 				if (loadMode == DCLoadFromXML) {saveAsXML(getEntity());} else {saveDrawingItems();}
 				clearDrawingCanvas();
 				dcEntity = "entity"; // default value
@@ -4435,7 +4252,7 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 			supportFunctions.getMenuItem(menu,"Redo").setEnabled(undoIndex > undoDrawingItems.size() - 1);
 			cbPictureFrame.setState(bDrawPictureFrame);		  
 		  }
-		  public void itemStateChanged(ItemEvent evt) {
+		  public void itemStateChanged(ItemEvent evt) { 
 			  if (evt.getSource() == cbPictureFrame) {
 				  TRACE("Changed show picture frame state",4);
 				  bDrawPictureFrame = cbPictureFrame.getState();
