@@ -1,6 +1,11 @@
 import java.awt.Color;
 
 public class ehsConstants {
+	protected static boolean	bRunAppWithGUI = false;
+	protected static final String		registrationEmail="endhousesoftware999@gmail.com";
+	protected static final String		adminEmail="endhousesoftware999@gmail.com";
+	protected static boolean	bRemoteHosted = false;
+
 	protected 	static Color navy = new Color(0,0,128);
 	protected 	static Color purple = new Color(128,0,128);
 	protected 	static Color maroon = new Color(128,0,0);

@@ -130,6 +130,91 @@ public class supportFunctions extends Component {
 	public static void connectDatabase() {
 		dbConn = new mysqlJDBC();
 	}
+	public static String getMachineUniqueIDInternal(String directory) {
+		if (ehsConstants.bRemoteHosted) {return "1";}
+		
+		pseduoFile f = new pseduoFile(directory + "/.licence");
+		String  s = f.loadFile();
+		if (s.length() != 0) {return s.trim();}
+		
+		int tmp = supportFunctions.getSystemVar("muniquecount",0);
+		supportFunctions.setSystemVar("muniquecount",tmp+1);
+
+		pseduoFile f1 = new pseduoFile(directory + "/.licence");
+		f1.saveFile(String.valueOf(tmp));
+		f1.flush();
+		
+		return String.valueOf(tmp);
+	}
+	public static String getMachineUniqueString(String directory) {
+		return getMachineUniqueIDInternal(directory);
+	}
+	public static int getMachineUniqueID(String directory) {
+		try {
+			return Integer.parseInt(getMachineUniqueIDInternal(directory));
+		} catch (Exception e) {return 0;}
+	}
+	public static int getSystemVar(String name, int defValue) {
+		String data = "";
+		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",String.valueOf(defValue));
+		
+		//TRACE("data (getSystemVar) is " + data + " length="+String.valueOf(data.length()),3);
+		if(data.length() == 0) {
+			setSystemVar(name,defValue);
+			return defValue;
+		}
+
+		int val = 0;
+		try {
+		   val = Integer.parseInt(data);
+		} catch(Exception e) {e.printStackTrace();}
+		return val;
+	}
+
+	public static boolean getSystemVar(String name, boolean defValue) {
+		String data="";
+		data = supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",supportFunctions.valueOf(defValue));
+		
+		if(data.length() == 0) {
+			setSystemVar(name,defValue);
+			return defValue;
+		}
+
+ 	    boolean ret = false;
+		try {
+		   if(Integer.parseInt(data) == 1) {ret = true;}
+		} catch (Exception e) {e.printStackTrace();}
+		
+		return ret;
+	}
+
+	public static String getSystemVar(String name, String defValue) {
+		String data = "";
+		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",defValue);
+		
+		if(data.length() == 0) {
+			setSystemVar(name,defValue);
+			return defValue;
+		}
+
+		return data.trim();
+	}
+
+	public static String setSystemVar(String name, String val) {
+		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+val+"')","");
+		return val;
+	}
+
+	public static int setSystemVar(String name, int val) {
+		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+String.valueOf(val)+"')","");
+		return val;
+	}
+	
+	public static boolean setSystemVar(String name, boolean val) {
+		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+supportFunctions.valueOf(val)+"')","");
+		return val;
+	}
+
 	public static String displayLogonDialog() {
 		logonDialog d = new logonDialog(null);
 		return d.getUserName() + "," + d.getPassword();
