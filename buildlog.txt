@@ -3,6 +3,20 @@ generateehssupportjar:
     [javac] C:\Users\Gavin\eclipse-workspace\build.xml:138: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
    [delete] Deleting: C:\Users\Gavin\eclipse-workspace\classes\ehssupport.jar
       [jar] Building jar: C:\Users\Gavin\eclipse-workspace\classes\ehssupport.jar
+
+compileehsjars:
+    [javac] C:\Users\Gavin\eclipse-workspace\build.xml:148: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] C:\Users\Gavin\eclipse-workspace\build.xml:150: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 1 source file to C:\Users\Gavin\eclipse-workspace\ehscontrols\bin
+    [javac] C:\Users\Gavin\eclipse-workspace\build.xml:152: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+
+generateehsjars:
+   [delete] Deleting: C:\Users\Gavin\eclipse-workspace\classes\ehscomplier.jar
+      [jar] Building jar: C:\Users\Gavin\eclipse-workspace\classes\ehscomplier.jar
+   [delete] Deleting: C:\Users\Gavin\eclipse-workspace\classes\ehscontrols.jar
+      [jar] Building jar: C:\Users\Gavin\eclipse-workspace\classes\ehscontrols.jar
+   [delete] Deleting: C:\Users\Gavin\eclipse-workspace\classes\ehsgraphicalcanvas.jar
+      [jar] Building jar: C:\Users\Gavin\eclipse-workspace\classes\ehsgraphicalcanvas.jar
 BUILD SUCCESSFUL
 
 BUILD SUCCESSFUL
