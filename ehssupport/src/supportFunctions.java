@@ -130,6 +130,14 @@ public class supportFunctions extends Component {
 	public static void connectDatabase() {
 		dbConn = new mysqlJDBC();
 	}
+	public static int ehsHashCode(String s) {
+		int hc = 0;
+		for (int i=0;i<s.length();i++) {
+			char ch = s.charAt(i);
+			hc = hc + ch;
+		}
+		return hc;
+	}
 	public static String getMachineUniqueIDInternal(String directory) {
 		if (ehsConstants.bRemoteHosted) {return "1";}
 		
