@@ -110,8 +110,8 @@ public class logonDialog extends JDialog  implements ActionListener {
 		private JButton	butOK,butCancel;
 		private String username,password;
 		private	TextField usernameTF,passwordTF;
-		private int charWidth = 10;
-		private int charHeight = 10;
+		private int charWidth = 8;
+		private int charHeight = 14;
 
 		public logonDialog (Frame f) {
 			super(f,"User Logon",true);

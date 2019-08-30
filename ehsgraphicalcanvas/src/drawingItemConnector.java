@@ -112,8 +112,8 @@ public class drawingItemConnector  extends Component {
 		private connSymbol connectorStartSymbol;
 		private connSymbol connectorEndSymbol;
 		private	int		connectorLayer;
-		private int charWidth = 10;
-		private int charHeight = 10;
+		private int charWidth = 8;
+		private int charHeight = 14;
 	
 		public drawingItemConnector(drawingItem start,drawingItem end,String textStart,String textEnd,int symStart,int symEnd,String id,int layer) {
 			connector = new JConnector(start,end);

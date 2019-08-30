@@ -123,8 +123,8 @@ public class xmlBase implements ActionListener, ErrorListener {
 	private	DocumentBuilder	builder;
 	private	JButton	xmlNewEntryButton,xmlCloseButton,xmlDeleteButton,xmlSaveButton,xmlChangeButton,xmlNewChildButton;
 	private String	xmlFilename;
-    private int charWidth = 10;
-    private int charHeight = 10;
+    private int charWidth = 8;
+    private int charHeight = 14;
 		
 	public xmlBase() {
 		initxmlBase("");

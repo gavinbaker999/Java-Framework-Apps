@@ -111,8 +111,8 @@ public class fontDialog extends JDialog implements ActionListener,ItemListener {
 		private boolean OKPressed = false;
 		private Font font = null;
 		private JLabel labExample;
-		private int charWidth = 10;
-		private int charHeight = 10;
+		private int charWidth = 8;
+		private int charHeight = 14;
 		   
 	   
 		public fontDialog(Frame parent) {

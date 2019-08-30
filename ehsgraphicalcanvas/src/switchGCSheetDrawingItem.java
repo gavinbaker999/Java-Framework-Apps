@@ -107,8 +107,8 @@ import javax.naming.*;
 public class switchGCSheetDrawingItem extends drawingItem {
 		private	String		newGCSheetName = "";
 		private Rectangle	boundingRect;
-		private int charWidth = 10;
-		private int charHeight = 10;
+		private int charWidth = 8;
+		private int charHeight = 14;
 		private int	size = charHeight + 2 + 2;
 		
 		public void setNewGCSheetName(String name) {newGCSheetName = name;}

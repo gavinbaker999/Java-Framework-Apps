@@ -118,8 +118,8 @@ public class xmlNodeDialog extends JDialog implements ActionListener,TextListene
 		private	String nodeName,nodeValue,nodeAttrib;
 	    private TextField nTFName,nTFValue,nTFAttrib; 
 	    private boolean bOK = false;
-	    private int charWidth = 10;
-	    private int charHeight = 10;
+	    private int charWidth = 8;
+	    private int charHeight = 14;
 	   
 		public xmlNodeDialog(Frame parent,String name,String value,String attrib) {
 		   super(parent,"New XML Node",true);

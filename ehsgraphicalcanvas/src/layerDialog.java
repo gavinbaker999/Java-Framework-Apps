@@ -108,8 +108,8 @@ public class layerDialog extends JDialog  implements ActionListener {
 		private JButton	butDelete,butAdd,butOK,butCancel;
 		private	multiColumnCanvasComponent listLayers = null;
 		private layerManager layerMan = null;
-		private int charWidth = 10;
-		private int charHeight = 10;
+		private int charWidth = 8;
+		private int charHeight = 14;
 
 		// forwarding functions to the component
 		public void addmultiColumnCanvasDialogListener(multiColumnCanvasDialogListener dcu) {

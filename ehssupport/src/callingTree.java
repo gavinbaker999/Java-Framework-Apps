@@ -116,8 +116,8 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 		private String					eventHandlers = "";
 		private	String					treeName = "";
 		private boolean					bValid = true;
-		private int						charWidth = 10;
-		private int						charHeight = 10;
+		private int						charWidth = 8;
+		private int						charHeight = 14;
  		
 		callingTree(String treeName) {
 			this.treeName = treeName;

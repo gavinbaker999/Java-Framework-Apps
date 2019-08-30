@@ -114,8 +114,8 @@ public class propBoxDialog extends JDialog implements TableModelListener {
 		private	String id;
 		private String title;
 		private propBoxDialogListener target = null;
-		private int charWidth = 10;
-		private int charHeight = 10;
+		private int charWidth = 8;
+		private int charHeight = 14;
 
 		public void addPropBoxDialogListener(propBoxDialogListener pbdl) {target = pbdl;}
 		public void removePropBoxDialogListener() {target = null;}

@@ -112,8 +112,8 @@ public class gridDialog extends JDialog  implements ActionListener {
 		private String[] colTitles;
 		private String[][] colOptions;
 		private boolean bOk = false;
-		private int charWidth = 10;
-		private int charHeight = 10;
+		private int charWidth = 8;
+		private int charHeight = 14;
 
 		// forwarding functions to the component
 		public void addmultiColumnCanvasDialogListener(multiColumnCanvasDialogListener dcu) {
