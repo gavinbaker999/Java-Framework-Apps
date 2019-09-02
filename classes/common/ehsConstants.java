@@ -6,6 +6,16 @@ public class ehsConstants {
 	protected static final String		adminEmail="endhousesoftware999@gmail.com";
 	protected static boolean	bRemoteHosted = false;
 
+	protected	static final int		windowXMax = 1600;
+	protected	static final int		windowYMax = 1200;
+	protected	static int				dcMaxX = windowXMax;
+	protected	static int				dcMaxY = windowYMax;
+	protected	static final int		dcGridSpaceX = 20;
+	protected	static final int		dcGridSpaceY = 20;
+	protected 	static String			rotateJPG = "../classes/common/rotate.png";
+	protected 	static String 			machineID = "";
+	protected	static String			applicationName = "";
+
 	protected 	static Color navy = new Color(0,0,128);
 	protected 	static Color purple = new Color(128,0,128);
 	protected 	static Color maroon = new Color(128,0,0);
