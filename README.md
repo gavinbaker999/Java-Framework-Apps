@@ -17,6 +17,7 @@ Create a MySQL database and then place the database host, database name, usernam
 ## Notes
 
 **classes/common/ehsContants.java** - Bridge file between application and JAVA framework.
+**classes/common/drawingCanvas.java** - Java framework drawing canvas.
 **classes/common/syntaxeditorpane.css** - Style sheet used in the JAVA framework color syntx editor control.
 **classes/common/containerclasses.dat** - CSV list of container class names used in the UML Workbench application.
 **classes/common/dbcreate.sql** - SQL statment to create MySQL database used by the JAVA framework.
@@ -26,9 +27,9 @@ Create a MySQL database and then place the database host, database name, usernam
 
 The following batch files exist to run the HDL workbench, the UML workbench and the example Template application.
 
-* hdlwb [status] [gui] [trace] [symbolfump] [about] [updatehelp] filename
-* umlwb [status] [gui] [trace] [symbolfump] [about] [updatehelp] filename
-* temlate [status] [gui] [trace] [symbolfump] [about] [updatehelp]
+* hdlwb [status] [gui] [trace] [symbolfump] [about] filename
+* umlwb [status] [gui] [trace] [symbolfump] [about] filename
+* temlate [status] [gui] [trace] [symbolfump] [about]
 
 ## Built With
 
