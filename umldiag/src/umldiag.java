@@ -231,18 +231,15 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		return maxWidth;
 	}
 
-	public String getTTName() { 
-		return baseUMLTransTableName + "test.ttd";
-	}
-	public void displayTransTableEditor() {
+	public void displayTransTableEditor(String TTName) {
 		int xMax = 5000;
 		int yMax = 5000;
 		translationTable transTable = new translationTable();
-		transTable.loadTranslationTable(getTTName());
+		transTable.loadTranslationTable(TTName);
 		
 		if (transTable != null) {
 			JPanel keyPanel = new JPanel();
-			basicFile f = new basicFile(dataRelativePath + "/" + appDirectory + "/documents/ttkey.txt");
+			basicFile f = new basicFile("../classes/common/ttkey.txt");
 			JTextArea text = new JTextArea(f.loadFile(),10,30);
 			text.setEditable(false);
 			text.setBackground(ehsConstants.lightyellow);
@@ -253,7 +250,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			keyWindow.destory();
 			if (d.isOK()) {
 				xmlDataFile ttItems = new xmlDataFile();
-				if (ttItems.openXMLDataFile(supportFunctions.getPathFilenameNoExt(getTTName()),"transtable",true)) {
+				if (ttItems.openXMLDataFile(supportFunctions.getPathFilenameNoExt(TTName),"transtable",true)) {
 					org.w3c.dom.Element root = ttItems.getRootElement();
 					org.w3c.dom.Document doc = ttItems.getXMLDocument();
 					for (Map.Entry<String, Vector> entry : transTableMap.entrySet()) {
@@ -287,7 +284,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				}
 			}
 		} else {
-			supportFunctions.displayMessageDialog(null,"Can not load translation table");
+			supportFunctions.displayMessageDialog(null,"Can not load translation table: " + TTName);
 		}
 	}
 	
@@ -7151,27 +7148,6 @@ public void deleteFilename(String filename) {
 		c.addColumn("Title 2",true,colData2);
 		c.addComboColumn("Title 3",true,colData3,options);
 		multiColumnCanvasDialog d = new multiColumnCanvasDialog(null,"Test MCD",c);
-	}
-		 		
-	public void setCustomColor1a() {
-		Color c = JColorChooser.showDialog(this,"Choose Custom Color 1",
-				ehsConstants.colorCodes[ehsConstants.colorCodes.length-1]);
-		if (c != null) {
-			ehsConstants.colorCodes[ehsConstants.colorCodes.length-1] = c;			
-			TRACE("setCustomColor1:"+String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()),4);
-			systemUserReg.getConfigurationSettings().setConfigurationSetting("customcolor1",String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()));
-			if (getDrawingCanvas() != null) {getDrawingCanvas().refreshColorToolWindow();}
-		}
-	} 
-	public void setCustomColor2a() {
-		Color c = JColorChooser.showDialog(this,"Choose Custom Color 2",
-				ehsConstants.colorCodes[ehsConstants.colorCodes.length-2]);
-		if (c != null) {
-			ehsConstants.colorCodes[ehsConstants.colorCodes.length-2] = c;			
-			TRACE("setCustomColor2:"+String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()),4);
-			systemUserReg.getConfigurationSettings().setConfigurationSetting("customcolor2",String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()));
-			if (getDrawingCanvas() != null) {getDrawingCanvas().refreshColorToolWindow();}
-		}
 	}
 }
 

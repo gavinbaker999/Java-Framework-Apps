@@ -20,6 +20,8 @@ Create a MySQL database and then place the database host, database name, usernam
 
 **classes/common/syntaxeditorpane.css** - Style sheet used in the JAVA framework color syntx editor control.
 
+**classes/common/ttkey.txt** - Key for the translation table editor.
+
 **classes/common/containerclasses.dat** - CSV list of container class names used in the UML Workbench application.
 
 **classes/common/dbcreate.sql** - SQL statment to create MySQL database used by the JAVA framework.
