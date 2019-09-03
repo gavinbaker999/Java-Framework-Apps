@@ -465,10 +465,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		   return d;
 	}
 		
-	public String getAppletInfo() {
-		return systemUserReg.getAppCopyright();
-	}
-
 	public class hdlSystem {
 		private compiler[] compilers = new compiler[2];
 		private int currentCompilerIndex = 0;
@@ -2093,7 +2089,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		}
 	}
 	
-	public class plotOptionsDialog extends positionDialog implements ActionListener {
+	public class plotOptionsDialog extends JDialog implements ActionListener {
 		private JButton	butOK;
 		private JButton butCancel;
 		private ScrollPane sPane;
@@ -5778,70 +5774,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		}
 	}
 	
-	public class positionDialog extends JDialog {
-		public positionDialog(Frame parent,String s,boolean b) {
-			super(parent,s,b);
-			setLocationRelativeTo(lastPositionWindow);
-			lastPositionWindow = this;
-		}
-		public positionDialog(Frame parent,String s,boolean b,String id) {
-			super(parent,s,b);
-			id = id.replaceAll(" ","");
-			String tmp = supportFunctions.getSystemVar(id,"0,0");
-			Vector v = supportFunctions.splitIntoTokens(tmp);
-			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
-			lastPositionWindow = this;
-		}
-		public positionDialog(Frame parent) {
-			super(parent);
-			setLocationRelativeTo(lastPositionWindow);
-			lastPositionWindow = this;
-		}
-		public positionDialog(Frame parent,String id) {
-			super(parent);
-			id = id.replaceAll(" ","");
-			String tmp = supportFunctions.getSystemVar(id,"0,0");
-			Vector v = supportFunctions.splitIntoTokens(tmp);
-			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
-			lastPositionWindow = this;
-		}
-		public void savePosition(String id) {
-			Point p = getPosition();
-			id = id.replaceAll(" ","");
-			String tmp = String.valueOf(p.x) + "," + String.valueOf(p.y);
-			supportFunctions.setSystemVar(id,tmp);
-		}
-		
-		public void loadPosition(String id) {
-			id = id.replaceAll(" ","");
-			String tmp = supportFunctions.getSystemVar(id,"0,0");
-			Vector v = supportFunctions.splitIntoTokens(tmp);
-			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
-		}
-
-		public void loadPosition(String id,String defaultPos) {
-			id = id.replaceAll(" ","");
-			String tmp = supportFunctions.getSystemVar(id,defaultPos);
-			Vector v = supportFunctions.splitIntoTokens(tmp);
-			setLocation(Integer.parseInt((String)v.elementAt(0)),Integer.parseInt((String)v.elementAt(1)));
-		}
-		
-		public Point getPosition() {return getLocationOnScreen();}
-	}
-		
-	public class CustomTableModel extends DefaultTableModel {
-		   CustomTableModel(String[][] data,String[] colNames) {
-		      super(data,colNames);
-		   }
-		   public boolean isCellEditable(int row,int column) {return false;}
-	}
-	
-	public JToolBar setupToolBar(boolean floatable) {
-		   JToolBar tBar = new JToolBar("");
-		   tBar.setFloatable(floatable);
-		   tBar.add(help);
-		   return tBar;
-	}
 	public class aboutAction extends AbstractAction {
 		   public aboutAction() {super("About");putValue(SHORT_DESCRIPTION,"Display About Box");}
 		   public void actionPerformed(ActionEvent evt) {
