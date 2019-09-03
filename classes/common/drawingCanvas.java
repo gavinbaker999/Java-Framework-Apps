@@ -1444,7 +1444,7 @@ import javax.naming.*;
 						ehsConstants.colorCodes[ehsConstants.colorCodes.length-1]);
 				if (c != null) {
 					ehsConstants.colorCodes[ehsConstants.colorCodes.length-1] = c;			
-					//systemUserReg.getConfigurationSettings().setConfigurationSetting("customcolor1",String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()));
+					supportFunctions.getAppConfigSettings().setConfigurationSetting("customcolor1",String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()));
 					refreshColorToolWindow();
 				}
 			}
@@ -1453,7 +1453,7 @@ import javax.naming.*;
 						ehsConstants.colorCodes[ehsConstants.colorCodes.length-2]);
 				if (c != null) {
 					ehsConstants.colorCodes[ehsConstants.colorCodes.length-2] = c;			
-					//systemUserReg.getConfigurationSettings().setConfigurationSetting("customcolor2",String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()));
+					supportFunctions.getAppConfigSettings().setConfigurationSetting("customcolor2",String.valueOf(c.getRed())+","+String.valueOf(c.getGreen())+","+String.valueOf(c.getBlue()));
 					refreshColorToolWindow();
 				}
 			}

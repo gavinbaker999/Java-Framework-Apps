@@ -397,8 +397,6 @@ public class template extends JApplet implements ChangeListener,Runnable
 			add(textPanel,"Center");
 			
 			getDrawingCanvas().showToolWindows();
-
-			//setCustomColor1();
 		}
 		public void updateCard1() {}
       	public void actionPerformed(ActionEvent evt) {}
