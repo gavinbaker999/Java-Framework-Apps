@@ -360,7 +360,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			System.exit(0);			
 		}
 
-		writeHitRecord("umldiag");
+		supportFunctions.writeHitRecord("umldiag");
 		String file = (String)commandLineArgs.get("arg0");
 		if (file != null) {
 			umlDiagram = new umlDiagramStruct(); // must be first thing created BEFORE scrollabecanvas
@@ -799,8 +799,8 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 			
 			TRACE("draw:rcStart:"+rcStart.toString()+":rcEnd:"+rcEnd.toString(),4);
-			Point ptStart = mainTab.centerPoint(rcStart);
-			Point ptEnd = mainTab.centerPoint(rcEnd);
+			Point ptStart = supportFunctions.centerPoint(rcStart);
+			Point ptEnd = supportFunctions.centerPoint(rcEnd);
 			TRACE("draw:ptStart:"+ptStart.toString()+":ptEnd:"+ptEnd.toString(),4);
 			
 			double m = 0.0;
@@ -4919,13 +4919,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			  umlDiagram.diagramProperties();
 		  	}
 		}
-		  public Point centerPoint(Rectangle r) {
-			float cx = (float)r.getWidth() / (float)2.00;
-			float cy = (float)r.getHeight() / (float)2.00;
-			cx = cx + (float)r.getX();
-			cy = cy + (float)r.getY();
-			return new Point((int)cx,(int)cy);
-		  }
 		public void rightClickAction(Vector v,MouseEvent evt) {
 			// only work if we have one UML DI selected
 			if (v.size() > 1) {return;}
@@ -4937,7 +4930,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				setUMLInfoWindow((panelDialog)null);
 			}
 			drawingItem d = (drawingItem)v.elementAt(0);
-			Point pt = centerPoint(d.getBoundingRect());
+			Point pt = supportFunctions.centerPoint(d.getBoundingRect()); 
 
 			if (umlDiagram.getDiagramType() == UMLDiagramType.CLASS) {	
 				if (!(d instanceof UMLDrawingItem)) {return;}
@@ -5345,50 +5338,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 		}
 	}
-	
-public void deleteFilename(String filename) {
-	basicFile tmp = new basicFile(filename);
-	tmp.deleteFile();
-}
-	public String getDirectory(String tmp) {
-		   int index = tmp.lastIndexOf("/");
-		   if (index == -1) {index = 0;}
-		   String path = tmp.substring(0,index);
-		   if (path.charAt(1) == ':') {
-			   	  path = path.substring(2); // remove any drive specifier 
-		   }
-		   
-		   return path;
-	}
-		public String getRemoteHostName(String ipaddr) {
-			String hostname = "";
-			try {
-				hostname = InetAddress.getByName(ipaddr).getHostName();
-			}
-			catch (Exception e) {return "";}
-			return hostname;
-		}
-		public void writeHitRecord(String product) {
-			String ipAddr = "0.0.0.0";
-			String reverse = getRemoteHostName(ipAddr);
-			String tmp = supportFunctions.currentShortDate();
-			tmp = tmp.replace('/','-');
-			supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sysehswebstats (sysEHSWSID,sysEHSWSProduct,sysEHSWSIP,sysEHSWSDate,sysEHSWSTime,sysEHSWSRef,sysEHSWSReverse) VALUES (null,'"+product+"','"+ipAddr+"','"+tmp+"','"+supportFunctions.currentShortTime()+":00','','"+reverse+"')","");
-		}
-		
-		public Vector removeNumberTokens(Vector v) {
-			Vector n = new Vector();
-			for (int i=0;i<v.size();i++) {
-				try {
-					int num = Integer.parseInt((String)v.elementAt(i));
-				} catch (Exception e) {
-					n.addElement((String)v.elementAt(i));
-				}
-			}
 			
-			return n;
-		}
-		
 		String appProcessName = "";
 		public void startPerApplicationProcess() {
 			appProcessName = "EHS-"+"UD-"+supportFunctions.currentShortDate().replace('/', '-')+supportFunctions.currentShortTime().replace(':', '-');
@@ -5465,7 +5415,7 @@ public void deleteFilename(String filename) {
 		ciD = new customIconData(x6,y6,Color.black);
 		ciHelp.addData(ciD);
 		
-		writeHitRecord("umldiag");
+		supportFunctions.writeHitRecord("umldiag");
 		
 		msgD.destory();
 		msgD.dispose();

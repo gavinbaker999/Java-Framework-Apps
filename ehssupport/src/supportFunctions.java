@@ -130,6 +130,55 @@ public class supportFunctions extends Component {
 	public static void connectDatabase() {
 		dbConn = new mysqlJDBC();
 	}
+	  public static Point centerPoint(Rectangle r) {
+		float cx = (float)r.getWidth() / (float)2.00;
+		float cy = (float)r.getHeight() / (float)2.00;
+		cx = cx + (float)r.getX();
+		cy = cy + (float)r.getY();
+		return new Point((int)cx,(int)cy);
+	  }
+	public static void deleteFilename(String filename) {
+		basicFile tmp = new basicFile(filename);
+		tmp.deleteFile();
+	}
+	public static String getDirectory(String tmp) {
+		   int index = tmp.lastIndexOf("/");
+		   if (index == -1) {index = 0;}
+		   String path = tmp.substring(0,index);
+		   if (path.charAt(1) == ':') {
+			   	  path = path.substring(2); // remove any drive specifier 
+		   }
+		   
+		   return path;
+	}
+		public static String getRemoteHostName(String ipaddr) {
+			String hostname = "";
+			try {
+				hostname = InetAddress.getByName(ipaddr).getHostName();
+			}
+			catch (Exception e) {return "";}
+			return hostname;
+		}
+		public static void writeHitRecord(String product) {
+			String ipAddr = "0.0.0.0";
+			String reverse = getRemoteHostName(ipAddr);
+			String tmp = supportFunctions.currentShortDate();
+			tmp = tmp.replace('/','-');
+			supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sysehswebstats (sysEHSWSID,sysEHSWSProduct,sysEHSWSIP,sysEHSWSDate,sysEHSWSTime,sysEHSWSRef,sysEHSWSReverse) VALUES (null,'"+product+"','"+ipAddr+"','"+tmp+"','"+supportFunctions.currentShortTime()+":00','','"+reverse+"')","");
+		}
+		
+		public static Vector removeNumberTokens(Vector v) {
+			Vector n = new Vector();
+			for (int i=0;i<v.size();i++) {
+				try {
+					int num = Integer.parseInt((String)v.elementAt(i));
+				} catch (Exception e) {
+					n.addElement((String)v.elementAt(i));
+				}
+			}
+			
+			return n;
+		}
 	public static int ehsHashCode(String s) {
 		int hc = 0;
 		for (int i=0;i<s.length();i++) {

@@ -381,7 +381,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		}
 
 		lStrings = new languageStrings();
-		writeHitRecord("hdlwb");
+		supportFunctions.writeHitRecord("hdlwb");
 
 		String file = (String)commandLineArgs.get("arg0");
 		if (file != null) {
@@ -1387,7 +1387,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 	} 
 
 	public class transTableDrawingCanvas extends drawingCanvas {
-		private ArrayList<Integer> l = new ArrayList<Integer>();
+		private ArrayList<Integer> l = new ArrayList<Integer>();  
 		
 		   public transTableDrawingCanvas(String entity,int maxX,int maxY,int spaceX,int spaceY,boolean gVisible) {
 			   super(entity,maxX,maxY,spaceX,spaceY,gVisible);
@@ -2267,40 +2267,8 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			}
 		}
 	}
-	public void deleteFilename(String filename) {
-		basicFile tmp = new basicFile(filename);
-		tmp.deleteFile();
-	}
-		public String getRemoteHostName(String ipaddr) {
-			String hostname = "";
-			try {
-				hostname = InetAddress.getByName(ipaddr).getHostName();
-			}
-			catch (Exception e) {return "";}
-			return hostname;
-		}
-		public void writeHitRecord(String product) {
-			String ipAddr = "0.0.0.0";
-			String reverse = getRemoteHostName(ipAddr);
-			String tmp = supportFunctions.currentShortDate();
-			tmp = tmp.replace('/','-');
-			supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sysehswebstats (sysEHSWSID,sysEHSWSProduct,sysEHSWSIP,sysEHSWSDate,sysEHSWSTime,sysEHSWSRef,sysEHSWSReverse) VALUES (null,'"+product+"','"+ipAddr+"','"+tmp+"','"+supportFunctions.currentShortTime()+":00','','"+reverse+"')","");
-		}
-		
-		public Vector removeNumberTokens(Vector v) {
-			Vector n = new Vector();
-			for (int i=0;i<v.size();i++) {
-				try {
-					int num = Integer.parseInt((String)v.elementAt(i));
-				} catch (Exception e) {
-					n.addElement((String)v.elementAt(i));
-				}
-			}
-			
-			return n;
-		}
-		
-		String appProcessName = "";
+
+	String appProcessName = "";
 		public void startPerApplicationProcess() {
 			appProcessName = "EHS-"+"HW-"+supportFunctions.currentShortDate().replace('/', '-')+supportFunctions.currentShortTime().replace(':', '-');
 			TRACE("Starting Per Application Processes - " + appProcessName,4);
@@ -2394,7 +2362,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		ciD = new customIconData(x6,y6,Color.black);
 		ciHelp.addData(ciD);
 		
-		writeHitRecord("hdlwb");
+		supportFunctions.writeHitRecord("hdlwb");
 		
 		msgD.destory();
 		msgD.dispose();

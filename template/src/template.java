@@ -270,7 +270,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 			System.exit(0);			
 		}
 
-		writeHitRecord("tem");
+		supportFunctions.writeHitRecord("tem");
 		supportFunctions.getDBConn().disconnect();
 		System.exit(0);
 	}
@@ -501,40 +501,6 @@ public class template extends JApplet implements ChangeListener,Runnable
 		}
 	}
 	
-public void deleteFilename(String filename) {
-	basicFile tmp = new basicFile(filename);
-	tmp.deleteFile();
-}
-
-		public String getRemoteHostName(String ipaddr) {
-			String hostname = "";
-			try {
-				hostname = InetAddress.getByName(ipaddr).getHostName();
-			}
-			catch (Exception e) {return "";}
-			return hostname;
-		}
-		public void writeHitRecord(String product) {
-			String ipAddr = "0.0.0.0";
-			String reverse = getRemoteHostName(ipAddr);
-			String tmp = supportFunctions.currentShortDate();
-			tmp = tmp.replace('/','-');
-			supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sysehswebstats (sysEHSWSID,sysEHSWSProduct,sysEHSWSIP,sysEHSWSDate,sysEHSWSTime,sysEHSWSRef,sysEHSWSReverse) VALUES (null,'"+product+"','"+ipAddr+"','"+tmp+"','"+supportFunctions.currentShortDate()+":00','','"+reverse+"')","");
-		}
-		
-		public Vector removeNumberTokens(Vector v) {
-			Vector n = new Vector();
-			for (int i=0;i<v.size();i++) {
-				try {
-					int num = Integer.parseInt((String)v.elementAt(i));
-				} catch (Exception e) {
-					n.addElement((String)v.elementAt(i));
-				}
-			}
-			
-			return n;
-		}
-		
 		String appProcessName = "";
 		public void startPerApplicationProcess() {
 			appProcessName = "EHS-"+"TM-"+supportFunctions.currentShortDate().replace('/', '-')+supportFunctions.currentShortDate().replace(':', '-');
@@ -630,7 +596,7 @@ public void deleteFilename(String filename) {
 		ciD = new customIconData(x6,y6,Color.black);
 		ciHelp.addData(ciD);
 		
-		writeHitRecord("tem");
+		supportFunctions.writeHitRecord("tem");
 		
 		msgD.destory();
 		msgD.dispose();
@@ -993,10 +959,10 @@ public void deleteFilename(String filename) {
 			JPanel p = new JPanel();
 			p.setLayout(new BoxLayout(p,BoxLayout.Y_AXIS));
 			
-			sDC1 = new scrollableTransTableCanvas(entity,xMax,yMax,20,20,false);
+			sDC1 = new scrollableTransTableCanvas(entity,xMax,yMax,20,20,false); 
 
 			dc = sDC1.getDC();
-			sp = sDC1.getComponent();
+			sp = sDC1.getComponent(); 
 
 			processTransTableDrawingItems();
 			
