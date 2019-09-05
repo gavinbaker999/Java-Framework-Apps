@@ -28,6 +28,8 @@ Create a MySQL database and then place the database host, database name, usernam
 
 **appname/src/drawingCanvas.java** - Java framework drawing canvas class (has to exist at the application directory level).
 
+**appname/src/transtableeditor.java** - Java framework translate table editor classes (has to exist at the application directory level).
+
 ## Deployment
 
 The following batch files exist to run the HDL workbench, the UML workbench and the example Template application.
