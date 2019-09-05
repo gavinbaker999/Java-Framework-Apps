@@ -12,6 +12,7 @@ public class ehsConstants {
 	protected	static int				dcMaxY = windowYMax;
 	protected	static final int		dcGridSpaceX = 20;
 	protected	static final int		dcGridSpaceY = 20;
+	public		static final int		transTableNoJump = 99;
 	protected 	static String			rotateJPG = "../classes/common/rotate.png";
 	protected 	static String 			machineID = "";
 	protected	static String			applicationName = "";
