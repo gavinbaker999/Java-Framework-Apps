@@ -866,7 +866,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			textPanel.setBorder(BorderFactory.createTitledBorder("Design"));
 			sDC = new scrollableDrawingCanvas(supportFunctions.getTmpFilename("untitled"),ehsConstants.dcMaxX,ehsConstants.dcMaxY,20,20,true);
 			getDrawingCanvas().addDrawingCanvasListener(this);
-			getDrawingCanvas().setMultiUser(false);
 			getDrawingCanvas().setReadOnly(false);
 			getDrawingCanvas().setUseDatabase(false);
 			getDrawingCanvas().setDrawFocusHandles(false);

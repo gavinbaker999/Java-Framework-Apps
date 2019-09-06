@@ -107,10 +107,7 @@ import javax.naming.*;
 //import sun.reflect.ReflectionFactory;  
 
 	// when a drawing item is added a unique Id is added of hashcode(macheId+ddMMyyyyHHmmss);
-	// call setMultiUser(true) to write out a virtual refresh message every time a drawing item is added
 	public class drawingCanvas extends printableCanvas implements MouseListener,MouseMotionListener,KeyListener,ChangeListener,ActionListener,ItemListener,ListSelectionListener,Printable,buttonCanvasUtils,statusCanvasDialogListener {
-		protected	static final int		DCMsg = 0;	
-		protected	static final int		DCRefresh = 1;	
 		protected	static final int		DCLoadFromDB = 0;
 		protected	static final int		DCLoadFromXML = 1;
 		private int charWidth = 8;
@@ -119,7 +116,7 @@ import javax.naming.*;
 		private	float	fScalingFactor = 1;
 		   private JList 	GCSheets = null;
 		   protected int	canvasMaxX,canvasMaxY;
-		   private boolean	gridVisible,dcFilled,dcOutline,dcMultiUser;
+		   private boolean	gridVisible,dcFilled,dcOutline;
 		   private int 		gridSpaceX,gridSpaceY;
 		   private int		dcSelIndex;
 		   private Cursor	normalCursor,handCursor,moveCursor,crosshairCursor,waitCursor;
@@ -143,9 +140,6 @@ import javax.naming.*;
 		   private diControlCanvas    	controlPanel;
 		   private boolean	loading = false;
 		   private drawingCanvasUtils	target = null;
-		   private Thread	dcThread = null;
-		   private boolean	dcThreadRunning = false;
-		   private int		dcLastMsgID = 0;
 		   private boolean	printing = false;
 		   private drawingItem	dragDI = null;
 		   private int		dragFH = -1;
@@ -160,7 +154,6 @@ import javax.naming.*;
 		   private	Rectangle rcBoundingBox = null;
 		   private	Point ptBoundingBox = null;
 		   private	boolean bUseDatabase = true;
-		   private 	boolean bVirtualMsgProcessing = false;
 		   private	boolean bUpdateDC = true;
 		   private	layerManager layerMan = new layerManager();
 		   private	int loadMode = DCLoadFromDB;
@@ -351,7 +344,6 @@ import javax.naming.*;
 			   layerMan.addNewLayer(); // add default layer
 			   
 			   undoIndex = -1;
-			   dcLastMsgID = 0;
 			   dcSelIndex = -1;
 			   canvasMaxX = maxX;
 			   canvasMaxY = maxY;
@@ -370,14 +362,11 @@ import javax.naming.*;
 			   dcOutline = false;
 			   loading = false;
 			   target = null;
-			   dcThread = null;
-			   dcThreadRunning = false;
 			   printing = false;
 			   dragDI = null;
 			   dragFH = -1;
 			   stickyTools = true;
 			   dragFHDI = null;
-			   dcMultiUser = false;
 			   readonly = false;
 			   menuSelectedConnector = null;
 			   menuSelectedDI = null;
@@ -388,7 +377,6 @@ import javax.naming.*;
 			   rcBoundingBox = null;
 			   ptBoundingBox = null;
 			   bUseDatabase = true;
-			   bVirtualMsgProcessing = false;
 			   backgroundColor = Color.white;
 			   bUpdateDC = true;
 			   clipboardActive = false;
@@ -430,7 +418,6 @@ import javax.naming.*;
 			   addKeyListener(this);
 			   add(dcMenu);
 			   add(dcConnectorMenu);
-			   //add(umlDiagram.getMenuUMLDI());
 			   
 			   colorPanel = new colorButtonCanvas();
 			   colorPanel.colorButtonCanvas().addButtonCanvasListener(this);
@@ -451,29 +438,15 @@ import javax.naming.*;
 			   String tmp = "False";
 			   if (dcFilled) {tmp = "True";}
 			   props.addElement(new statusCanvasProp("Filled",tmp));
-			   statusPanel.setProps(props);
+			   statusPanel.setProps(props);		
 			   
-			   dcThread = new Thread(new Runnable() {
-				public void run() {
-					while(dcThreadRunning) {
-					   if (dcMultiUser) {
-						try {
-							readVirtualMsg();
-							Thread.sleep(3000);
-						} catch (Exception e) {;}
-					   }
-					}
-				}
-			   });
-			   dcThreadRunning = true;
-			   dcThread.setPriority(5);
-			   dcThread.setName("Drawing canvas thread");
-			   dcThread.start();
+			   onInitDrawingCanvas();
 		   }
+		   public void onInitDrawingCanvas() {}
+		   public void onDestroyDrawingCanvas() {}
 		   public void destroyDrawingCanvas() {
-			   if (dcThreadRunning) {
-				   dcThreadRunning = false;
-			   }
+			   onDestroyDrawingCanvas();
+			   
 				if (GCSheetsDialog != null) {
 					GCSheetsDialog.destory();
 					GCSheetsDialog.dispose();
@@ -598,8 +571,6 @@ import javax.naming.*;
 		   public Color getBackgroundColor() {return backgroundColor;}
 		   public void setDisplayStatus(boolean b) {displayStatus = b;}
 		   public boolean getDisplayStatus() {return displayStatus;}
-		   public void setMultiUser(boolean b) {dcMultiUser = b;}
-		   public boolean getMultiUser() {return dcMultiUser;}
 		   public void setSubEntity(String s) {dcSubEntity = s;}
 		   public String getSubEntity() {return dcSubEntity;}
 		   public String getEntity() {return dcEntity;}
@@ -808,11 +779,8 @@ import javax.naming.*;
 			   clipboardDrawingItems.removeAllElements();
 			   dcMode = ehsConstants.dcTypeSelect;
 			   bUpdateDC = true;
-			   bVirtualMsgProcessing = false;
 			   loadMode = DCLoadFromDB;
 			   clipboardActive = false;
-			   
-			   if (dcMultiUser) {writeVirtualMsg(dcEntity,String.valueOf(DCRefresh),dcSubEntity,"");}
 			   
 			   paint(getGraphics());
 		   }
@@ -1307,7 +1275,6 @@ import javax.naming.*;
 				  drawingItem d = (drawingItem)selectedDrawingItems.elementAt(i);
 				  d.setGroupID(id);
 			  }
-			  if (dcMultiUser) {writeVirtualMsg(dcEntity,String.valueOf(DCRefresh),dcSubEntity,"");}
 			  paint();
 		  }
 		  public void ungroup(String id) {
@@ -1316,7 +1283,6 @@ import javax.naming.*;
 				  String tmp = d.getGroupID();
 				  if (tmp.equals(id)) {d.setGroupID("");}
 			  }
-			  if (dcMultiUser) {writeVirtualMsg(dcEntity,String.valueOf(DCRefresh),dcSubEntity,"");}
 			  paint();
 		  }
 		  public void renameEntityNameInDB(String oldEntityName,String newEntityName) {
@@ -1595,12 +1561,6 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 						supportFunctions.displayMessageDialog(null,"Add Connector: Select 2 Items To Connect");
 					}
 			  }
-			  if (cmd.equalsIgnoreCase("Virtual Message")) {
-				  String text = JOptionPane.showInputDialog(null,"Enter Message","Canvas - " + getEntity(),JOptionPane.QUESTION_MESSAGE);
-				  if (text != null) {
-					  if (dcMultiUser) {writeVirtualMsg(dcEntity,String.valueOf(DCMsg),dcSubEntity,text);}
-				  }
-			  }
 			  if (cmd.equalsIgnoreCase("Delete")) {
 				deleteDrawingItem(d);
 			  }
@@ -1751,8 +1711,6 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 			  if(!isLoading()) {
 				  d.setUnique(getUniqueID());
 				  if (bUseDatabase) {supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sdcdrawingitems (sdcDIID,sdcDIEntity,sdcDIType,sdcDIName,sdcDIOriginX,sdcDIOriginY,sdcDIParam1,sdcDIParam2,sdcDIParam3,sdcDIParam4,sdcDIFilled,sdcDIColor,sdcDIUnique,sdcDIStrokeWidth,sdcDILayer,sdcDIRotAngle) VALUES (null,'"+entity+"',"+String.valueOf(type)+",'"+id+"',"+String.valueOf(x)+","+String.valueOf(y)+",'"+p1+"','"+p2+"','"+p3+"','"+p4+"',"+supportFunctions.valueOf(fill)+",'"+supportFunctions.getColorName(c)+"','"+d.getUnique()+"',"+String.valueOf(dcStrokeWidth)+","+String.valueOf(dcLayer)+",0)","");}
-				  // notify users of this drawing canvas that it has changed
-				  if (dcMultiUser) {writeVirtualMsg(dcEntity,String.valueOf(DCRefresh),dcSubEntity,"");}
 				  if (!stickyTools) {dcMode = ehsConstants.dcTypeSelect;}
 				  addUndoItem(d.getUnique(),"Delete","",isClipboardActive());
 				  paint();
@@ -1883,9 +1841,6 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 			  item = new MenuItem("Add Connector");
 			  item.addActionListener(this);
 			  dcMenu.add(item);
-			  item = new MenuItem("Virtual Message");
-			  item.addActionListener(this);
-			  dcMenu.add(item);
 			  dcMenu = customCreateMenu(dcMenu);
 		  }
 		  public PopupMenu customCreateMenu(PopupMenu menu) {
@@ -1917,54 +1872,5 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 			  }
 			  paint();
 		  }
-		  public void writeVirtualMsg(String entity,String type,String p1,String p2) {
-			  //if (systemUserReg.getUseDatabase()) {
-				  supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sysehsmsg (sysEHSMsgID,sysEHSMsgEntity,sysEHSMsgType,sysEHSMsgParam1,sysEHSMsgParam2) VALUES (null,'"+entity+"','"+type+"','"+p1+"','"+p2+"')","");
-			  //}
-		  }
-		  public String readVirtualMsg() { // called by the DC thread every few seconds for a multi user canvas
-			  String msg = "";
-			  if (bVirtualMsgProcessing) {return msg;}
-			  //if (systemUserReg.getUseDatabase()) {
-				  msg = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSMsgID,sysEHSMsgEntity,sysEHSMsgType,sysEHSMsgParam1,sysEHSMsgParam2 FROM sysehsmsg WHERE sysEHSMsgEntity='"+getEntity()+"' AND sysEHSMsgID>"+String.valueOf(dcLastMsgID)+" LIMIT 1","");
-			  //} 
-			  if (msg.length() == 0) {return msg;}
-			  
-			  //TRACE("Read Virtual Msg: "+msg,4);
-			  Vector v = supportFunctions.splitIntoTokens(msg);
-			  String[] tokens = new String[v.size()];
-			  v.copyInto(tokens);
-			  dcLastMsgID = Integer.parseInt(tokens[0]);
-			  processVirtualMsg(tokens[1],tokens[2],tokens[3],tokens[4]);
-			  return msg;
-		  }
-		 public void processCustomVirtualMsg(String entity,String msgType,String param1,String param2) {
-			int msgID = Integer.parseInt(msgType);
-			switch (msgID) {
-				case DCRefresh:
-					//loadDrawingItems();
-					break;
-				}
-		 }
-		  public void processVirtualMsg(String entity,String msgType,String param1,String param2) {
-			//TRACE("Process Virtual Msg: E="+entity+", Type="+msgType+", P1="+param1+", P2="+param2,4);
-			if (param1.equals(dcSubEntity)) { // ignore our own virtual messages
- 				//TRACE("Ignored own virtual msg",4);
-				return;
-			} 
-			boolean bProcessed = false;
-			bVirtualMsgProcessing = true;
-			int msgID = Integer.parseInt(msgType);
-				switch (msgID) {
-					case DCMsg:
-						supportFunctions.displayMessageDialog(null,param2);
-						bProcessed = true;
-						break;
-				}
-			
-			if (!bProcessed) {
-				processCustomVirtualMsg(entity,msgType,param1,param2);
-			}			
-			bVirtualMsgProcessing = false;
-		}
 	}
+	

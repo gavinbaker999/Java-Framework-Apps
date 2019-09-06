@@ -1968,6 +1968,9 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		   public UMLDrawingCanvas(String entity,int maxX,int maxY,int spaceX,int spaceY,boolean gVisible) {
 			   super(entity,maxX,maxY,spaceX,spaceY,gVisible);
 		   }
+		   public void onInitDrawingCanvas() {
+			   add(umlDiagram.getMenuUMLDI());
+		   }
 		   public boolean doPaint(drawingItem d) {
 			   if (d.getType() <= ehsConstants.dcTypeBuiltInMaxId) {return true;} //built in types always drawn
 			   if (d.getType() == dcTypeUMLUseCase && umlDiagram.getDiagramType() == UMLDiagramType.USECASE) {return true;}
@@ -4126,7 +4129,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			
 			sDC = new scrollableDrawingCanvas(supportFunctions.getTmpFilename("untitled"),ehsConstants.dcMaxX,ehsConstants.dcMaxY,20,20,false);
 			getDrawingCanvas().hideToolWindows();
-			getDrawingCanvas().setMultiUser(false);
 			getDrawingCanvas().setUseDatabase(false);
 			getDrawingCanvas().setReadOnly(false);
 			getDrawingCanvas().addDrawingCanvasListener(this);

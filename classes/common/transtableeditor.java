@@ -430,7 +430,6 @@ class transtableeditor {
 			processTransTableDrawingItems();
 			
 			getDC().hideToolWindows();
-			getDC().setMultiUser(false);
 			getDC().setUseDatabase(false);
 			getDC().setReadOnly(false);
 			getDC().addDrawingCanvasListener(this);
