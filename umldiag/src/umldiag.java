@@ -626,7 +626,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		public void removeAllClassVariables() {classVariables.removeAllElements();}
 		public void removeAllClassFunctions() {classFunctions.removeAllElements();}
 	}
-	public enum UMLConnectorType {HEIR("HEIR",dcTypeUML),AREG("AREG",dcTypeUML),CREATE("CREATE",dcTypeUML),
+	public enum UMLConnectorType {HEIR("HEIR",dcTypeUML),AREG("AREG",dcTypeUML),DEPENDS("DEPENDS",dcTypeUML),
 			SEQUENCENONE("SEQUENCENONE",dcTypeUMLSequence),SEQUENCESYNC("SEQUENCESYNC",dcTypeUMLSequence),
 			SEQUENCEASYNC("SEQUENCEASYNC",dcTypeUMLSequence),SEQUENCESIMPLE("SEQUENCESIMPLE",dcTypeUMLSequence),
 			SEQUENCERETURN("SEQUENCERETURN",dcTypeUMLSequence),SEQUENCESYNCRETURN("SEQUENCESYNCRETURN",dcTypeUMLSequence),
@@ -907,74 +907,14 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			g2d.setColor(Color.black);
 			supportFunctions.centerTextAtPoint(g2d,text,ptCenter.x,ptCenter.y + charWidth);
 		}
-		public void drawUMLCreateConnector(Graphics2D g2d,Point ptStart,Point ptEnd,boolean bDrawConnLine,boolean bArray,String variable,boolean bDrawRightSymbols,UMLDrawingItem umlDI) {
+		public void drawUMLDependsConnector(Graphics2D g2d,Point ptStart,Point ptEnd,boolean bDrawConnLine,UMLDrawingItem umlDI) {
 			// HOOK B2 and HOOK E
+
+			g2d.setStroke(new BasicStroke(1.f,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL,8.f,new float[] {6.f,6.f},0.f));
+
 			if (bDrawConnLine) {g2d.drawLine(ptStart.x-charWidth,ptStart.y,ptEnd.x,ptEnd.y);}
 
-			if (ptStart != null) {
-				if (bDrawRightSymbols) {
-					Polygon p = new Polygon();
-					p.addPoint(ptStart.x,ptStart.y);
-					p.addPoint(ptStart.x+(charWidth/2),ptStart.y-(charWidth/2));
-					p.addPoint(ptStart.x+charWidth,ptStart.y);
-					p.addPoint(ptStart.x+(charWidth/2),ptStart.y+(charWidth/2));
-					p.addPoint(ptStart.x,ptStart.y);
-					if (umlDI.getData().isMemberVariable(variable)) {g2d.fill(p);} else {g2d.draw(p);}
-				} else {
-					Polygon p = new Polygon();
-					p.addPoint(ptStart.x,ptStart.y);
-					p.addPoint(ptStart.x+(charWidth/2),ptStart.y-(charWidth/2));
-					p.addPoint(ptStart.x+charWidth,ptStart.y);
-					p.addPoint(ptStart.x+(charWidth/2),ptStart.y+(charWidth/2));
-					p.addPoint(ptStart.x,ptStart.y);
-					if (umlDI.getData().isMemberVariable(variable)) {g2d.fill(p);} else {g2d.draw(p);}
-				}
-			}
-			
-			if (ptEnd != null) {
-				if (bDrawRightSymbols) {
-					if (bArray) {
-						g2d.fillOval(ptEnd.x - (charWidth/2),ptEnd.y - (charWidth/2),charWidth,charWidth);
-						// adjust end point so arrow head draw to correct position
-						ptEnd = new Point(ptEnd.x - (charWidth/2),ptEnd.y);
-					}
-					g2d.drawLine(ptEnd.x,ptEnd.y,ptEnd.x - (charWidth/2),ptEnd.y - (charWidth/2));
-					g2d.drawLine(ptEnd.x,ptEnd.y,ptEnd.x - (charWidth/2),ptEnd.y + (charWidth/2));
-				} else {
-					if (bArray) {
-						g2d.fillOval(ptEnd.x + (charWidth/2),ptEnd.y - (charWidth/2),charWidth,charWidth);
-						// adjust end point so arrow head draw to correct position
-						ptEnd = new Point(ptEnd.x + (charWidth/2),ptEnd.y);
-					}
-					g2d.drawLine(ptEnd.x,ptEnd.y,ptEnd.x + (charWidth/2),ptEnd.y - (charWidth/2));
-					g2d.drawLine(ptEnd.x,ptEnd.y,ptEnd.x + (charWidth/2),ptEnd.y + (charWidth/2));
-				}
-			}
-			
-			if (ptStart != null && ptEnd != null) {
-				Point ptTextStart = new Point(0,0);
-				double rotAngle = 0;
-				Font orgFont = g2d.getFont();
-				Font newFont;
-				if (bDrawRightSymbols) {
-					ptTextStart.x = ptStart.x + charWidth;
-					ptTextStart.y = ptStart.y;
-					rotAngle = Math.toDegrees(Math.atan2(ptEnd.y-ptStart.y,ptEnd.x-ptStart.x));
-					newFont = supportFunctions.getRotatedFont(orgFont,(int)rotAngle);
-				} else {
-					ptTextStart.x = ptStart.x - charWidth; 
-					ptTextStart.y = ptStart.y; 
-					rotAngle = Math.toDegrees(Math.atan2(ptEnd.y-ptStart.y,ptEnd.x-ptStart.x));
-					rotAngle = 180 - rotAngle;
-					AffineTransform flip = AffineTransform.getScaleInstance(1,-1);
-					newFont = supportFunctions.getRotatedFont(orgFont,(int)rotAngle);
-					newFont = newFont.deriveFont(flip);
-				}
-				TRACE("drawUMLHorzConnector:Text rotate angle:"+String.valueOf(rotAngle),4);
-				g2d.setFont(newFont);
-				g2d.drawString(umlDiagram.getUMLCustomStereotypeText(umlDI.getData().getClassName() + ":link:"+variable+":stereotype") + " " + variable + " " + umlDiagram.getUMLCustomPropsText(umlDI.getData().getClassName() + ":link:"+variable),ptTextStart.x,ptTextStart.y);
-				g2d.setFont(orgFont);
-			}
+			g2d.setStroke(new BasicStroke(1.f));
 		}
 		public void drawUMLVertConnector(Graphics2D g2d,Point ptStart,Point ptEnd,boolean bDrawConnLine) {
 			TRACE("drawUMLVertConnector:ptStart:"+ptStart.toString()+":ptEnd:"+ptEnd.toString(),4);
@@ -1070,7 +1010,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				ptStart = dStart.getConnectorPoint(UMLCONN_BOTTOM);
 				ptEnd = dEnd.getConnectorPoint(UMLCONN_TOP);
 			}
-			if (getType() == UMLConnectorType.AREG || getType() == UMLConnectorType.CREATE) {
+			if (getType() == UMLConnectorType.AREG || getType() == UMLConnectorType.DEPENDS) {
 				if (ptEndOrigin.x > ptStartOrigin.x) {
 					ptStart = dStart.getConnectorPoint(UMLCONN_RIGHT);
 					ptEnd = dEnd.getConnectorPoint(UMLCONN_LEFT);
@@ -1092,8 +1032,8 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				if (getType() == UMLConnectorType.AREG) {
 					drawUMLHorzConnector(g2d,ptStart,ptEnd,true,bArray,getVariable(),bDrawRightSymbols,(UMLDrawingItem)getStart());
 				}
-				if (getType() == UMLConnectorType.CREATE) {
-					drawUMLCreateConnector(g2d,ptStart,ptEnd,true,bArray,getVariable(),bDrawRightSymbols,(UMLDrawingItem)getStart());
+				if (getType() == UMLConnectorType.DEPENDS) {
+					drawUMLDependsConnector(g2d,ptStart,ptEnd,true,(UMLDrawingItem)getStart());
 				}
 			} else {
 				TRACE("drawUMLConnectors:Both UML DI on different sheets",4);
@@ -1111,8 +1051,8 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						drawUMLHorzConnector(g2d,ptStart,ptEnd,false,bArray,getVariable(),bDrawRightSymbols,(UMLDrawingItem)getStart());
 						ptCenter = new Point(0,0);
 					}
-					if (getType() == UMLConnectorType.CREATE) {
-						drawUMLCreateConnector(g2d,ptStart,ptEnd,false,bArray,getVariable(),bDrawRightSymbols,(UMLDrawingItem)getStart());
+					if (getType() == UMLConnectorType.DEPENDS) {
+						drawUMLDependsConnector(g2d,ptStart,ptEnd,false,(UMLDrawingItem)getStart());
 						ptCenter = new Point(0,0);
 					}
 
@@ -2689,9 +2629,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 			supportFunctions.displayMessageDialog(null,"generateCode:NYI");
 		}
-		public void OCLBuilder() {
-			supportFunctions.displayMessageDialog(null,"OCLBuilder:NYI");
-		}
 		public void propChanged(String title,statusCanvasProp tmp,String newValue) {
 			
 		}
@@ -2891,13 +2828,14 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					name,desc,type,conn+":"+conntype,false,Color.black);			
 		}
 		public void UMLConnectorDoubleClicked(UMLBaseConnector conn) {
-			supportFunctions.displayMessageDialog(null,"UMLConnectorDoubleClicked:NYI");
-
 			String expr = "/umlconnectors/connector[@id='"+conn.getIDAsString()+"']";
 			NodeList n = supportFunctions.executeXPathExpr(umlDiagram.getConnectorsDocument(),expr);
 			if (n.getLength() == 0) {supportFunctions.displayMessageDialog(null,"Connector XML Error");return;}
 			org.w3c.dom.Element e = (org.w3c.dom.Element)n.item(0);
 
+			JPanel p = new JPanel();
+			p.add(new JLabel(e.getAttribute("id")));
+			supportFunctions.displayPanelDialog(null,p,"Connector ID",true);
 		}
 		public int getMarginWidth() {return iMarginWidth;}
 		public int getMarginHeight() {return iMarginHeight;}
@@ -3282,11 +3220,26 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				}
 			}
 			
-			// create connectors - change existing aggregation type connectors to create type?
-			for (int i=0;i<UMLConnectors.size();i++) {
-				UMLConnector conn = (UMLConnector)UMLConnectors.elementAt(i);
-				// HOOK A
-				// if (false) {conn.setType(UMLConnectorType.CREATE);}
+			// depends connectors - Go through every function parameter, if the name of an enum, class, etc. 
+			// then we connect to that enum/class with a depends connector.
+			for (int i=0;i<drawingItems.size();i++) {
+				UMLDrawingItem dStart = (UMLDrawingItem)drawingItems.elementAt(i);
+				UMLClassFunctionData[] functionList = dStart.getData().getClassFunctionStrings();
+				for (int ii=0;ii<functionList.length;ii++) {
+					UMLClassFunctionData tmp = functionList[ii];
+					
+					String funcparams = tmp.getFunctionParameters();
+					TRACE("Depends:" + funcparams,4);
+					Vector v = supportFunctions.splitIntoTokens(funcparams,",");
+					for (int iii=0;iii<v.size();iii++) {
+						Vector v1 = supportFunctions.splitIntoTokens((String)v.elementAt(iii)," ");
+						
+						UMLDrawingItem dEnd = (UMLDrawingItem)sDC.getDC().getDIWithUserDefinedName((String)v1.elementAt(0));
+						if (dEnd != null) {
+							UMLConnectors.addElement(new UMLConnector(dStart,dEnd,UMLConnectorType.DEPENDS,UMLConnID++,false,""));
+						}
+					}
+				}
 			}
 			
 			TRACE("ProcessUMLConnectors:Number of connectors:"+String.valueOf(UMLConnectors.size()),4);
@@ -4001,7 +3954,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	}
 		
 	public class mainCard extends Panel  implements drawingCanvasUtils,ActionListener,statusCanvasDialogListener,ItemListener {
-		private JButton 					openSourceBut,openDiagramBut,printDiagramBut,umlCustomTextBut,helpBut,cycleBut,oclBuilderBut,dataDictBut,saveAsJPGBut;
+		private JButton 					openSourceBut,openDiagramBut,printDiagramBut,umlCustomTextBut,cycleBut,dataDictBut,saveAsJPGBut;
 		private JTextField 					diagramFilenameTF,diagramSheetTF;
 		private UMLCompiler 				compilier;
 		private modelessStatusDialog 					msgD;
@@ -4074,18 +4027,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			cycleBut.addActionListener(this);
 			cycleBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
 			cycleBut.setToolTipText("Cycle Sheets");
-			helpBut = new JButton("Help");
-			helpBut.addActionListener(this);
-			helpBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
-			helpBut.setToolTipText("Help");
 			umlCustomTextBut = new JButton("Custom");
 			umlCustomTextBut.addActionListener(this);
 			umlCustomTextBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
 			umlCustomTextBut.setToolTipText("Custom UML Text");
-			oclBuilderBut = new JButton("OCL Builder");
-			oclBuilderBut.addActionListener(this);
-			oclBuilderBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
-			oclBuilderBut.setToolTipText("OCL Builder");
 			dataDictBut = new JButton("Symbols");
 			dataDictBut.addActionListener(this);
 			dataDictBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
@@ -4103,8 +4048,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			butPanel.add(printDiagramBut);
 			butPanel.add(saveAsJPGBut);
 			butPanel.add(dataDictBut);
-			butPanel.add(oclBuilderBut);
-			butPanel.add(helpBut);
+			butPanel.add(new JLabel("Hover over class for any notes"));
 
 			JPanel topPanel = new JPanel();
 			JLabel lab = new JLabel("<html><font size='+2' color='red'>"+systemUserReg.getAppName()+"</font><p><font size='-2'>"+systemUserReg.getAppCopyright()+"</font></html>");
@@ -4143,7 +4087,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			cycleBut.setEnabled(false);
 			printDiagramBut.setEnabled(false);
 			umlCustomTextBut.setEnabled(false);
-			oclBuilderBut.setEnabled(false);
 			dataDictBut.setEnabled(false);
 			saveAsJPGBut.setEnabled(false);
 			
@@ -4187,9 +4130,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		  }
 		  if (cmd.equalsIgnoreCase("Generate Code")) {
 			  umlDiagram.generateCode(getDrawingCanvas().getDrawingItemsOfType(dcTypeUML));
-		  }
-		  if (cmd.equalsIgnoreCase("OCL Builder")) {
-			  umlDiagram.OCLBuilder();
 		  }
 		  if (cmd.equalsIgnoreCase("Add Actor")) {
 			  umlDiagram.addActor();
@@ -4305,14 +4245,9 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			if (evt.getSource() == openDiagramBut) {openDiagram();}
 			if (evt.getSource() == printDiagramBut) {printDiagram();}
 			if (evt.getSource() == cycleBut) {cycleDiagramSheets();}
-			if (evt.getSource() == oclBuilderBut) {umlDiagram.OCLBuilder();}
 			if (evt.getSource() == dataDictBut) {compilier.getSymbolTable().createSymbolDialog("Data Dictionary","Data Dictionary");}
 			if (evt.getSource() == saveAsJPGBut) {getDrawingCanvas().saveAsJPG(getDrawingCanvas().getDCBoundingRect(), "");}
 			if (evt.getSource() == umlCustomTextBut) {umlCustomText();}
-			if (evt.getSource() == helpBut) {
-				expressionBuilder dlg = new expressionBuilder(parentFrame,"OCL Expression",
-						dataRelativePath+"/"+appDirectory+"/"+"oclsyntax.dat");
-			}
 		}
 		public void umlCustomText() {
 			UMLCustomIDEditor d = new UMLCustomIDEditor(supportFunctions.getTopLevelParent(this));
@@ -4349,7 +4284,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			cycleBut.setEnabled(true);
 			printDiagramBut.setEnabled(true);
 			umlCustomTextBut.setEnabled(true);
-			oclBuilderBut.setEnabled(true);
 			dataDictBut.setEnabled(true);
 			saveAsJPGBut.setEnabled(true);
 			umlDiagram.setModified(false);

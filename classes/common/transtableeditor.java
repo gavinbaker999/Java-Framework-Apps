@@ -116,6 +116,90 @@ class transtableeditor {
 	public transtableeditor(String name) {
 		displayTransTableEditor(name);
 	}
+	public class transTableDrawingItem extends drawingItem {
+		private String 				keyword;
+		private String				text;
+		private	String 				transtext;
+		private String 				flags; 
+		private String				prestring;
+		private String				poststring;
+		private	Rectangle			boundingRect;
+		private	transTableTokenType	type = transTableTokenType.NONE;
+		private int					groupTTID = 0;
+		private	int					count = 0;
+		
+		public void setCount(int i) {count = i;}
+		public int getCount() {return count;}
+		public void setTTGroupID(int i) {groupTTID = i;}
+		public int getTTGroupID() {return groupTTID;}
+		public transTableTokenType getTokenType() {return type;}
+		public void setTokenType(transTableTokenType t) {type = t;}
+		public String getPreString() {return prestring;}
+		public void setPreString(String s) {prestring = s;} 
+		public String getPostString() {return poststring;}
+		public void setPostString(String s) {poststring = s;} 
+		public String getFlags() {return flags;}
+		public String getTransText() {return transtext;}
+		public String getText() {return text;}
+		public transTableDrawingItem() {}
+		public transTableDrawingItem(String id,int orgX,int orgY,String p1,String p2,String p3,String p4,boolean fill,Color c) {
+			super(ehsConstants.dcTypeTransTable,id,orgX,orgY,p1,p2,p3,p4,fill,c);
+			
+			Vector v = supportFunctions.splitIntoTokens(p1,":");
+			keyword = (String)v.elementAt(0);
+			text = (String)v.elementAt(1);
+			this.transtext = p2;
+			this.flags = p3;
+			this.groupTTID = Integer.parseInt(p4);
+			boundingRect = new Rectangle(orgX,orgY,ehsConstants.ttDIWidth,ehsConstants.ttDIHeight);
+			prestring = "";
+			poststring = "";
+		}
+		public void outlinePaint(Graphics2D g2d,int dcLastX,int dcLastY,int xCord,int yCord,boolean dcFilled) {
+			// do nothing here if drawing item is of a fixed size
+		}
+		public void editor() {
+			String[] titles = new String[]{"Text","Trans Text","Flags"};			
+			String[] defaults = new String[] {getText(),getTransText(),getFlags()};
+			String[] data = supportFunctions.getDataAsDialog("Edit Trans Table Element",titles,defaults);
+			if (data != null) {
+				text = data[0];
+				transtext = data[1];
+				flags = data[2];
+			}
+			
+			repaint();
+		}
+		public void paint(Graphics2D g2d,boolean focus) {
+			setupPaint(g2d,focus);
+			
+			g2d.setColor(type.getTokenColor());
+
+			AffineTransform at = new AffineTransform();
+			Shape s = new RoundRectangle2D.Double(boundingRect.x, boundingRect.y, 
+					boundingRect.width, boundingRect.height,
+					25,25);
+			g2d.fill(s);
+
+			g2d.setColor(Color.black);
+			g2d.drawRoundRect(boundingRect.x, boundingRect.y, 
+					boundingRect.width, boundingRect.height,
+					25,25);
+			supportFunctions.centerTextAtBox(g2d,text,boundingRect);
+			
+			teardownPaint(g2d,focus);
+		}
+		public void fitToRectangle(Rectangle r) {
+			// do nothing here if drawing item is of a fixed size
+		}
+		public Rectangle getBoundingRect() {
+			return boundingRect;
+		}
+		public void setBoundingRect(Rectangle r) {
+			boundingRect = r;
+		}
+		//public boolean canDelete() {return false;}
+	}
 	public class transTableCanvasDialog extends JDialog implements drawingCanvasUtils {
 		private int 						numRows = 20;
 		private int 						numCols = 60;
