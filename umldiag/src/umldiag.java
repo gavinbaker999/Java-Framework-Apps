@@ -3234,7 +3234,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					for (int iii=0;iii<v.size();iii++) {
 						Vector v1 = supportFunctions.splitIntoTokens((String)v.elementAt(iii)," ");
 						
-						UMLDrawingItem dEnd = (UMLDrawingItem)sDC.getDC().getDIWithUserDefinedName((String)v1.elementAt(0));
+						String classname = (String)v1.elementAt(0);
+						int index = classname.indexOf("[");
+						if (index != -1) {classname = classname.substring(0,index);}
+						UMLDrawingItem dEnd = (UMLDrawingItem)sDC.getDC().getDIWithUserDefinedName(classname);
 						if (dEnd != null) {
 							UMLConnectors.addElement(new UMLConnector(dStart,dEnd,UMLConnectorType.DEPENDS,UMLConnID++,false,""));
 						}
