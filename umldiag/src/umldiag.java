@@ -156,7 +156,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final int 		visibleDCWidthChars = 140;
 	protected	static final int 		visibleDCHeightChars = 30;
 
-	protected	String		exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"documents/help.xml";
+	protected	String		exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"readme.txt";
 	protected	static String			exFAQFile="";
 	protected	static final String		appDirectory = "umldiag"; 
 	protected	static final String		appClassName = "umldiag";
@@ -279,7 +279,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","02.51.0000.00","01/02/18","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","03.00.0000.00","09/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "UML Work Bench";
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 		supportFunctions.connectDatabase(); 
@@ -3957,10 +3957,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	}
 		
 	public class mainCard extends Panel  implements drawingCanvasUtils,ActionListener,statusCanvasDialogListener,ItemListener {
-		private JButton 					openSourceBut,openDiagramBut,printDiagramBut,umlCustomTextBut,cycleBut,dataDictBut,saveAsJPGBut;
+		private JButton 					openSourceBut,openDiagramBut,printDiagramBut,umlCustomTextBut,cycleBut,dataDictBut,saveAsJPGBut,supportBut;
 		private JTextField 					diagramFilenameTF,diagramSheetTF;
 		private UMLCompiler 				compilier;
-		private modelessStatusDialog 					msgD;
+		private modelessStatusDialog 		msgD;
 		private Choice						umlDiagTypes;
 
   	    public void itemStateChanged(ItemEvent evt) {
@@ -4042,6 +4042,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			saveAsJPGBut.addActionListener(this);
 			saveAsJPGBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
 			saveAsJPGBut.setToolTipText("JPG Export");
+			supportBut = new JButton("Support");
+			supportBut.addActionListener(this);
+			supportBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
+			supportBut.setToolTipText("Support");
 			
 			JPanel butPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 			butPanel.add(openSourceBut);
@@ -4051,6 +4055,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			butPanel.add(printDiagramBut);
 			butPanel.add(saveAsJPGBut);
 			butPanel.add(dataDictBut);
+			butPanel.add(supportBut);
 			butPanel.add(new JLabel("Hover over class for any notes"));
 
 			JPanel topPanel = new JPanel();
@@ -4248,6 +4253,12 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			if (evt.getSource() == openDiagramBut) {openDiagram();}
 			if (evt.getSource() == printDiagramBut) {printDiagram();}
 			if (evt.getSource() == cycleBut) {cycleDiagramSheets();}
+			if (evt.getSource() == supportBut) {
+				try {
+					URL u = new URL("https://ehsphpapps.herokuapp.com/applications/devtrack");
+					miniWebBrowser tmp = new miniWebBrowser(u);
+				} catch(Exception e) {;}
+			}
 			if (evt.getSource() == dataDictBut) {compilier.getSymbolTable().createSymbolDialog("Data Dictionary","Data Dictionary");}
 			if (evt.getSource() == saveAsJPGBut) {getDrawingCanvas().saveAsJPG(getDrawingCanvas().getDCBoundingRect(), "");}
 			if (evt.getSource() == umlCustomTextBut) {umlCustomText();}
@@ -4580,7 +4591,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		contentPane = getContentPane();
 		tabPane = new JTabbedPane();
 
-		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","02.51.0000.00","01/02/18","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","03.00.0000.00","09/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "UML Work Bench";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
@@ -4600,7 +4611,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		helpMenu.add(about);
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);
-		if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
+		//if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
 		
 		ac = getAppletContext();
 					   

@@ -165,7 +165,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 	protected	static final int 		visibleDCWidthChars = 25;
 	protected	static final int 		visibleDCHeightChars = 10;
 
-	protected	String		exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"documents/help.xml";
+	protected	String		exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"readme.txt";
 	protected	static String			exFAQFile="";
 	protected	static final String		appDirectory = "hdlworkbench";
 	protected	static final String		appClassName = "hdlworkbench";
@@ -297,7 +297,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","01.63.0000.00","01/02/18","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","02.00.0000.00","18/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "HDL Work Bench";
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 
@@ -613,7 +613,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			simulateBut.addActionListener(this);
 			simulateBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
 			simulateBut.setToolTipText("Simulate HDL File");
-			helpBut = new JButton("Help");
+			helpBut = new JButton("Support");
 			helpBut.addActionListener(this);
 			helpBut.setPreferredSize(new Dimension(10*charWidth,charHeight));
 			helpBut.setToolTipText("Help File");
@@ -724,6 +724,12 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			if (evt.getSource() == saveBut) {hdlSystemSave(true);}
 			if (evt.getSource() == compileBut) {hdlSystemCompile();}
 			if (evt.getSource() == simulateBut) {hdlSystemSimulate();}
+			if (evt.getSource() == helpBut) {
+				try {
+					URL u = new URL("https://ehsphpapps.herokuapp.com/applications/devtrack");
+					miniWebBrowser tmp = new miniWebBrowser(u);
+				} catch(Exception e) {;}
+			}
 		}
 		public void keyTyped(KeyEvent evt) {}
 		public void keyReleased(KeyEvent evt) {}
@@ -1581,7 +1587,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		contentPane = getContentPane();
 		tabPane = new JTabbedPane();
 
-		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","01.63.0000.00","01/02/18","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","02.00.0000.00","18/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "HDL Work Bench";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
@@ -1601,7 +1607,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		helpMenu.add(about);
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);
-		if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
+		//if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
 		
 		ac = getAppletContext();
 					   

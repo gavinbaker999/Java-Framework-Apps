@@ -111,7 +111,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 	protected static final String	appClassName = "template";
 	protected static final String	appBaseURL = "http://endhousesoftware.byethost11.com";
 	protected static helpDialog helpDlg = null;
-	protected static String	exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"documents/help.xml";
+	protected static String	exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"readme.txt";
 	protected static String	splashJPG = dataRelativePath+"/"+appDirectory+"/template_logo.jpg";
 
 	public	static final String		buildDate = "@@@Build Date: 8-March-2019 05:16 PM Build Number: 21@@@";
@@ -245,7 +245,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo(appDirectory,"JAVA Template","Template Application","TA1000","01.41.0000.00","01/02/18","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"JAVA Template","Template Application","TA1000","02.00.0000.00","16/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "JAVA Template";
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 		supportFunctions.connectDatabase(); 
@@ -533,7 +533,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 		contentPane = getContentPane();
 		tabPane = new JTabbedPane();
 
-		systemUserReg = new registrationinfo(appDirectory,"JAVA Template","Template Application","TA1000","01.41.0000.00","01/02/18","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"JAVA Template","Template Application","TA1000","02.00.0000.00","16/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "JAVA Template";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
@@ -553,7 +553,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 		helpMenu.add(about);
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);
-		if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
+		//if(supportFunctions.getSystemVar(systemUserReg.getAppSerialBase() + systemUserReg.getUserName() + "menubar",0) == 1) {setJMenuBar(menuBar);}
 		
 		ac = getAppletContext();
 					   
