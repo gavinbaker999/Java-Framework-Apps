@@ -141,7 +141,7 @@ public class mysqlJDBC {
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 				System.err.println("Mysql JDBC driver loaded");
 				conn = DriverManager.getConnection("jdbc:mysql://" + ehsConstants.dbHost 
-						+ "/" + ehsConstants.dbName,ehsConstants.dbUser,ehsConstants.dbPassword);
+						+ "/" + ehsConstants.dbName+ "?characterEncoding=latin1",ehsConstants.dbUser,ehsConstants.dbPassword);
 			} 
 			catch(ClassNotFoundException e) {e.printStackTrace(); 
 				System.err.println("Class not found");
@@ -236,6 +236,8 @@ public class mysqlJDBC {
 			   return columnNames;
 		}
 		public String executeSQLQuery(String query,String testData) {
+			System.err.println("JDBC query:"+query);
+
 			java.sql.Statement	stat = null;
 			String data = "";
 			ResultSet results = null;

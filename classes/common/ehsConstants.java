@@ -1,3 +1,4 @@
+import java.lang.System;
 import java.awt.Color;
 
 public class ehsConstants {
@@ -56,9 +57,9 @@ public class ehsConstants {
 	protected	static final int		noScaleY = -1;
 
 	public 		static String		dbHost = "localhost";
-	public		static String		dbName = "gavin_endhousesoftware";
-	public 		static String		dbUser = "root";
-	public		static String		dbPassword = "joidefoster";
+	public		static String		dbName = System.getenv("LOCALDBNAME");
+	public 		static String		dbUser = System.getenv("LOCALDBUSER");
+	public		static String		dbPassword = System.getenv("LOCALDBPASSWORD");
 
     public static String COLLAPSIBLE_AREA_ELEMENT="collapsible_area_element";
 }

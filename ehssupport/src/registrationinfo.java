@@ -413,7 +413,7 @@ public class registrationinfo {
 				data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSRegSerial,sysEHSRegName,sysEHSRegPassword,sysEHSRegLogonDate,sysEHSRegLogonTime,sysEHSRegUserName FROM sysehsregistrations WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUserName='"+username+"' AND sysEHSRegActive=1","");
 				// assume at the moment passwords match, but need to check that !!!
 				supportFunctions.getDBConn().executeSQLQuery("UPDATE sysehsregistrations SET sysEHSRegLogonDate='"+supportFunctions.currentShortDate()+"' WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUserName='"+username+"'","");
-				supportFunctions.getDBConn().executeSQLQuery("UPDATE sysehsregistrations SET sysEHSRegLogonTime='"+supportFunctions.currentShortDate()+"' WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUserName='"+username+"'","");
+				supportFunctions.getDBConn().executeSQLQuery("UPDATE sysehsregistrations SET sysEHSRegLogonTime='"+supportFunctions.currentShortTime()+"' WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUserName='"+username+"'","");
 				//TRACE("LRD:"+data,4);
 				if (data.length() == 0) { // user not yet registered
 					//TRACE("LRD:User not yet registered",4);

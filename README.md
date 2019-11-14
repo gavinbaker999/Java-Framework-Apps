@@ -12,7 +12,7 @@ To run locally you need the [Java JRE/JDK](https://www.java.com/en/download/) an
 
 ### Database Structure
 
-Create a MySQL database and then place the database host, database name, username and password in the **classes/common/ehsConstants.java** file. Next use the **classes/common/dbcreate.sql** file to create the database tables.
+Use the **classes/common/dbcreate.sql** file to create the **MySQL** database and tables (you will need to edit the **dbcreate.sql** file to change the database name), and then place the database name, username and password in the following environment variables **LOCALDBNAME**, **LOCALDBUSER** and **LOCALDBPASSWORD**. Note: The database host is assumed to be **localhost** and the database table names can not be changed.
 
 ## Notes
 
