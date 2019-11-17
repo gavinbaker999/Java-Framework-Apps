@@ -213,7 +213,7 @@ public class supportFunctions extends Component {
 	}
 	public static int getSystemVar(String name, int defValue) {
 		String data = "";
-		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",String.valueOf(defValue));
+		data=supportFunctions.getDBConn().executeSQLQuery("SELECT varValue FROM sysehsvariables WHERE varName='" + name + "'",String.valueOf(defValue));
 		
 		//TRACE("data (getSystemVar) is " + data + " length="+String.valueOf(data.length()),3);
 		if(data.length() == 0) {
@@ -230,7 +230,7 @@ public class supportFunctions extends Component {
 
 	public static boolean getSystemVar(String name, boolean defValue) {
 		String data="";
-		data = supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",supportFunctions.valueOf(defValue));
+		data = supportFunctions.getDBConn().executeSQLQuery("SELECT varValue FROM sysehsvariables WHERE varName='" + name + "'",supportFunctions.valueOf(defValue));
 		
 		if(data.length() == 0) {
 			setSystemVar(name,defValue);
@@ -247,7 +247,7 @@ public class supportFunctions extends Component {
 
 	public static String getSystemVar(String name, String defValue) {
 		String data = "";
-		data=supportFunctions.getDBConn().executeSQLQuery("SELECT chatVarValue FROM chatvariables WHERE chatVarName='" + name + "'",defValue);
+		data=supportFunctions.getDBConn().executeSQLQuery("SELECT varValue FROM sysehsvariables WHERE varName='" + name + "'",defValue);
 		
 		if(data.length() == 0) {
 			setSystemVar(name,defValue);
@@ -258,17 +258,17 @@ public class supportFunctions extends Component {
 	}
 
 	public static String setSystemVar(String name, String val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+val+"')","");
+		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO sysehsvariables (varName,varValue) VALUES ('"+name+"','"+val+"')","");
 		return val;
 	}
 
 	public static int setSystemVar(String name, int val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+String.valueOf(val)+"')","");
+		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO sysehsvariables (varName,varValue) VALUES ('"+name+"','"+String.valueOf(val)+"')","");
 		return val;
 	}
 	
 	public static boolean setSystemVar(String name, boolean val) {
-		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO chatvariables (chatVarName,chatVarValue) VALUES ('"+name+"','"+supportFunctions.valueOf(val)+"')","");
+		supportFunctions.getDBConn().executeSQLQuery("REPLACE INTO sysehsvariables (varName,varValue) VALUES ('"+name+"','"+supportFunctions.valueOf(val)+"')","");
 		return val;
 	}
 
