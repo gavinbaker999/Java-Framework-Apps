@@ -159,7 +159,7 @@ CREATE TABLE `sysehsregistrations` (
 --
 
 INSERT INTO `sysehsregistrations` (`sysEHSRegID`, `sysEHSRegName`, `sysEHSRegAddr`, `sysEHSRegTel`, `sysEHSRegFax`, `sysEHSRegEmail`, `sysEHSRegProduct`, `sysEHSRegSerial`, `sysEHSRegPassword`, `sysEHSRegUserName`, `sysEHSRegDate`, `sysEHSRegTime`, `sysEHSRegPayMethod`, `sysEHSRegPayRef`, `sysEHSRegFailedLogons`, `sysEHSRegLogonDate`, `sysEHSRegLogonTime`, `sysEHSRegUses`, `sysEHSRegExpired`, `sysEHSRegVersion`, `sysEHSRegActive`, `sysEHSRegData`, `sysEHSRegQuestion`, `sysEHSRegCredit`, `sysEHSRegUnique`, `sysEHSRegReceiveEmailUpdates`, `sysEHSRegEmailValidated`, `sysEHSRegToken`, `sysEHSRegTag`) VALUES
-(1, 'Admin', 'Your Company', '96 645 7291', '', 'endhousesoftware999@gmail.com', 'HDL Work Bench', 'EHS-WB1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL);
+(1, 'Admin', 'Your Company', 'Your Telephone Number', 'Your Fax Number', 'Your Email Address', 'HDL Work Bench', 'EHS-WB1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL),(2, 'Admin', 'Your Company', 'Your Telephone Number', 'Your Fax Number', 'Your Email Address', 'UML Work Bench', 'EHS-UD1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL),(3, 'Admin', 'Your Company', 'Your Telephone Number', 'Your Fax Number', 'Your Email Address', 'Project Tracker', 'EHS-DT1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL);
 
 --
 -- Table structure for table `sysehsvariables`
@@ -225,7 +225,7 @@ ALTER TABLE `sdcdrawingitems`
 -- AUTO_INCREMENT for table `sysehsregistrations`
 --
 ALTER TABLE `sysehsregistrations`
-  MODIFY `sysEHSRegID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `sysEHSRegID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sysehsvariables`
