@@ -159,13 +159,6 @@ public class supportFunctions extends Component {
 			catch (Exception e) {return "";}
 			return hostname;
 		}
-		public static void writeHitRecord(String product) {
-			String ipAddr = "0.0.0.0";
-			String reverse = getRemoteHostName(ipAddr);
-			String tmp = supportFunctions.currentShortDate();
-			tmp = tmp.replace('/','-');
-			supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sysehswebstats (sysEHSWSID,sysEHSWSProduct,sysEHSWSIP,sysEHSWSDate,sysEHSWSTime,sysEHSWSRef,sysEHSWSReverse) VALUES (null,'"+product+"','"+ipAddr+"','"+tmp+"','"+supportFunctions.currentShortTime()+":00','','"+reverse+"')","");
-		}
 		
 		public static Vector removeNumberTokens(Vector v) {
 			Vector n = new Vector();

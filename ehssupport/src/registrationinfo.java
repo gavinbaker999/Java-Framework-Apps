@@ -122,7 +122,6 @@ public class registrationinfo {
 		private String 	statusMsg;
 		private String  lastLogonDetails;
 		private	boolean	appPreRelease;
-		private Vector 	depts = new Vector();
 		private Vector 	rptTypes = new Vector();
 		private Vector	rptStatus = new Vector();
 		private int	numAttemptsLeft,userCredit,features; 
@@ -302,9 +301,7 @@ public class registrationinfo {
 		public void setStatusMsg(String msg) {statusMsg = msg;}
 		public int getFeatures() {return features;}
 		public void setFeatures(int f) {features = f;}
-		public Vector getDepts() {return depts;}
 		public Vector getRptTypes() {return rptTypes;}
-		public void setDepts(Vector v) {depts = v;}
 		public void setRptTypes(Vector v) {rptTypes = v;}
 		public boolean getPreRelease() {return appPreRelease;}
 		public void setPreRelease(boolean b) {appPreRelease=b;}
@@ -339,16 +336,6 @@ public class registrationinfo {
 			else {
 				supportFunctions.displayMessageDialog(null,"User is not registered");
 			}
-		}
-		public void deleteProductEntry(String productCode) {
-			supportFunctions.getDBConn().executeSQLQuery("DELETE FROM sysehsproducts WHERE sysEHSProdCode='"+productCode+"'","");
-		}
-		public void createProductEntry(String productName,String productDescription,String productSerialBase,int productPrice,int productBeta,int productTries,String productVersion,String productUpdateURL,String productPaymentURL,int productClient,String productClientEmail,String productClientName,String productCode,String productAdminUser,String productAdminPassword,int features) {
-			supportFunctions.getDBConn().executeSQLQuery("INSERT INTO sysehsproducts (sysEHSProdID,sysEHSProdName,sysEHSProdDescription,sysEHSProdSerialBase,sysEHSProdPrice,sysEHSProdBeta,sysEHSProdTries,sysEHSProdVersion,sysEHSProdUpdateURL,sysEHSProdPaymentURL,sysEHSProdClient,sysEHSProdClientEmail,sysEHSProdClientName,sysEHSProdCode,sysEHSProdAdminUser,sysEHSProdAdminPassword,sysEHSProdFeatures) VALUES (NULL,'"+productName+"','"+productDescription+"','"+productSerialBase+"',"+String.valueOf(productPrice)+","+String.valueOf(productBeta)+","+String.valueOf(productTries)+",'"+productVersion+"','"+productUpdateURL+"','"+productPaymentURL+"',"+String.valueOf(productClient)+",'"+productClientEmail+"','"+productClientName+"','"+productCode+"','"+productAdminUser+"','"+productAdminPassword+"',"+String.valueOf(features)+")","");
-		}
-		public boolean productEntryExists(String productCode) {
-			String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSProdDescription FROM sysehsproducts WHERE sysEHSProdCode='"+productCode+"'","");
-			if(data.length()==0) return false; else return true;
 		}
 		public String getAppCopyright() {
 			return appCopyright;
@@ -499,112 +486,6 @@ public class registrationinfo {
 			p.add(sp);
 			supportFunctions.displayTextFile(exFAQFile,ta);
 			supportFunctions.displayPanelDialog(null,p,product + " - FAQ");
-		}
-		public void sendReport(String email) {
-			final		Choice		deptCh,typeCh;
-			JButton		FAQBut,submitBut,OKBut;
-			final 		JTextArea	ta;
-			JLabel		statusLab;
-			final 		JTextField	titleTF,emailTF;
-			JPanel		repPanel;
-			
-			repPanel = new JPanel();
-			repPanel.setLayout(new BoxLayout(repPanel,BoxLayout.Y_AXIS));			
-			JPanel p = new JPanel();
-			p.setLayout(new BoxLayout(p,BoxLayout.X_AXIS));
-			p.add(new JLabel("Title:"));
-			titleTF = new JTextField("",20);
-			titleTF.setBackground(ehsConstants.lightyellow);
-			p.add(titleTF);
-			repPanel.add(p);
-			repPanel.add(Box.createRigidArea(new Dimension(charWidth,charHeight)));
-			p = new JPanel();
-			p.setLayout(new BoxLayout(p,BoxLayout.X_AXIS));
-			deptCh = new Choice();
-			typeCh = new Choice();
-			p.add(new JLabel("Dept:"));
-			p.add(deptCh);
-			p.add(new JLabel("Type:"));
-			p.add(typeCh);
-			deptCh.setBackground(ehsConstants.lightyellow);
-			typeCh.setBackground(ehsConstants.lightyellow);
-			repPanel.add(p);
-			repPanel.add(Box.createRigidArea(new Dimension(charWidth,charHeight)));
-			p = new JPanel();
-			p.setLayout(new BoxLayout(p,BoxLayout.X_AXIS));
-			emailTF = new JTextField("",20);
-			emailTF.setBackground(ehsConstants.lightyellow);
-			p.add(new JLabel("Email:"));
-			p.add(emailTF);
-			repPanel.add(p);
-			repPanel.add(Box.createRigidArea(new Dimension(charWidth,charHeight)));
-			p = new JPanel();
-			p.setLayout(new FlowLayout(FlowLayout.LEFT));
-			JLabel descLab = new JLabel("Description:");
-			p.add(descLab);
-			repPanel.add(p);
-			ta = new JTextArea("",5,20);
-			ta.setBackground(ehsConstants.lightyellow);
-			ta.setWrapStyleWord(true);
-			repPanel.add(ta);
-			repPanel.add(Box.createRigidArea(new Dimension(charWidth,charHeight)));
-			p = new JPanel();
-			p.setLayout(new BoxLayout(p,BoxLayout.X_AXIS));
-			statusLab = new JLabel(getHTMLInfoText());
-			p.add(statusLab);
-			repPanel.add(p);
-			repPanel.add(Box.createRigidArea(new Dimension(charWidth,charHeight)));
-			p = new JPanel();
-			p.setLayout(new BoxLayout(p,BoxLayout.X_AXIS));
-			FAQBut = new JButton("FAQ");
-			submitBut = new JButton("Submit");
-			OKBut = new JButton("Ok");
-			p.add(FAQBut);
-			p.add(submitBut);
-			p.add(OKBut);
-			repPanel.add(p);
-			emailTF.setText(email);
-			populateChoice(deptCh,getDepts());
-			populateChoice(typeCh,getRptTypes());
-			deptCh.select(0);
-			typeCh.select(0);
-			ActionListener OKTask = new ActionListener() {
-				public void actionPerformed(ActionEvent evt) {
-					helpDlg.dispose();
-			   }
-			};
-			OKBut.addActionListener(OKTask);
-			ActionListener FAQTask = new ActionListener() {
-				public void actionPerformed(ActionEvent evt) {
-					displayFAQ(getAppName());
-			   }
-			};
-			FAQBut.addActionListener(FAQTask);
-			ActionListener submitTask = new ActionListener() {
-				public void actionPerformed(ActionEvent evt) {
-					String tmp = "EHS-" + String.valueOf(supportFunctions.rand(100,999)) + "-" + supportFunctions.currentShortDate();
-					String ticket = tmp.replace('/','-');
-					modelessStatusDialog msgD = supportFunctions.displayModelessStatusDialog("Submit Report");
-					msgD.setText("Submitting Report ...");
-					String tmp1 = "INSERT INTO sysehsreports (sysEHSRepID,sysEHSRepOwnerID,sysEHSRepProduct,sysEHSRepVersion,sysEHSRepDesc,sysEHSRepName,sysEHSRepEmail,sysEHSRepType,sysEHSRepDept,sysEHSRepDate,sysEHSRepTicket,sysEHSRepUser) VALUES (null,LAST_INSERT_ID()+1,'"+appName+"','"+appVersion+"','"+ta.getText()+"','"+titleTF.getText()+"','"+emailTF.getText()+"','"+typeCh.getSelectedItem()+"','"+deptCh.getSelectedItem()+"','"+supportFunctions.currentDate()+"','"+ticket+"','"+userName+"')";
-					//supportFunctions.displayMessageDialog(null,tmp1);
-					supportFunctions.getDBConn().executeSQLQuery(tmp1,"");
-					supportFunctions.mail(emailTF.getText(),"EHS Report Submitted","Thank you for submitting a report. It has been given ticket ID " + ticket + ". You do not need to reply to this email. Report data sent is " + ta.getText());
-					supportFunctions.mail(ehsConstants.registrationEmail,"New EHS Report Created","Ticket: " + ticket + " Product:" + appName + " Description:" + ta.getText());
-					msgD.destory();
-					msgD.dispose();
-					supportFunctions.displayMessageDialog(null,"Thank you for the report, it has been assigined ticket ID " + ticket + ". Please use this reference in any further communication.");
-					titleTF.setText("");
-					emailTF.setText("");
-					ta.setText("");
-				}
-			};
-			submitBut.addActionListener(submitTask);
-			boolean bEnable = false;
-			//TRACE("sendReport:userid:"+getUserID(),4);
-			if (getUserID().equals("gavin") || getUserID().equals("admin")) {bEnable = true;}
-			helpDlg = supportFunctions.displayPanelDialog(null,repPanel,"Help Center");
-			helpDlg.setLocationRelativeTo(null);
 		}
 		public void registerUser() {
 			if (getUserRegistered()) {return;}

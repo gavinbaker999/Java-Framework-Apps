@@ -173,6 +173,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	public					 String		UMLTypes = "boolean,byte,char,double,float,int,long,short,String,Integer,DateFormat";
 	
 	public		String		splashJPG = dataRelativePath+"/"+appDirectory+"/umlan_logo.jpg";
+	public		String		productKBFile = "uml_kb.txt";
 	
 	public		static final int 		iNumberCharacetrsInClassNotePopupWindowRow = 25;
 	public		static final int		UMLCONN_TOP = 0;
@@ -302,7 +303,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			System.exit(0);			
 		}
 
-		supportFunctions.writeHitRecord("umldiag");
 		String file = (String)commandLineArgs.get("arg0");
 		if (file != null) {
 			umlDiagram = new umlDiagramStruct(); // must be first thing created BEFORE scrollabecanvas
@@ -4595,9 +4595,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		ehsConstants.applicationName = "UML Work Bench";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
-		String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSDeptName FROM sysehsdepartments","Admin,Enquiry,Techinical,Sales");
-		Vector v = supportFunctions.splitIntoTokens(data);
-		systemUserReg.setDepts(v);
 		//systemUserReg.setPreRelease(true);
 		systemUserReg.registerUser();
 		
@@ -4645,8 +4642,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		ciD = new customIconData(x6,y6,Color.black);
 		ciHelp.addData(ciD);
 		
-		supportFunctions.writeHitRecord("umldiag");
-		
 		msgD.destory();
 		msgD.dispose();
 
@@ -4655,8 +4650,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		parentFrame = supportFunctions.getTopLevelParent(this);
 		ehsConstants.machineID = supportFunctions.getMachineUniqueIDInternal("../" + appDirectory);
 		
-		String data1 = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSProdKBFilename FROM sysehsproducts WHERE sysEHSProdName='" + systemUserReg.getAppName() + "'","");
-		exFAQFile = dataRelativePath + "/knowledgebases/" + data1;
+		exFAQFile = dataRelativePath + "/knowledgebases/" + productKBFile;
 		TRACE("init:Knowledgebase file:"+exFAQFile,4);
 		systemUserReg.setFAQFile(exFAQFile);
 		

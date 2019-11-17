@@ -113,7 +113,8 @@ public class template extends JApplet implements ChangeListener,Runnable
 	protected static helpDialog helpDlg = null;
 	protected static String	exHelpFile=dataRelativePath+"/"+appDirectory+"/"+"readme.txt";
 	protected static String	splashJPG = dataRelativePath+"/"+appDirectory+"/template_logo.jpg";
-
+	public		String		productKBFile = "tem_kb.txt";
+	
 	public	static final String		buildDate = "@@@Build Date: 8-March-2019 05:16 PM Build Number: 21@@@";
 	public	static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 	static final String		gitVersionInfo = "!!!Git Version : 22.1e71052.master-dirty.2019-03-08.17:16:29!!!";
@@ -268,7 +269,6 @@ public class template extends JApplet implements ChangeListener,Runnable
 			System.exit(0);			
 		}
 
-		supportFunctions.writeHitRecord("tem");
 		supportFunctions.getDBConn().disconnect();
 		System.exit(0);
 	}
@@ -443,9 +443,8 @@ public class template extends JApplet implements ChangeListener,Runnable
 		public void destroyCard4() {}	
 	}
 
-	public class helpCard extends Panel implements ActionListener {
+	public class helpCard extends Panel {
 		private JTextArea	messageWidget;
-		private	JButton		reportBut;
 
 		helpCard() {
 			setLayout(new BorderLayout());
@@ -461,15 +460,9 @@ public class template extends JApplet implements ChangeListener,Runnable
 			JScrollPane pane = new JScrollPane(messageWidget);
 			pane.setPreferredSize(new Dimension(50*charWidth,15*charHeight));
 			textPanel.add(pane);
-			reportBut = new JButton("End House Software Help Center");
-			textPanel.add(reportBut);
-			reportBut.addActionListener(this);
 			add(textPanel,"Center");
 		}
 		public void updateHelpCard() {}
-		public void actionPerformed(ActionEvent evt) {
-			if (evt.getSource() == reportBut) {systemUserReg.sendReport("");}
-		}
 		public void destroyHelpCard() {}	
 	}
 
@@ -537,10 +530,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 		ehsConstants.applicationName = "JAVA Template";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
-		String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSDeptName FROM sysehsdepartments","Admin,Enquiry,Techinical,Sales");
-		Vector v = supportFunctions.splitIntoTokens(data);
-		systemUserReg.setDepts(v);
-		systemUserReg.setPreRelease(true); 
+		//systemUserReg.setPreRelease(true); 
 		systemUserReg.registerUser();
 		
 		help = new helpAction();
@@ -594,8 +584,6 @@ public class template extends JApplet implements ChangeListener,Runnable
 		ciD = new customIconData(x6,y6,Color.black);
 		ciHelp.addData(ciD);
 		
-		supportFunctions.writeHitRecord("tem");
-		
 		msgD.destory();
 		msgD.dispose();
 
@@ -604,8 +592,7 @@ public class template extends JApplet implements ChangeListener,Runnable
 		parentFrame = supportFunctions.getTopLevelParent(this);
 		ehsConstants.machineID = supportFunctions.getMachineUniqueIDInternal("../" + appDirectory);
 
-		String data1 = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSProdKBFilename FROM sysehsproducts WHERE sysEHSProdName='" + systemUserReg.getAppName() + "'","");
-		exFAQFile = dataRelativePath + "/knowledgebases/" + data1;
+		exFAQFile = dataRelativePath + "/knowledgebases/" + productKBFile;
 		TRACE("init:Knowledgebase file:"+exFAQFile,4);
 		systemUserReg.setFAQFile(exFAQFile);
 		

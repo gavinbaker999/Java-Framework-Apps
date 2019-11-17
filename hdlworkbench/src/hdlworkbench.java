@@ -172,6 +172,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 	protected	static final String		appBaseURL = "http://endhousesoftware.byethost11.com";
 	
 	public		String		splashJPG = dataRelativePath+"/"+appDirectory+"/hdlwb_logo.jpg";
+	public		String		productKBFile = "hdl_kb.txt";
 	
 	public		static final int 		iNumberCharacetrsInHDLCodePopupWindowRow = 25;
 	
@@ -323,7 +324,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		}
 
 		lStrings = new languageStrings();
-		supportFunctions.writeHitRecord("hdlwb");
 
 		String file = (String)commandLineArgs.get("arg0");
 		if (file != null) {
@@ -1496,9 +1496,8 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		}
 	}
 
-	public class helpCard extends Panel implements ActionListener {
+	public class helpCard extends Panel {
 		private JTextArea	messageWidget;
-		private	JButton		reportBut;
 
 		helpCard() {
 			setLayout(new BorderLayout());
@@ -1514,15 +1513,9 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			JScrollPane pane = new JScrollPane(messageWidget);
 			pane.setPreferredSize(new Dimension(50*charWidth,15*charHeight));
 			textPanel.add(pane);
-			reportBut = new JButton("End House Software Help Center");
-			textPanel.add(reportBut);
-			reportBut.addActionListener(this);
 			add(textPanel,"Center");
 		}
 		public void updateHelpCard() {}
-		public void actionPerformed(ActionEvent evt) {
-			if (evt.getSource() == reportBut) {systemUserReg.sendReport("");}
-		}
 		public void destroyHelpCard() {}	
 	}
 
@@ -1591,10 +1584,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		ehsConstants.applicationName = "HDL Work Bench";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
-		String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSDeptName FROM sysehsdepartments","Admin,Enquiry,Technical,Sales");
-		Vector v = supportFunctions.splitIntoTokens(data);
-		systemUserReg.setDepts(v);
-		systemUserReg.setPreRelease(true);
+		//systemUserReg.setPreRelease(true);
 		systemUserReg.registerUser();
 
 		help = new helpAction();
@@ -1647,8 +1637,6 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		ciD = new customIconData(x6,y6,Color.black);
 		ciHelp.addData(ciD);
 		
-		supportFunctions.writeHitRecord("hdlwb");
-		
 		msgD.destory();
 		msgD.dispose();
 		
@@ -1657,8 +1645,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		parentFrame = supportFunctions.getTopLevelParent(this);
 		ehsConstants.machineID = supportFunctions.getMachineUniqueIDInternal("../" + appDirectory);
 		
-		String data1 = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSProdKBFilename FROM sysehsproducts WHERE sysEHSProdName='" + systemUserReg.getAppName() + "'","");
-		exFAQFile = dataRelativePath + "/knowledgebases/" + data1;
+		exFAQFile = dataRelativePath + "/knowledgebases/" + productKBFile;
 		TRACE("init:Knowledgebase file:"+exFAQFile,4);
 		systemUserReg.setFAQFile(exFAQFile);
 	}
