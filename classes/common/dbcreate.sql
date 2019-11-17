@@ -152,7 +152,14 @@ CREATE TABLE `sysehsregistrations` (
   `sysEHSRegEmailValidated` int(11) NOT NULL DEFAULT '0',
   `sysEHSRegToken` varchar(50) DEFAULT NULL,
   `sysEHSRegTag` varchar(250) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Holds details of End House Software registrartions';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Holds registration details';
+
+--
+-- Dumping data for table `sysehsregistrations`
+--
+
+INSERT INTO `sysehsregistrations` (`sysEHSRegID`, `sysEHSRegName`, `sysEHSRegAddr`, `sysEHSRegTel`, `sysEHSRegFax`, `sysEHSRegEmail`, `sysEHSRegProduct`, `sysEHSRegSerial`, `sysEHSRegPassword`, `sysEHSRegUserName`, `sysEHSRegDate`, `sysEHSRegTime`, `sysEHSRegPayMethod`, `sysEHSRegPayRef`, `sysEHSRegFailedLogons`, `sysEHSRegLogonDate`, `sysEHSRegLogonTime`, `sysEHSRegUses`, `sysEHSRegExpired`, `sysEHSRegVersion`, `sysEHSRegActive`, `sysEHSRegData`, `sysEHSRegQuestion`, `sysEHSRegCredit`, `sysEHSRegUnique`, `sysEHSRegReceiveEmailUpdates`, `sysEHSRegEmailValidated`, `sysEHSRegToken`, `sysEHSRegTag`) VALUES
+(1, 'Admin', 'Your Company', '96 645 7291', '', 'endhousesoftware999@gmail.com', 'HDL Work Bench', 'EHS-WB1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL);
 
 --
 -- Table structure for table `sysehsvariables`
@@ -181,47 +188,47 @@ ALTER TABLE `sysehsvariables`
 -- AUTO_INCREMENT for table `hdlwbforces`
 --
 ALTER TABLE `hdlwbforces`
-  MODIFY `hdlWBForcesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=588;
+  MODIFY `hdlWBForcesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `hdlwbmappings`
 --
 ALTER TABLE `hdlwbmappings`
-  MODIFY `hdlWBMappingsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=704;
+  MODIFY `hdlWBMappingsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `hdlwbparameters`
 --
 ALTER TABLE `hdlwbparameters`
-  MODIFY `hdlWBParametersID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `hdlWBParametersID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `hdlwbprocesses`
 --
 ALTER TABLE `hdlwbprocesses`
-  MODIFY `hdlWBProcessesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=179;
+  MODIFY `hdlWBProcessesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `hdlwbsignals`
 --
 ALTER TABLE `hdlwbsignals`
-  MODIFY `hdlWBSignalsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=759;
+  MODIFY `hdlWBSignalsID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 --
 -- AUTO_INCREMENT for table `sdcdrawingitems`
 --
 ALTER TABLE `sdcdrawingitems`
-  MODIFY `sdcDIID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `sdcDIID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT for table `sysehsregistrations`
 --
 ALTER TABLE `sysehsregistrations`
-  MODIFY `sysEHSRegID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `sysEHSRegID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `sysehsvariables`
 --
 ALTER TABLE `sysehsvariables`
-  MODIFY `sysEHSVarID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `sysEHSVarID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;

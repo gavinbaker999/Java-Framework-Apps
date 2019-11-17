@@ -417,7 +417,7 @@ public class registrationinfo {
 //			if (getUseDatabase()) {
 				data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSRegSerial,sysEHSRegName,sysEHSRegPassword,sysEHSRegLogonDate,sysEHSRegLogonTime,sysEHSRegUserName FROM sysehsregistrations WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUnique='"+uniqueID+"' AND sysEHSRegActive=1","");
 				supportFunctions.getDBConn().executeSQLQuery("UPDATE sysehsregistrations SET sysEHSRegLogonDate='"+supportFunctions.currentShortDate()+"' WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUnique='"+uniqueID+"'","");
-				supportFunctions.getDBConn().executeSQLQuery("UPDATE sysehsregistrations SET sysEHSRegLogonTime='"+supportFunctions.currentShortDate()+"' WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUnique='"+uniqueID+"'","");
+				supportFunctions.getDBConn().executeSQLQuery("UPDATE sysehsregistrations SET sysEHSRegLogonTime='"+supportFunctions.currentShortTime()+"' WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegUnique='"+uniqueID+"'","");
 				//TRACE("LRD:"+data,4);
 				if (data.length() == 0) { // user not yet registered
 					//TRACE("LRD:User not yet registered",4);
