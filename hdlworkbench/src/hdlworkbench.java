@@ -305,7 +305,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
 		
-		systemUserReg.registerUser();
+		systemUserReg.registerUser(true);
 
 		if (bStatus) {
 			if (supportFunctions.getDBConn().getConnection() == null) {
@@ -1585,7 +1585,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
 		//systemUserReg.setPreRelease(true);
-		systemUserReg.registerUser();
+		systemUserReg.registerUser(true);
 
 		help = new helpAction();
 		about = new aboutAction();

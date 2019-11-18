@@ -487,11 +487,19 @@ public class registrationinfo {
 			supportFunctions.displayTextFile(exFAQFile,ta);
 			supportFunctions.displayPanelDialog(null,p,product + " - FAQ");
 		}
-		public void registerUser() {
+		public void registerUser() {registerUser(false);}
+		public void registerUser(boolean bSkipLogon) {
 			if (getUserRegistered()) {return;}
+
+			boolean bRegistered;
+			int id = 1;
+			if (bSkipLogon) {
+				bRegistered = loadRegistrationDataInternal("EHS-ES1000-P00-00ZZ,End House Software,endhousesoftware,05/06/16,21:26,endhousesoftware");
+			} else {
+				id = supportFunctions.getMachineUniqueID("../" + appDirectory);
+				bRegistered = loadRegistrationData(String.valueOf(id));				
+			}
 			
-			int id = supportFunctions.getMachineUniqueID("../" + appDirectory);
-			boolean bRegistered = loadRegistrationData(String.valueOf(id));
 			if (!bRegistered) {
 				Vector v = supportFunctions.splitIntoTokens(supportFunctions.displayLogonDialog(),",");
 				if (v.size() == 2) {

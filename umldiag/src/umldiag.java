@@ -137,7 +137,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	customIcon			ciHelp;
 
 	protected	 int		TRACELEVEL = 4;
-	
+		
 	protected	static final int		sysThreadSleep = 1000;
 	protected	static final int		systemMsgThreadPrioity = 7;
 	
@@ -285,7 +285,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
-		systemUserReg.registerUser();
+		systemUserReg.registerUser(true);
 
 		if (bStatus) {
 			if (supportFunctions.getDBConn().getConnection() == null) {
@@ -4596,7 +4596,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();
 		//systemUserReg.setPreRelease(true);
-		systemUserReg.registerUser();
+		systemUserReg.registerUser(true);
 		
 		help = new helpAction();
 		about = new aboutAction();

@@ -119,49 +119,6 @@ CREATE TABLE `sdcdrawingitems` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Holds details of drawing items for drawing canvas';
 
 --
--- Table structure for table `sysehsregistrations`
---
-
-CREATE TABLE `sysehsregistrations` (
-  `sysEHSRegID` int(11) NOT NULL,
-  `sysEHSRegName` varchar(200) NOT NULL DEFAULT '',
-  `sysEHSRegAddr` varchar(200) DEFAULT '""',
-  `sysEHSRegTel` varchar(200) DEFAULT '""',
-  `sysEHSRegFax` varchar(200) DEFAULT '""',
-  `sysEHSRegEmail` varchar(200) NOT NULL DEFAULT '',
-  `sysEHSRegProduct` varchar(200) NOT NULL DEFAULT '',
-  `sysEHSRegSerial` varchar(200) NOT NULL DEFAULT '',
-  `sysEHSRegPassword` varchar(200) NOT NULL DEFAULT '',
-  `sysEHSRegUserName` varchar(200) NOT NULL DEFAULT '',
-  `sysEHSRegDate` varchar(200) DEFAULT '""',
-  `sysEHSRegTime` varchar(200) DEFAULT '""',
-  `sysEHSRegPayMethod` varchar(100) DEFAULT '""',
-  `sysEHSRegPayRef` varchar(100) DEFAULT '""',
-  `sysEHSRegFailedLogons` int(11) DEFAULT '0',
-  `sysEHSRegLogonDate` varchar(25) DEFAULT '""',
-  `sysEHSRegLogonTime` varchar(25) DEFAULT '""',
-  `sysEHSRegUses` int(11) DEFAULT '0',
-  `sysEHSRegExpired` int(11) DEFAULT '0',
-  `sysEHSRegVersion` varchar(13) NOT NULL DEFAULT '00.00.0000.00',
-  `sysEHSRegActive` int(11) NOT NULL DEFAULT '1',
-  `sysEHSRegData` varchar(250) DEFAULT '""',
-  `sysEHSRegQuestion` varchar(250) DEFAULT NULL,
-  `sysEHSRegCredit` int(11) NOT NULL DEFAULT '0',
-  `sysEHSRegUnique` varchar(200) DEFAULT NULL,
-  `sysEHSRegReceiveEmailUpdates` int(11) NOT NULL DEFAULT '1',
-  `sysEHSRegEmailValidated` int(11) NOT NULL DEFAULT '0',
-  `sysEHSRegToken` varchar(50) DEFAULT NULL,
-  `sysEHSRegTag` varchar(250) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Holds registration details';
-
---
--- Dumping data for table `sysehsregistrations`
---
-
-INSERT INTO `sysehsregistrations` (`sysEHSRegID`, `sysEHSRegName`, `sysEHSRegAddr`, `sysEHSRegTel`, `sysEHSRegFax`, `sysEHSRegEmail`, `sysEHSRegProduct`, `sysEHSRegSerial`, `sysEHSRegPassword`, `sysEHSRegUserName`, `sysEHSRegDate`, `sysEHSRegTime`, `sysEHSRegPayMethod`, `sysEHSRegPayRef`, `sysEHSRegFailedLogons`, `sysEHSRegLogonDate`, `sysEHSRegLogonTime`, `sysEHSRegUses`, `sysEHSRegExpired`, `sysEHSRegVersion`, `sysEHSRegActive`, `sysEHSRegData`, `sysEHSRegQuestion`, `sysEHSRegCredit`, `sysEHSRegUnique`, `sysEHSRegReceiveEmailUpdates`, `sysEHSRegEmailValidated`, `sysEHSRegToken`, `sysEHSRegTag`) VALUES
-(1, 'Admin', 'Your Company', 'Your Telephone Number', 'Your Fax Number', 'Your Email Address', 'HDL Work Bench', 'EHS-WB1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL),(2, 'Admin', 'Your Company', 'Your Telephone Number', 'Your Fax Number', 'Your Email Address', 'UML Work Bench', 'EHS-UD1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL),(3, 'Admin', 'Your Company', 'Your Telephone Number', 'Your Fax Number', 'Your Email Address', 'Project Tracker', 'EHS-DT1000-P00-00ZZ', 'admin', 'admin', '2012-01-15', '20:27:43', '\"\"', '\"\"', 0, '01/03/15', '13:13', 0, 0, '01.00.0000.00', 1, '\"\"', NULL, 0, '1179', 1, 1, '1234ABCD', NULL);
-
---
 -- Table structure for table `sysehsvariables`
 --
 
@@ -170,13 +127,6 @@ CREATE TABLE `sysehsvariables` (
   `varName` varchar(200) NOT NULL DEFAULT '',
   `varValue` varchar(200) NOT NULL DEFAULT ''
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Hold details of End House Software variables';
-
---
--- Indexes for table `sysehsregistrations`
---
-ALTER TABLE `sysehsregistrations`
-  ADD PRIMARY KEY (`sysEHSRegID`),
-  ADD UNIQUE KEY `sysEHSRegID` (`sysEHSRegID`);
 
 --
 -- Indexes for table `sysehsvariables`
@@ -220,12 +170,6 @@ ALTER TABLE `hdlwbsignals`
 --
 ALTER TABLE `sdcdrawingitems`
   MODIFY `sdcDIID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- AUTO_INCREMENT for table `sysehsregistrations`
---
-ALTER TABLE `sysehsregistrations`
-  MODIFY `sysEHSRegID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sysehsvariables`
