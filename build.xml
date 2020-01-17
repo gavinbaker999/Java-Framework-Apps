@@ -54,7 +54,7 @@
     <property name="version" value="${version.revision}.${version.hash}.${version.branch}${version.dirty}.${version.date}" />
 
     <echo>Version : ${version}</echo>
-		<replaceregexp file="src/${appname}.java"
+		<replaceregexp file="${appdir}/src/${appname}.java"
              match="!!!Git Version.*!!!"
              replace="!!!Git Version : ${version}!!!"
 			 flags="gi"
@@ -62,8 +62,6 @@
 
     <echo file="version.properties" append="false">version = ${version}</echo>
 
-</target>
-	<target name ="projtransfer" depends="init,gitversioninfo,fbs,updateebook" description="Transfer project files">
 </target>
 	<target name ="init" description="Perform Inital Build Tasks">
 	<echo message="${appname} Build File, (c) End House Software 2012-2020"/>	
@@ -73,7 +71,7 @@
 			<format property="build.date" pattern="d-MMMM-yyyy hh:mm aa" locale="en,UK"/>
 		</tstamp>
 		<buildnumber file="${appname}build.number"/>
-		<replaceregexp file="src/${appname}.java"
+		<replaceregexp file="${appdir}/src/${appname}.java"
                          match="@@@.*@@@"
                          replace="@@@Build Date: ${build.date} Build Number: ${build.number}@@@"
 			 flags="gi"
@@ -88,7 +86,7 @@
 		</tstamp>
 	</target>
 	<target name="fbs" if="frameworkbs" depends="init" description="Update the Framework Build Number">
-		<replaceregexp file="src/${appname}.java"
+		<replaceregexp file="${appdir}/src/${appname}.java"
                          match="###.*###"
                          replace="###JAVA Framework (${frameworkbs})###"
 			 flags="gi"
@@ -104,13 +102,13 @@
 		<delete file="${appname}build.number" verbose="true"/>
 	</target>
 	<target name="jar" description="Create the Application JAR">
-		<delete file="${appname}.jar" verbose="true"/>
-		<jar destfile="${appname}.jar">
-			<fileset dir="bin"/>
-			<zipfileset src="../classes/ehscomplier.jar" prefix="ehscomplier"/>
-			<zipfileset src="../classes/ehssupport.jar" prefix="ehssupport"/>
-			<zipfileset src="../classes/ehscontrols.jar" prefix="ehscontrols"/>
-			<zipfileset src="../classes/ehsgraphicalcanvas.jar" prefix="ehsgraphicalcanvas"/>
+		<delete file="${appdir}/${appname}.jar" verbose="true"/>
+		<jar destfile="${appdir}/${appname}.jar">
+			<fileset dir="${appdir}/bin"/>
+			<zipfileset src="${appdir}/../classes/ehscomplier.jar" prefix="ehscomplier"/>
+			<zipfileset src="${appdir}/../classes/ehssupport.jar" prefix="ehssupport"/>
+			<zipfileset src="${appdir}/../classes/ehscontrols.jar" prefix="ehscontrols"/>
+			<zipfileset src="${appdir}/../classes/ehsgraphicalcanvas.jar" prefix="ehsgraphicalcanvas"/>
     			<manifest>
         <attribute name="Implementation-Vendor" value="End House Software"/>
         <attribute name="Implementation-Title" value="${appname}"/>
@@ -119,23 +117,21 @@
     			</manifest>
 		</jar>
 	</target>
-	<target name="updateebook" description="Copy Source Files to EBook">
-		<echo message="Creating JAVA Source text files..."/>	
-		<copy overwrite="true" file="../umldiag/src/umldiag.java" tofile="../umldiag.txt"/>
-		<copy overwrite="true" file="../hdlworkbench/src/hdlworkbench.java" tofile="../hdlworkbench.txt"/>
-		<copy overwrite="true" file="../template/src/template.java" tofile="../template.txt"/>
-	</target>
 <target name="compile" depends="init" description="Compiles Source Files">
-<mkdir dir="${classes.dir}"/>
-<javac srcdir="src" destdir="${classes.dir}">
+<mkdir dir="${appdir}/${classes.dir}"/>
+<javac destdir="${appdir}/${classes.dir}">
+	<src path="${appdir}/src"/>
+	<src path="classes/common"/>
 	<classpath>
-		<pathelement path="${classpath.dir}"/>
+		<pathelement path="${appdir}/${classpath.dir}"/>
 	</classpath>
 </javac>
 	</target>
 <target name="generateehssupportjar" depends="ehsjarinit" description="Generates the EHS support JAR">
 <mkdir dir="ehssupport/${classes.dir}"/>
-<javac srcdir="ehssupport/src" destdir="ehssupport/${classes.dir}"/>
+<javac destdir="ehssupport/${classes.dir}">
+	<src path="ehssupport/src"/>
+</javac>
 		<delete file="classes/ehssupport.jar" verbose="true"/>
 		<jar destfile="classes/ehssupport.jar">
 			<fileset dir="ehssupport/bin"/>

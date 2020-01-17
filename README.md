@@ -16,6 +16,8 @@ Use the **classes/common/dbcreate.sql** file to create the **MySQL** database an
 
 ## Build Procedures
 
+The following describes the build procedures.
+
 ###Common Files:
 
 **classes/common/ehsContants.java** - Constants and Variables definitions bridge file between the application code and JAVA framework code.
@@ -28,9 +30,9 @@ Use the **classes/common/dbcreate.sql** file to create the **MySQL** database an
 
 **classes/common/dbcreate.sql** - SQL statment to create MySQL database used by the JAVA framework.
 
-**appname/src/drawingCanvas.java** - Java framework drawing canvas class (has to exist at the application directory level).
+**classes/common/drawingCanvas.java** - Java framework drawing canvas class (has to exist at the base application directory level).
 
-**appname/src/transtableeditor.java** - Java framework translate table editor classes (has to exist at the application directory level).
+**classes/common/transtableeditor.java** - Java framework translate table editor classes (has to exist at the base application directory level).
 
 ### Command Line Build:
 
@@ -42,7 +44,7 @@ Compile Java framework JAR files (run from the **eclipse_workspace** directory).
 
 Compile and build application JAR file (run from the application's base directory - assuming one level below **eclipse_workspace** directory).
 
-	$ant -buildfile ..\build.xml compile -Dappname=umldiag -Dmainclass=umldiag
+	$ant -buildfile ..\build.xml compile -Dappname=umldiag -Dmainclass=umldiag -Dappdir=umldiag
 	$ant -buildfile ..\build.xml jar
 
 To run the application,
