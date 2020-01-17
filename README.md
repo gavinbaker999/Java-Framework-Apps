@@ -17,6 +17,7 @@ Use the **classes/common/dbcreate.sql** file to create the **MySQL** database an
 ## Build Procedures
 
 ###Common Files:
+
 **classes/common/ehsContants.java** - Constants and Variables definitions bridge file between the application code and JAVA framework code.
 
 **classes/common/syntaxeditorpane.css** - Style sheet used in the JAVA framework color syntx editor control.
@@ -32,22 +33,24 @@ Use the **classes/common/dbcreate.sql** file to create the **MySQL** database an
 **appname/src/transtableeditor.java** - Java framework translate table editor classes (has to exist at the application directory level).
 
 ### Command Line Build:
+
 To build the Java framework or applications via the command line us the following **Ant** command lines:
 
 Compile Java framework JAR files (run from the **eclipse_workspace** directory).
 
 	$ant generateehsjars
 
-Compile and build apllication JAR file (run from the application's base directory).
+Compile and build application JAR file (run from the application's base directory - assuming one level below **eclipse_workspace** directory).
 
-	$ant compile -Dappname=umldiag -Dmainclass=umldiag
-	$ant jar
+	$ant -buildfile ..\build.xml compile -Dappname=umldiag -Dmainclass=umldiag
+	$ant -buildfile ..\build.xml jar
 
 To run the application,
 
 	$java -jar umldiag.jar <args>
 
 ###Support Batch Files
+
 The following batch files exist to run the HDL workbench, the UML workbench and the example Template application.
 
 * hdlwb [status] [gui] [trace] [symbolfump] [about] filename

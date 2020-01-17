@@ -66,7 +66,7 @@
 	<target name ="projtransfer" depends="init,gitversioninfo,fbs,updateebook" description="Transfer project files">
 </target>
 	<target name ="init" description="Perform Inital Build Tasks">
-	<echo message="${appname} Build File, (c) End House Software 2012-2019"/>	
+	<echo message="${appname} Build File, (c) End House Software 2012-2020"/>	
 	<record name="buildlog.txt"/>
 		<splash/>
 		<tstamp>
@@ -80,7 +80,7 @@
                          byline="true"/>
 	</target>
 	<target name ="ehsjarinit" description="Perform Inital Build Tasks">
-	<echo message="EHS JAR Build File, (c) End House Software 2012-2019"/>	
+	<echo message="EHS JAR Build File, (c) End House Software 2012-2020"/>	
 	<record name="buildlog.txt"/>
 		<splash/>
 		<tstamp>
@@ -145,11 +145,17 @@
 </target>
 <target name="compileehsjars" description="Compiles EHS JAR Source Files">
 <mkdir dir="ehscomplier/${classes.dir}"/>
-<javac srcdir="ehscomplier/src" destdir="ehscomplier/${classes.dir}"/>
+<javac destdir="ehscomplier/${classes.dir}">
+	<src path="ehscomplier/src"/>
+</javac>
 <mkdir dir="ehscontrols/${classes.dir}"/>
-<javac srcdir="ehscontrols/src" destdir="ehscontrols/${classes.dir}"/>
+<javac destdir="ehscontrols/${classes.dir}">
+	<src path="ehscontrols/src"/>
+</javac>
 <mkdir dir="ehsgraphicalcanvas/${classes.dir}"/>
-<javac srcdir="ehsgraphicalcanvas/src" destdir="ehsgraphicalcanvas/${classes.dir}"/>
+<javac destdir="ehsgraphicalcanvas/${classes.dir}">
+	<src path="ehsgraphicalcanvas/src"/>
+</javac>
 </target>
 <target name="generateehsjars" depends="generateehssupportjar,compileehsjars" description="Generates EHS JAR Files">
 		<delete file="classes/ehscomplier.jar" verbose="true"/>
