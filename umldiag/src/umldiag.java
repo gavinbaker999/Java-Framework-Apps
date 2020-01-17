@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 9-August-2019 10:37 PM Build Number: 88@@@";
+	public		static final String		buildDate = "@@@Build Date: 17-January-2020 06:06 PM Build Number: 2@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -280,7 +280,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","03.00.0000.00","09/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","03.00.0000.00","09/10/19","(c) End House Software 2007-2020",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "UML Work Bench";
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 		supportFunctions.connectDatabase(); 
@@ -4591,7 +4591,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		contentPane = getContentPane();
 		tabPane = new JTabbedPane();
 
-		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","03.00.0000.00","09/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"UML Work Bench","UML Work Bench (Application)","UD1000","03.00.0000.00","09/10/19","(c) End House Software 2007-2020",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "UML Work Bench";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();

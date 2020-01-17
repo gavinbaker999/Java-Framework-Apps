@@ -2,7 +2,7 @@
 <project name="template" basedir="." default="run">
 	<description>ANT build file for ${appname} application</description>
 <property name="classes.dir" value="bin"/>
-<property name="classpath.dir" value="..\classes"/>	
+<property name="classpath.dir" value="classes"/>	
 	<target name="gitversioninfo"  description="Displays the git version details">
 
     <exec executable="..\..\..\Program Files\Git\cmd\git" outputproperty="version.revisions">
@@ -70,14 +70,14 @@
 		<tstamp>
 			<format property="build.date" pattern="d-MMMM-yyyy hh:mm aa" locale="en,UK"/>
 		</tstamp>
-		<buildnumber file="${appname}build.number"/>
+		<buildnumber file="${appdir}/${appname}build.number"/>
 		<replaceregexp file="${appdir}/src/${appname}.java"
                          match="@@@.*@@@"
                          replace="@@@Build Date: ${build.date} Build Number: ${build.number}@@@"
 			 flags="gi"
                          byline="true"/>
 	</target>
-	<target name ="ehsjarinit" description="Perform Inital Build Tasks">
+	<target name ="ehsjarinit" description="Perform Inital Build Tasks for EHS JARS">
 	<echo message="EHS JAR Build File, (c) End House Software 2012-2020"/>	
 	<record name="buildlog.txt"/>
 		<splash/>
@@ -119,11 +119,15 @@
 	</target>
 <target name="compile" depends="init" description="Compiles Source Files">
 <mkdir dir="${appdir}/${classes.dir}"/>
-<javac destdir="${appdir}/${classes.dir}">
+<javac destdir="${appdir}/${classes.dir}"> 
 	<src path="${appdir}/src"/>
 	<src path="classes/common"/>
 	<classpath>
-		<pathelement path="${appdir}/${classpath.dir}"/>
+		<pathelement path="${classpath.dir}"/>
+		<pathelement path="ehscontrols/bin"/>
+		<pathelement path="ehscomplier/bin"/>
+		<pathelement path="ehsgraphicalcanvas/bin"/>
+		<pathelement path="ehssupport/bin"/>
 	</classpath>
 </javac>
 	</target>

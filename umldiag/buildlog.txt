@@ -1,28 +1,8 @@
 
-BUILD FAILED
+compile:
+    [javac] C:\Users\Gavin\eclipse-workspace\build.xml:122: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 1 source file to C:\Users\Gavin\eclipse-workspace\umldiag\bin
+    [javac] Note: C:\Users\Gavin\eclipse-workspace\umldiag\src\umldiag.java uses unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
 
-C:\Users\Gavin\eclipse-workspace\build.xml:74: C:\Users\Gavin\eclipse-workspace\umldiag\umldiag\umldiagbuild.number doesn't exist and new file can't be created.
-	at org.apache.tools.ant.taskdefs.BuildNumber.validate(BuildNumber.java:186)
-	at org.apache.tools.ant.taskdefs.BuildNumber.execute(BuildNumber.java:78)
-	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:293)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
-	at java.lang.reflect.Method.invoke(Unknown Source)
-	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:106)
-	at org.apache.tools.ant.Task.perform(Task.java:348)
-	at org.apache.tools.ant.Target.execute(Target.java:435)
-	at org.apache.tools.ant.Target.performTasks(Target.java:456)
-	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1405)
-	at org.apache.tools.ant.Project.executeTarget(Project.java:1376)
-	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
-	at org.eclipse.ant.internal.launching.remote.EclipseDefaultExecutor.executeTargets(EclipseDefaultExecutor.java:36)
-	at org.apache.tools.ant.Project.executeTargets(Project.java:1260)
-	at org.eclipse.ant.internal.launching.remote.InternalAntRunner.run(InternalAntRunner.java:460)
-	at org.eclipse.ant.internal.launching.remote.InternalAntRunner.main(InternalAntRunner.java:142)
-Caused by: java.io.IOException: The system cannot find the path specified
-	at java.io.WinNTFileSystem.createFileExclusively(Native Method)
-	at java.io.File.createNewFile(Unknown Source)
-	at org.apache.tools.ant.util.FileUtils.createNewFile(FileUtils.java:1103)
-	at org.apache.tools.ant.taskdefs.BuildNumber.validate(BuildNumber.java:182)
-	... 17 more
+BUILD SUCCESSFUL

@@ -23,7 +23,7 @@ import javax.swing.text.View;
 			}
 		public float getPreferredSpan(int axis) {
 			return 0.0f;
-		}
+		} 
 		public void paint(Graphics g, Shape allocation) {
 		}
 	}

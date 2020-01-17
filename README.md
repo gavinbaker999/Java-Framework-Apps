@@ -45,7 +45,7 @@ Compile Java framework JAR files (run from the **eclipse_workspace** directory).
 Compile and build application JAR file (run from the application's base directory - assuming one level below **eclipse_workspace** directory).
 
 	$ant -buildfile ..\build.xml compile -Dappname=umldiag -Dmainclass=umldiag -Dappdir=umldiag
-	$ant -buildfile ..\build.xml jar
+	$ant -buildfile ..\build.xml jar -Dappname=umldiag -Dmainclass=umldiag -Dappdir=umldiag
 
 To run the application,
 
