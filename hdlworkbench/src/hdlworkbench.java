@@ -298,7 +298,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 			commandLineArgs.put(opt,(String)v.elementAt(1));
 		}
 		
-		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","02.00.0000.00","18/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","02.00.0000.00","18/10/19","(c) End House Software 2007-2020",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "HDL Work Bench";
 		System.out.println(systemUserReg.getApplicationInfoText() + "\n");
 
@@ -1580,7 +1580,7 @@ public class hdlworkbench extends JApplet implements ChangeListener,Runnable
 		contentPane = getContentPane();
 		tabPane = new JTabbedPane();
 
-		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","02.00.0000.00","18/10/19","(c) End House Software 2007-2019",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
+		systemUserReg = new registrationinfo(appDirectory,"HDL Work Bench","HDL Work Bench","WB1000","02.00.0000.00","18/10/19","(c) End House Software 2007-2020",splashJPG,exHelpFile,ehsConstants.bRemoteHosted,buildDate,frameworkBuildDate,gitVersionInfo);
 		ehsConstants.applicationName = "HDL Work Bench";
 		supportFunctions.connectDatabase(); 
 		supportFunctions.getDBConn().connect();

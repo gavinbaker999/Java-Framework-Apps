@@ -117,6 +117,8 @@
     			</manifest>
 		</jar>
 	</target>
+<target name="compile-jar" depends="compile,jar" description="Builds application">
+	</target>
 <target name="compile" depends="init" description="Compiles Source Files">
 <mkdir dir="${appdir}/${classes.dir}"/>
 <javac destdir="${appdir}/${classes.dir}"> 
@@ -147,14 +149,23 @@
 <mkdir dir="ehscomplier/${classes.dir}"/>
 <javac destdir="ehscomplier/${classes.dir}">
 	<src path="ehscomplier/src"/>
+	<classpath>
+		<pathelement path="ehssupport/bin"/>
+	</classpath>
 </javac>
 <mkdir dir="ehscontrols/${classes.dir}"/>
 <javac destdir="ehscontrols/${classes.dir}">
 	<src path="ehscontrols/src"/>
+	<classpath>
+		<pathelement path="ehssupport/bin"/>
+	</classpath>
 </javac>
 <mkdir dir="ehsgraphicalcanvas/${classes.dir}"/>
 <javac destdir="ehsgraphicalcanvas/${classes.dir}">
 	<src path="ehsgraphicalcanvas/src"/>
+	<classpath>
+		<pathelement path="ehssupport/bin"/>
+	</classpath>
 </javac>
 </target>
 <target name="generateehsjars" depends="generateehssupportjar,compileehsjars" description="Generates EHS JAR Files">

@@ -264,6 +264,9 @@ public class compiler {
 			extraLines.addElement(line);
 		}
 		public boolean completeLine(String line) {return true;}
+public void warningMsg(int line,String msg) {
+	System.out.print("Compiler warning:Line " + String.valueOf(line) + ":" + msg + "\n");
+}
 		public boolean compile(String filename,boolean bHeaders) {
 			//supportFunctions.displayMessageDialog(null,filename);
 			multilineComment = false;
@@ -303,6 +306,7 @@ public class compiler {
 			do {
 				if (extraLines.size() == 0) {
 					sourceFileLine = f.readFileLine();
+					setLineNumber(line++);
 				} else {
 					sourceFileLine = (String)extraLines.elementAt(0);
 					extraLines.removeElementAt(0);
@@ -325,7 +329,7 @@ public class compiler {
 					} while (true);
 					postCompleteLine(sourceFileLine);
 					//TRACE("Complete Line:"+sourceFileLine,4);
-					setLineNumber(line++);
+					//setLineNumber(line++);
 					setCompilerStatusMsg("Compiling Pass " + String.valueOf(getPassNumber()) + " Line " + String.valueOf(getLineNumber()+1) + " (" + moduleName + ")");
 					if (getPassNumber() == 1) {firstPassLine(getLineNumber(),sourceFileLine);}
 					if (sourceFileLine.charAt(0) == '&') {
