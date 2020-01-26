@@ -18,7 +18,7 @@ Use the **classes/common/dbcreate.sql** file to create the **MySQL** database an
 
 The following describes the build procedures.
 
-###Common Files:
+### Common Files:
 
 **classes/common/ehsContants.java** - Constants and Variables definitions bridge file between the application code and JAVA framework code.
 
@@ -51,7 +51,7 @@ To run the application,
 
 	$java -jar umldiag.jar <args>
 
-###Support Batch Files
+### Support Batch Files
 
 The following batch files exist to run the HDL workbench, the UML workbench and the example Template application.
 
