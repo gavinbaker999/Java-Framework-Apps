@@ -1,2 +1,0 @@
-# umldiag
-UML Designer
