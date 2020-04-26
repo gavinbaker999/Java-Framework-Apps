@@ -105,7 +105,8 @@ import javax.naming.*;
 //import com.saxonica.xqj.SaxonXQDataSource;
 
 public class drawingItemConnector  extends Component {
-		private JConnector connector;
+		private drawingItem connectorStart;
+		private drawingItem connectorEnd;
 		private String	connectorTextStart;
 		private String	connectorTextEnd;
 		private	String	connectorID;
@@ -116,7 +117,8 @@ public class drawingItemConnector  extends Component {
 		private int charHeight = 14;
 	
 		public drawingItemConnector(drawingItem start,drawingItem end,String textStart,String textEnd,int symStart,int symEnd,String id,int layer) {
-			connector = new JConnector(start,end);
+			connectorStart = start;
+			connectorEnd = end;
 			connectorTextStart = textStart;
 			connectorTextEnd = textEnd;
 			connectorID = id;
@@ -125,7 +127,8 @@ public class drawingItemConnector  extends Component {
 			connectorLayer = layer;
 		}
 		public drawingItemConnector(drawingItem start,drawingItem end,String textStart,String textEnd,String id) {
-			connector = new JConnector(start,end);
+			connectorStart = start;
+			connectorEnd = end;
 			connectorTextStart = textStart;
 			connectorTextEnd = textEnd;
 			connectorID = id;
@@ -169,27 +172,27 @@ public class drawingItemConnector  extends Component {
 		}
 		public String getID() {return connectorID;}
 		public void setID(String s) {connectorID = s;}
-		public drawingItem getStart() {return connector.getSource();}
-		public drawingItem getEnd() {return connector.getDest();}
+		public drawingItem getStart() {return connectorStart;}
+		public drawingItem getEnd() {return connectorEnd;}
 		public boolean hitTest(int x,int y) {
-			GeneralPath p = connector.getConnectorPath();
-			Graphics2D g2d = (Graphics2D)getGraphics();
-			Rectangle r = new Rectangle(x-2,y-2,4,4);
-			return g2d.hit(r,p,true);
+			//GeneralPath p = connector.getConnectorPath();
+			//Graphics2D g2d = (Graphics2D)getGraphics();
+			//Rectangle r = new Rectangle(x-2,y-2,4,4);
+			//return g2d.hit(r,p,true);
+			return false;
 		}
 		public void drawConnector(Graphics2D g2d) {
-			connector.drawConnector(g2d);
-			Point pt1 = connector.getP1();
-			Point pt2 = connector.getP2();
-			Point start = getTextStartPoint(getTextStart(),getStart(),connector.getP1());
-			Point end = getTextStartPoint(getTextEnd(),getEnd(),connector.getP2());
-			g2d.drawString(getTextStart(),start.x,start.y);
-			g2d.drawString(getTextEnd(),end.x,end.y);
+			//Point pt1 = connector.getP1();
+			//Point pt2 = connector.getP2();
+			//Point start = getTextStartPoint(getTextStart(),getStart(),connector.getP1());
+			//Point end = getTextStartPoint(getTextEnd(),getEnd(),connector.getP2());
+			//g2d.drawString(getTextStart(),start.x,start.y);
+			//g2d.drawString(getTextEnd(),end.x,end.y);
 			
-			int sourceEdgeId = getConnEdge(getStart(),connector.getP1()).edgeID();
-			int destEdgeId = getConnEdge(getEnd(),connector.getP2()).edgeID();
-			drawConnSymbol(g2d,connectorStartSymbol,(int)((sourceEdgeId-1) * Math.PI));
-			drawConnSymbol(g2d,connectorEndSymbol,(int)((destEdgeId-1) * Math.PI));
+			//int sourceEdgeId = getConnEdge(getStart(),connector.getP1()).edgeID();
+			//int destEdgeId = getConnEdge(getEnd(),connector.getP2()).edgeID();
+			//drawConnSymbol(g2d,connectorStartSymbol,(int)((sourceEdgeId-1) * Math.PI));
+			//drawConnSymbol(g2d,connectorEndSymbol,(int)((destEdgeId-1) * Math.PI));
 		}
 		public int getLayer() {return connectorLayer;}
 		public void setTextStart(String s) {connectorTextStart = s;}
