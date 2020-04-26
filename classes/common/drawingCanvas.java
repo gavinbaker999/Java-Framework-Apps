@@ -774,7 +774,6 @@ import javax.naming.*;
 			   dcStrokeWidth = 1;
 			   dcColor = Color.black;
 			   backgroundColor = Color.white;
-			   connectors.removeAllElements();
 			   selectedDrawingItems.removeAllElements();
 			   clipboardDrawingItems.removeAllElements();
 			   dcMode = ehsConstants.dcTypeSelect;
