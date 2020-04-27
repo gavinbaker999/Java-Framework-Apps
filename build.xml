@@ -105,10 +105,10 @@
 		<delete file="${appdir}/${appname}.jar" verbose="true"/>
 		<jar destfile="${appdir}/${appname}.jar">
 			<fileset dir="${appdir}/bin"/>
-			<zipfileset src="${appdir}/../classes/ehscomplier.jar" prefix="ehscomplier"/>
-			<zipfileset src="${appdir}/../classes/ehssupport.jar" prefix="ehssupport"/>
-			<zipfileset src="${appdir}/../classes/ehscontrols.jar" prefix="ehscontrols"/>
-			<zipfileset src="${appdir}/../classes/ehsgraphicalcanvas.jar" prefix="ehsgraphicalcanvas"/>
+			<zipfileset src="${appdir}/../classes/ehscomplier.jar"/>
+			<zipfileset src="${appdir}/../classes/ehssupport.jar"/>
+			<zipfileset src="${appdir}/../classes/ehscontrols.jar"/>
+			<zipfileset src="${appdir}/../classes/ehsgraphicalcanvas.jar"/>
     			<manifest>
         <attribute name="Implementation-Vendor" value="End House Software"/>
         <attribute name="Implementation-Title" value="${appname}"/>
