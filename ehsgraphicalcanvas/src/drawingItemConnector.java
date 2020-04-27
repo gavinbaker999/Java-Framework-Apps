@@ -115,6 +115,7 @@ public class drawingItemConnector  extends Component {
 		private	int		connectorLayer;
 		private int charWidth = 8;
 		private int charHeight = 14;
+		private GeneralPath connectorPath;
 	
 		public drawingItemConnector(drawingItem start,drawingItem end,String textStart,String textEnd,int symStart,int symEnd,String id,int layer) {
 			connectorStart = start;
@@ -135,64 +136,34 @@ public class drawingItemConnector  extends Component {
 			connectorStartSymbol = connSymbol.NONE;
 			connectorEndSymbol = connSymbol.NONE;
 		}
-		public connEdge getConnEdge(drawingItem d,Point ptConn) {
-			int margin = 10;
-			Rectangle r = d.getTransformBoundingBox();
-			float cx = (float)r.getWidth() / (float)2.00;
-			float cy = (float)r.getHeight() / (float)2.00;
-			
-			Rectangle r1 = new Rectangle((int)r.getX()+(int)cx,(int)r.getY(),2*margin,2*margin);
-			r1.translate(-margin,-margin);
-			if (r1.contains(ptConn.x,ptConn.y)) {return connEdge.TOP;}
-			r1 = new Rectangle((int)r.getX()+(int)r.getWidth(),(int)r.getY()+(int)cy,2*margin,2*margin);
-			r1.translate(-margin,-margin);
-			if (r1.contains(ptConn.x,ptConn.y)) {return connEdge.RIGHT;}
-			r1 = new Rectangle((int)r.getX()+(int)cx,(int)r.getY()+(int)r.getHeight(),2*margin,2*margin);
-			r1.translate(-margin,-margin);
-			if (r1.contains(ptConn.x,ptConn.y)) {return connEdge.BOTTOM;}
-			r1 = new Rectangle((int)r.getX(),(int)r.getY()+(int)cy,2*margin,2*margin);
-			r1.translate(-margin,-margin);
-			if (r1.contains(ptConn.x,ptConn.y)) {return connEdge.LEFT;}
-			
-			return connEdge.NONE;
-		}
-		public Point getTextStartPoint(String text,drawingItem d,Point ptConn) {
-			int margin = 10;
-			int textX = ptConn.x;
-			int textY = ptConn.y;
-			int stringWidth =  text.length() * charWidth;
-			
-			connEdge edge = getConnEdge(d,ptConn);
-			if (edge == connEdge.TOP) {textX = textX + margin;textY = textY - margin;}
-			if (edge == connEdge.RIGHT) {textX = textX + margin;textY = textY - margin;}
-			if (edge == connEdge.BOTTOM) {textX = textX + margin;textY = textY + margin;}
-			if (edge == connEdge.LEFT) {textX = textX - margin - stringWidth;textY = textY - margin;}
-			
-			return new Point(textX,textY);
-		}
 		public String getID() {return connectorID;}
 		public void setID(String s) {connectorID = s;}
 		public drawingItem getStart() {return connectorStart;}
 		public drawingItem getEnd() {return connectorEnd;}
 		public boolean hitTest(int x,int y) {
-			//GeneralPath p = connector.getConnectorPath();
-			//Graphics2D g2d = (Graphics2D)getGraphics();
-			//Rectangle r = new Rectangle(x-2,y-2,4,4);
-			//return g2d.hit(r,p,true);
-			return false;
+			Graphics2D g2d = (Graphics2D)getGraphics();
+			Rectangle r = new Rectangle(x-2,y-2,4,4);
+			return g2d.hit(r,connectorPath,true);
 		}
 		public void drawConnector(Graphics2D g2d) {
-			//Point pt1 = connector.getP1();
-			//Point pt2 = connector.getP2();
-			//Point start = getTextStartPoint(getTextStart(),getStart(),connector.getP1());
-			//Point end = getTextStartPoint(getTextEnd(),getEnd(),connector.getP2());
-			//g2d.drawString(getTextStart(),start.x,start.y);
-			//g2d.drawString(getTextEnd(),end.x,end.y);
+			Point pt1 = new Point(0,0);
+			Point pt2 = new Point(0,0);
 			
-			//int sourceEdgeId = getConnEdge(getStart(),connector.getP1()).edgeID();
-			//int destEdgeId = getConnEdge(getEnd(),connector.getP2()).edgeID();
-			//drawConnSymbol(g2d,connectorStartSymbol,(int)((sourceEdgeId-1) * Math.PI));
-			//drawConnSymbol(g2d,connectorEndSymbol,(int)((destEdgeId-1) * Math.PI));
+			int stringWidthStart =  getTextStart().length() * charWidth;
+			int stringWidthEnd =  getTextEnd().length() * charWidth;
+			Point start = new Point(0,0);
+			Point end = new Point(0,0);
+			g2d.drawString(getTextStart(),start.x,start.y);
+			g2d.drawString(getTextEnd(),end.x,end.y);
+			
+			connectorPath = new GeneralPath();
+			connectorPath.moveTo(pt1.x,pt1.y);
+			connectorPath.lineTo(pt2.x,pt2.y);
+			connectorPath.closePath();
+			g2d.draw(connectorPath);
+			
+			connectorStartSymbol.draw(g2d,pt1,(int)Math.PI);
+			connectorEndSymbol.draw(g2d,pt2,(int)Math.PI);
 		}
 		public int getLayer() {return connectorLayer;}
 		public void setTextStart(String s) {connectorTextStart = s;}
@@ -205,7 +176,4 @@ public class drawingItemConnector  extends Component {
 		public connSymbol getEndSymbol() {return connectorEndSymbol;}
 		public void setStartSymbol(connSymbol ci) {connectorStartSymbol = ci;}
 		public void setEndSymbol(connSymbol ci) {connectorEndSymbol = ci;}
-		void drawConnSymbol(Graphics2D g2d,connSymbol connSym,int rotate) {
-			if (connSym == connSymbol.NONE) {return;}
-		}
 	}
