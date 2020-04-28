@@ -541,6 +541,12 @@ public class supportFunctions extends Component {
 		AffineTransform rotation = AffineTransform.getRotateInstance(Math.toRadians(degrees));
 		return f.deriveFont(rotation);
 	}
+	public static void drawRotatedText(Graphics2D g,String text,int x,int y,int degrees) {
+		Font orgFont = g.getFont();
+		g.setFont(getRotatedFont(orgFont,degrees));
+		g.drawString(text,x,y);
+		g.setFont(orgFont);
+	}
 	public static propBoxDialog displayPropBoxDialog(String msg,Vector props,String id) {
 		propBoxDialog d = new propBoxDialog(null,msg,props,id,null); 
 		return d;

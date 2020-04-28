@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 26-April-2020 05:18 PM Build Number: 3@@@";
+	public		static final String		buildDate = "@@@Build Date: 27-April-2020 04:45 PM Build Number: 5@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -981,7 +981,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					ptTextStart.x = ptStart.x + charWidth;
 					ptTextStart.y = ptStart.y;
 					rotAngle = Math.toDegrees(Math.atan2(ptEnd.y-ptStart.y,ptEnd.x-ptStart.x));
-					newFont = supportFunctions.getRotatedFont(orgFont,(int)rotAngle);
+					newFont = supportFunctions.getRotatedFont(,(int)rotAngle);
 				} else {
 					ptTextStart.x = ptStart.x - charWidth; 
 					ptTextStart.y = ptStart.y; 

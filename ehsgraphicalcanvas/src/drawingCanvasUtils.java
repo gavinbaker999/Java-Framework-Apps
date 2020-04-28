@@ -11,3 +11,4 @@ public interface drawingCanvasUtils {
 		public boolean canvasDoubleClickAction(MouseEvent evt);
 		public boolean canvasLeftClickAction(MouseEvent evt);
 	}
+	
