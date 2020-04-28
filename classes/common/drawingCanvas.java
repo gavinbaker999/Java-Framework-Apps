@@ -619,6 +619,9 @@ import javax.naming.*;
 					   }
 				   }
 			   }
+
+			   drawConnectors(g2d);
+			   
 			   for (int k=0;k<drawingItems.size();k++) {
 				   drawingItem d = (drawingItem)drawingItems.elementAt(k);
 				   boolean focus = false;
@@ -628,8 +631,6 @@ import javax.naming.*;
 				   if (readonly) {focus = false;}
 				   if (layerMan.layerDisplayed("Layer "+String.valueOf(d.getLayer()))) {if(doPaint(d)) {d.paint(g2d,focus);}}
 			   }
-			   
-			   drawConnectors(g2d);
 			   
 			   if (dragBoundingBox) {
 			    int xCordAdj = xCord;

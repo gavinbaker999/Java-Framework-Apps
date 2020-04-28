@@ -5,10 +5,4 @@ compile:
     [javac] Note: C:\Users\Gavin\eclipse-workspace\umldiag\src\umldiag.java uses unchecked or unsafe operations.
     [javac] Note: Recompile with -Xlint:unchecked for details.
 
-jar:
-   [delete] Deleting: C:\Users\Gavin\eclipse-workspace\umldiag\umldiag.jar
-      [jar] Building jar: C:\Users\Gavin\eclipse-workspace\umldiag\umldiag.jar
-
-compile-jar:
-
 BUILD SUCCESSFUL

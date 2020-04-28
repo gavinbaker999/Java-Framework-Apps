@@ -146,8 +146,8 @@ public class drawingItemConnector  extends Component {
 			return g2d.hit(r,connectorPath,true);
 		}
 		public void drawConnector(Graphics2D g2d) {
-			Point pt1 = new Point(0,0);
-			Point pt2 = new Point(0,0);
+			Point pt1 = getStart().getOrigin();
+			Point pt2 = getEnd().getOrigin();
 			
 			int stringWidthStart =  getTextStart().length() * charWidth;
 			int stringWidthEnd =  getTextEnd().length() * charWidth;
