@@ -153,9 +153,9 @@ public class drawingItemConnector  extends Component {
 			int stringWidthEnd =  getTextEnd().length() * charWidth;
 			Point start = new Point(0,0);
 			Point end = new Point(0,0);
-			g2d.drawString(getTextStart(),start.x,start.y);
-			g2d.drawString(getTextEnd(),end.x,end.y);
-			
+			supportFunctions.drawRotatedText(g2d,getTextStart(),start.x,start.y,0);
+			supportFunctions.drawRotatedText(g2d,getTextEnd(),end.x,end.y,0);
+
 			connectorPath = new GeneralPath();
 			connectorPath.moveTo(pt1.x,pt1.y);
 			connectorPath.lineTo(pt2.x,pt2.y);
