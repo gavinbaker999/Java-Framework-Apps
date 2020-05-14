@@ -135,7 +135,7 @@
 	</target>
 <target name="generateehssupportjar" depends="ehsjarinit" description="Generates the EHS support JAR">
 <mkdir dir="ehssupport/${classes.dir}"/>
-<javac destdir="ehssupport/${classes.dir}">
+<javac destdir="ehssupport/${classes.dir}" classpath="classes/sendgrid-java.jar">
 	<src path="ehssupport/src"/>
 </javac>
 		<delete file="classes/ehssupport.jar" verbose="true"/>

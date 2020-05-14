@@ -543,9 +543,29 @@ public class supportFunctions extends Component {
 	}
 	public static void drawRotatedText(Graphics2D g,String text,int x,int y,int degrees) {
 		Font orgFont = g.getFont();
-		g.setFont(getRotatedFont(orgFont,degrees));
+		Font rotFont = getRotatedFont(orgFont,degrees);
+		if (degrees > 90 && degrees < 270) {
+			rotFont = rotFont.deriveFont(getFlipXTransform());
+		}
+		g.setFont(rotFont);
 		g.drawString(text,x,y);
 		g.setFont(orgFont);
+	}
+	public static int getQuad(Point ptSrc,Point ptDest) {
+		// return quad number of ptDest relative to ptSrc
+		// Angles are measured positive from the horizontal zero baseline
+		// Q0: 0-90 , Q1: 91-180 , Q2: 181-270 , Q3: 271 - 360
+		if (ptDest.x < ptSrc.x && ptDest.y > ptSrc.y) {return 2;}
+		if (ptDest.x > ptSrc.x && ptDest.y > ptSrc.y) {return 0;}
+		if (ptDest.x < ptSrc.x && ptDest.y > ptSrc.y) {return 1;}
+
+		return 3;
+	}
+	public static AffineTransform getFlipXTransform() {
+		return AffineTransform.getScaleInstance(1,-1);
+	}
+	public static AffineTransform getFlipYTransform() {
+		return AffineTransform.getScaleInstance(-1,1);
 	}
 	public static propBoxDialog displayPropBoxDialog(String msg,Vector props,String id) {
 		propBoxDialog d = new propBoxDialog(null,msg,props,id,null); 
