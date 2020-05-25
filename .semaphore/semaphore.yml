@@ -1,4 +1,11 @@
-- name: 'Job #1'
+version: v1.0
+name: End House Software Pipeline
+agent:
+	machine:
+		type: e1-standard-2
+		os-image: ubuntu1804
+blocks:
+	- name: 'Job #1'
           commands:
             - checkout
             - echo "Hello from semaphore"
