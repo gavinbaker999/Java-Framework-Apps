@@ -3,7 +3,7 @@ name: End House Software Pipeline
 agent:
 	machine:
 		type: e1-standard-2
-		os-image: ubuntu1804
+		os_image: ubuntu1804
 blocks:
 	- name: 'Job #1'
 		task:
