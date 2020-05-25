@@ -1,19 +1,14 @@
-# .semaphore/semaphore.yml
-
-version: 1.0
-
-name: "End House Software Pipeline"
-
+version: v1.0
+name: End House Software Pipeline
 agent:
   machine:
-    type: e1-standard-2    # Linux machine type with 2 vCPUs, 4 GB of RAM
-    os_image: ubuntu1804   # The Ubuntu 18.04 OS image.
-
+    type: e1-standard-2
+    os_image: ubuntu1804
 blocks:
-  - name: "Test"
+  - name: DeployProcesses
     task:
       jobs:
-        - name: Tests
+        - name: PreDeploy
           commands:
             - checkout
             - echo 'Running Semaphore Processes...'
