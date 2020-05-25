@@ -273,7 +273,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			Vector v = new Vector();
 			while(st.hasMoreTokens()) {
 				v.addElement(st.nextToken());
-			}
+			} 
 			if (v.size() == 1) {v.insertElementAt("arg"+String.valueOf(argID++),0);}
 			String opt = (String)v.elementAt(0);
 			//if (opt.charAt(0) == '-') {opt = opt.substring(1);} // remove - character
