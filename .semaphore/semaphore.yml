@@ -1,0 +1,4 @@
+- name: 'Job #1'
+          commands:
+            - checkout
+            - echo "Hello from semaphore"
