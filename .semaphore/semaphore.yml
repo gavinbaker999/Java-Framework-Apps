@@ -8,7 +8,7 @@ blocks:
   - name: Test
     task:
       jobs:
-        - name: Tests
+        - name: PreDeploy
           commands:
             - checkout
             - echo 'Running Semaphore Processes...'
