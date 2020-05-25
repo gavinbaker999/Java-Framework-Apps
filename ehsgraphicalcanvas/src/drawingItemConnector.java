@@ -143,12 +143,18 @@ public class drawingItemConnector  extends Component {
 			Rectangle r = new Rectangle(x-2,y-2,4,4);
 			return g2d.hit(r,connectorPath,true);
 		}
+		public Point getStartPoint() {
+			return new Point(0,0);
+		}
+		public Point getEndPoint() {
+			return new Point(0,0);
+		}
 		public void drawConnector(Graphics2D g2d) {
 			Point pt1 = getStart().getOrigin();
 			Point pt2 = getEnd().getOrigin();
 			
-			Point start = new Point(0,0);
-			Point end = new Point(0,0);
+			Point start = getStartPoint();
+			Point end = getEndPoint();
 			int startAngle = (int)Math.toDegrees(Math.atan2(Math.abs(pt2.x - pt1.x),Math.abs(pt2.y - pt1.y))) +
 				(supportFunctions.getQuad(pt1,pt2) * 90);
 			int endAngle = (int)Math.toDegrees(Math.atan2(Math.abs(pt2.y - pt1.y),Math.abs(pt2.x - pt1.x))) +
