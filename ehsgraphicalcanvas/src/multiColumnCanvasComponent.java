@@ -101,7 +101,7 @@ import javax.naming.*;
 //impordt javax.xml.xquery.XQDataSource;
 //import javax.xml.xquery.XQException;
 //import javax.xml.xquery.XQPreparedExpression;
-//import javax.xml.xquery.XQResultSequence;
+//import javax.xml.xquery.XQResultSequence; 
 //import com.saxonica.xqj.SaxonXQDataSource;
 
 public class multiColumnCanvasComponent implements TableModelListener {

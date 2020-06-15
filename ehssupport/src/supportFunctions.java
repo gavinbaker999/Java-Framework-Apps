@@ -33,12 +33,12 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.*;
 import javax.xml.transform.OutputKeys.*;
-import javax.xml.ws.*;
-import javax.xml.ws.handler.*;
-import javax.xml.ws.handler.soap.*;
-import javax.xml.soap.*;
+//import javax.xml.ws.*;
+//import javax.xml.ws.handler.*;
+//import javax.xml.ws.handler.soap.*;
+//import javax.xml.soap.*;
 import javax.xml.namespace.QName;
-import javax.xml.ws.handler.Handler;
+//import javax.xml.ws.handler.Handler;
 import org.w3c.dom.*;
 import org.w3c.dom.traversal.*;
 import org.xml.sax.*;
@@ -62,7 +62,7 @@ import javax.xml.stream.util.XMLEventAllocator;
 import javax.xml.transform.Source;
 
 import javax.sound.sampled.*;
-import sun.audio.*;
+//import sun.audio.*;
 
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
@@ -80,7 +80,7 @@ import javax.imageio.stream.*;
 import javax.imageio.*;
 import javax.imageio.ImageReader;
 import javax.imageio.ImageWriter;
-import javax.activation.URLDataSource.*;
+//import javax.activation.URLDataSource.*;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.*;
@@ -129,6 +129,110 @@ public class supportFunctions extends Component {
 	public static mysqlJDBC getDBConn() {return dbConn;}
 	public static void connectDatabase() {
 		dbConn = new mysqlJDBC();
+	}
+	public static int[] boundingBox2D(int[] p,int[] bb) {
+		for (int i=0;i<2;i++) {
+			for (int j=0;j<p.length;j=j+2) {
+				int index = i + j;
+				//System.out.println("p[index]=" + String.valueOf(p[index]));
+				if (p[index] < bb[i]) {bb[i] = p[index];}
+				if (p[index] > bb[i + 2]) {bb[i + 2] = p[index];}
+			}
+		}
+
+		return bb;
+	}
+	public static int[] boundingBoxOfPoints(int[] points) {
+		int bb[] = {9999,9999,-9999,-9999};
+
+		for(int i=0;i<points.length;i=i+2) {
+			int p[] = new int[2];
+			p[0] = points[i];
+			p[1] = points[i + 1];
+			bb = boundingBox2D(p,bb);
+		}
+
+		return bb;
+	}
+	public static boolean boundingBoxIntersect2D(int[] boxa,int[] boxb) {
+		for (int i_min=0;i_min<2;i_min++) {
+			int i_max = i_min + 2; //index for the maximum
+			if (boxa[i_max] < boxb[i_min]) {return false;}
+			if (boxb[i_max] < boxa[i_min]) {return false;}
+		}
+
+		return true;
+	}
+	public static int[] lineIntersectionPoint2D(int x0,int y0,int x1,int y1,int x2,int y2,int x3,int y3) {
+		int[] ip = new int[2];
+		int[] p = new int[4];
+
+		int bb[] = {9999,9999,-9999,-9999};
+		p[0] = x0;p[1] = y0;p[2] = x1;p[3] = y1;
+		int[] boxa = boundingBox2D(p,bb);
+		int bbb[] = {9999,9999,-9999,-9999};
+		p[0] = x2;p[1] = y2;p[2] = x3;p[3] = y3;
+		int[] boxb = boundingBox2D(p,bbb);
+
+		if(!boundingBoxIntersect2D(boxa,boxb)) {// bounding boxes do not intersect
+			System.out.println("bounding boxes do not intersect");
+			ip[0] = -9999;
+			ip[1] = -9999;
+			return ip;
+		}
+
+		int dy10 = y1 - y0;
+		int dx10 = x1 - x0;
+		int dy32 = y3 - y2;
+		int dx32 = x3 - x2;
+		float dyx10 = 0; // the line slope
+		float dyx32 = 0; // the line slope
+
+		if (dx10 != 0) {dyx10 = dy10 / dx10;}
+		if (dx32 != 0) {dyx32 = dy32 / dx32;}
+
+		float x,y;
+		if (dy10 == 0 && dy32 == 0) {// parallel vertical
+			System.out.println("parallel vertical");
+			ip[0] = -9999;
+			ip[1] = -9999;
+			return ip;
+		} 
+		else if (dy10 == 0 && dy32 != 0) {// first line horz
+			System.out.println("first line horz");
+			y = y0;
+			x = x2 + (y - y2) * (dx32 / dy32);
+		}
+		else if (dy10 != 0 && dy32 == 0) {// second line horz
+			System.out.println("second line horz");
+			y = y2;
+			x = x0 + (y - y0) * (dx10/dy10);
+		}
+		else if (dx10 == x0 && dx32 != 0) {// first line vert
+			System.out.println("first line vert");
+			x = x0;
+			y = y2 + dyx32 * (x - x2);
+		}
+		else if (dx10 != 0 && dx32 == 0) {// second line vert
+			System.out.println("second line vert");
+			x = x2;
+			y = y0 + dyx10 * (x - x0);
+		}
+		else if (Math.abs(dyx10 - dyx32) == 0) {// parallel or parallel collinear
+			System.out.println("parallel or parallel collinear");
+			ip[0] = -9999;
+			ip[1] = -9999;
+			return ip; 
+		}
+		else {// we have a line intersection
+			System.out.println("we have a line intersection");
+			x = (y2 - y0 + dyx10 * x0 - dyx32 * x2) / (dyx10 - dyx32);
+			y = y0 + dyx10 * (x - x0);
+		}
+
+		ip[0] = (int)x;
+		ip[1] = (int)y;
+		return ip;
 	}
 	  public static Point centerPoint(Rectangle r) {
 		float cx = (float)r.getWidth() / (float)2.00;

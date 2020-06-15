@@ -143,24 +143,22 @@ public class drawingItemConnector  extends Component {
 			Rectangle r = new Rectangle(x-2,y-2,4,4);
 			return g2d.hit(r,connectorPath,true);
 		}
-		public Point getStartPoint() {
+		public Point getTextStartPoint() {
 			return new Point(0,0);
 		}
-		public Point getEndPoint() {
+		public Point getTextEndPoint() {
 			return new Point(0,0);
 		}
 		public void drawConnector(Graphics2D g2d) {
 			Point pt1 = getStart().getOrigin();
 			Point pt2 = getEnd().getOrigin();
 			
-			Point start = getStartPoint();
-			Point end = getEndPoint();
 			int startAngle = (int)Math.toDegrees(Math.atan2(Math.abs(pt2.x - pt1.x),Math.abs(pt2.y - pt1.y))) +
 				(supportFunctions.getQuad(pt1,pt2) * 90);
 			int endAngle = (int)Math.toDegrees(Math.atan2(Math.abs(pt2.y - pt1.y),Math.abs(pt2.x - pt1.x))) +
 				(supportFunctions.getQuad(pt1,pt2) * 90);
-			supportFunctions.drawRotatedText(g2d,getTextStart(),start.x,start.y,startAngle);
-			supportFunctions.drawRotatedText(g2d,getTextEnd(),end.x,end.y,endAngle);
+			supportFunctions.drawRotatedText(g2d,getTextStart(),getTextStartPoint().x,getTextStartPoint().y,startAngle);
+			supportFunctions.drawRotatedText(g2d,getTextEnd(),getTextEndPoint().x,getTextEndPoint().y,endAngle);
 
 			connectorPath = new GeneralPath();
 			connectorPath.moveTo(pt1.x,pt1.y);

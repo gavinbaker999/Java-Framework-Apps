@@ -39,12 +39,12 @@ import org.xml.sax.helpers.*;
 
 import javax.script.*;
 import javax.swing.filechooser.*;
-import javax.xml.ws.*;
-import javax.xml.ws.handler.*;
-import javax.xml.ws.handler.soap.*;
-import javax.xml.soap.*;
+//import javax.xml.ws.*;
+//import javax.xml.ws.handler.*;
+//import javax.xml.ws.handler.soap.*;
+//import javax.xml.soap.*;
 import javax.xml.namespace.QName;
-import javax.xml.ws.handler.Handler;
+//import javax.xml.ws.handler.Handler;
 //import javax.xml.messaging.*;
 import javax.xml.xpath.XPath; 
 import javax.xml.xpath.XPathConstants; 
@@ -62,7 +62,7 @@ import javax.xml.stream.util.XMLEventAllocator;
 import javax.xml.transform.Source;
 
 import javax.sound.sampled.*;
-import sun.audio.*;
+//import sun.audio.*;
 
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
@@ -78,7 +78,7 @@ import javax.imageio.plugins.bmp.*;
 import javax.imageio.spi.*;
 import javax.imageio.stream.*;
 import javax.imageio.*;
-import javax.activation.URLDataSource.*;
+//import javax.activation.URLDataSource.*;
 
 import java.awt.geom.Point2D.*;
 import javax.swing.text.*;
@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 28-April-2020 05:52 PM Build Number: 11@@@";
+	public		static final String		buildDate = "@@@Build Date: 15-June-2020 04:50 PM Build Number: 22@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -297,6 +297,12 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 			System.out.println("Registered To: " + systemUserReg.getUserName());
 
+			int p[]= {1,2,5,4,3,5,2,3,1,7,2,5,5,7,7,4,5,5,6,1};
+			int result[] = supportFunctions.boundingBoxOfPoints(p);
+			System.out.println("Bounding Cords:" + String.valueOf(result[0]) + "," + String.valueOf(result[1]) + "," + String.valueOf(result[2]) + "," + String.valueOf(result[3]));
+			int result1[] = supportFunctions.lineIntersectionPoint2D(1,1,5,5,2,4,7,4);
+			System.out.println("Intersection Cords:" + String.valueOf(result1[0]) + "," + String.valueOf(result1[1]));
+			
 			extraStatusInfo();
 			
 			supportFunctions.getDBConn().disconnect();

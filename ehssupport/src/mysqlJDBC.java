@@ -160,9 +160,9 @@ public class mysqlJDBC {
 				System.err.println("JDBC did not connect");
 				return false;
 			}
-			System.err.println("JDBC connect sucess");
-			System.err.println("Product:"+getDatabaseProduct());
-			System.err.println("Version:"+getDatabaseVersion());
+			System.err.println("JDBC connect success");
+			//System.err.println("Product:"+getDatabaseProduct());
+			//System.err.println("Version:"+getDatabaseVersion());
 			return true;
 		}
 		public void disconnect() {
