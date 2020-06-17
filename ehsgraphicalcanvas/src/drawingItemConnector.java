@@ -161,7 +161,7 @@ public class drawingItemConnector  extends Component {
 			supportFunctions.drawRotatedText(g2d,getTextEnd(),getTextEndPoint().x,getTextEndPoint().y,endAngle);
 
 			connectorPath = new GeneralPath();
-			connectorPath.moveTo(pt1.x,pt1.y);
+			connectorPath.moveTo(pt1.x,pt1.y);c
 			connectorPath.lineTo(pt2.x,pt2.y);
 			g2d.draw(connectorPath);
 			

@@ -118,6 +118,9 @@ import com.sendgrid.Response;
 import java.io.IOException;
 
 public class supportFunctions extends Component {
+
+	public static int maxBoundingBoxCordValue = 9999;
+
 	public static mysqlJDBC dbConn = null;
 	public static configurationSettings appConfigSetting = null;
 	
@@ -130,6 +133,88 @@ public class supportFunctions extends Component {
 	public static void connectDatabase() {
 		dbConn = new mysqlJDBC();
 	}
+
+	public static int[] getShapeSideCords(Shape shape,int side) {
+		int[] p = new int[4];
+
+		float seg[] = new float[6];
+		int segType = 0;
+		float curX = 0,curY = 0;
+		float lastMoveX = 0,lastMoveY = 0;
+		int sideIndex = 0;
+
+		p[0] = maxBoundingBoxCordValue;p[1] = maxBoundingBoxCordValue;
+		p[2] = maxBoundingBoxCordValue;p[3] = maxBoundingBoxCordValue;
+
+		PathIterator pi = shape.getPathIterator(null);
+		while (!pi.isDone()) {
+			segType = pi.currentSegment(seg);
+			System.out.println("Next path it, sideIndex=" + String.valueOf(sideIndex));
+			switch (segType) {
+				case PathIterator.SEG_MOVETO:
+					curX = seg[0];
+					curY = seg[1];
+					System.out.println("(SEG_MOVETO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					lastMoveX = curX;
+					lastMoveY = curY;
+					//sideIndex++;
+					break;
+				case PathIterator.SEG_LINETO:
+					if (sideIndex == side) {
+						p[0] = (int)curX;p[1] = (int)curY;
+						p[2] = (int)seg[0];p[3] = (int)seg[1];
+						System.out.println("(ret SEG_LINETO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+						return p;
+					}
+					curX = seg[0];
+					curY = seg[1];
+					sideIndex++;
+					System.out.println("(SEG_LINETO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					break;
+				case PathIterator.SEG_CLOSE:
+					if (sideIndex == side) {
+						p[0] = (int)curX;p[1] = (int)curY;
+						p[2] = (int)seg[0];p[3] = (int)seg[1];
+						System.out.println("(ret SEG_CLOSE) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+						return p;
+					}
+					curX = lastMoveX;
+					curY = lastMoveY;
+					sideIndex++;
+					System.out.println("(SEG_CLOSE) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					break;
+				case PathIterator.SEG_QUADTO:
+					if (sideIndex == side) {
+						p[0] = (int)curX;p[1] = (int)curY;
+						p[2] = (int)seg[2];p[3] = (int)seg[3];
+						System.out.println("(ret SEG_QUADTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+						return p;
+					}
+					curX = seg[2];
+					curY = seg[3];
+					sideIndex++;
+					System.out.println("(SEG_QUADTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					break;
+				case PathIterator.SEG_CUBICTO:
+					if (sideIndex == side) {
+						p[0] = (int)curX;p[1] = (int)curY;
+						p[2] = (int)seg[4];p[3] = (int)seg[5];
+						System.out.println("(ret SEG_CUBICTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+						return p;
+					}
+					curX = seg[4];
+					curY = seg[5];
+					sideIndex++;
+					System.out.println("(SEG_CUBICTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					break;
+			}
+
+			pi.next();
+		}
+
+		return p;
+	}
+	// the next 3 functions should be replaced with the graphic2D functions getBoundingRect, contains and intersect
 	public static int[] boundingBox2D(int[] p,int[] bb) {
 		for (int i=0;i<2;i++) {
 			for (int j=0;j<p.length;j=j+2) {
@@ -143,7 +228,7 @@ public class supportFunctions extends Component {
 		return bb;
 	}
 	public static int[] boundingBoxOfPoints(int[] points) {
-		int bb[] = {9999,9999,-9999,-9999};
+		int bb[] = {maxBoundingBoxCordValue,maxBoundingBoxCordValue,-maxBoundingBoxCordValue,-maxBoundingBoxCordValue};
 
 		for(int i=0;i<points.length;i=i+2) {
 			int p[] = new int[2];
@@ -167,17 +252,17 @@ public class supportFunctions extends Component {
 		int[] ip = new int[2];
 		int[] p = new int[4];
 
-		int bb[] = {9999,9999,-9999,-9999};
+		int bb[] = {maxBoundingBoxCordValue,maxBoundingBoxCordValue,-maxBoundingBoxCordValue,-maxBoundingBoxCordValue};
 		p[0] = x0;p[1] = y0;p[2] = x1;p[3] = y1;
 		int[] boxa = boundingBox2D(p,bb);
-		int bbb[] = {9999,9999,-9999,-9999};
+		int bbb[] = {maxBoundingBoxCordValue,maxBoundingBoxCordValue,-maxBoundingBoxCordValue,-maxBoundingBoxCordValue};
 		p[0] = x2;p[1] = y2;p[2] = x3;p[3] = y3;
 		int[] boxb = boundingBox2D(p,bbb);
 
 		if(!boundingBoxIntersect2D(boxa,boxb)) {// bounding boxes do not intersect
-			System.out.println("bounding boxes do not intersect");
-			ip[0] = -9999;
-			ip[1] = -9999;
+			//System.out.println("bounding boxes do not intersect");
+			ip[0] = -maxBoundingBoxCordValue;
+			ip[1] = -maxBoundingBoxCordValue;
 			return ip;
 		}
 
@@ -193,39 +278,39 @@ public class supportFunctions extends Component {
 
 		float x,y;
 		if (dy10 == 0 && dy32 == 0) {// parallel vertical
-			System.out.println("parallel vertical");
-			ip[0] = -9999;
-			ip[1] = -9999;
+			//System.out.println("parallel vertical");
+			ip[0] = -maxBoundingBoxCordValue;
+			ip[1] = -maxBoundingBoxCordValue;
 			return ip;
 		} 
 		else if (dy10 == 0 && dy32 != 0) {// first line horz
-			System.out.println("first line horz");
+			//System.out.println("first line horz");
 			y = y0;
 			x = x2 + (y - y2) * (dx32 / dy32);
 		}
 		else if (dy10 != 0 && dy32 == 0) {// second line horz
-			System.out.println("second line horz");
+			//System.out.println("second line horz");
 			y = y2;
 			x = x0 + (y - y0) * (dx10/dy10);
 		}
 		else if (dx10 == x0 && dx32 != 0) {// first line vert
-			System.out.println("first line vert");
+			//System.out.println("first line vert");
 			x = x0;
 			y = y2 + dyx32 * (x - x2);
 		}
 		else if (dx10 != 0 && dx32 == 0) {// second line vert
-			System.out.println("second line vert");
+			//System.out.println("second line vert");
 			x = x2;
 			y = y0 + dyx10 * (x - x0);
 		}
 		else if (Math.abs(dyx10 - dyx32) == 0) {// parallel or parallel collinear
-			System.out.println("parallel or parallel collinear");
+			//System.out.println("parallel or parallel collinear");
 			ip[0] = -9999;
 			ip[1] = -9999;
 			return ip; 
 		}
 		else {// we have a line intersection
-			System.out.println("we have a line intersection");
+			//System.out.println("we have a line intersection");
 			x = (y2 - y0 + dyx10 * x0 - dyx32 * x2) / (dyx10 - dyx32);
 			y = y0 + dyx10 * (x - x0);
 		}

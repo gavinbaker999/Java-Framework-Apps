@@ -39,12 +39,12 @@ import org.xml.sax.helpers.*;
 
 import javax.script.*;
 import javax.swing.filechooser.*;
-import javax.xml.ws.*;
+//import javax.xml.ws.*;
 import javax.xml.ws.handler.*;
 import javax.xml.ws.handler.soap.*;
 import javax.xml.soap.*;
 import javax.xml.namespace.QName;
-import javax.xml.ws.handler.Handler;
+//import javax.xml.ws.handler.Handler;
 //import javax.xml.messaging.*;
 import javax.xml.xpath.XPath; 
 import javax.xml.xpath.XPathConstants; 
@@ -62,7 +62,7 @@ import javax.xml.stream.util.XMLEventAllocator;
 import javax.xml.transform.Source;
 
 import javax.sound.sampled.*;
-import sun.audio.*;
+//import sun.audio.*;
 
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
@@ -78,7 +78,7 @@ import javax.imageio.plugins.bmp.*;
 import javax.imageio.spi.*;
 import javax.imageio.stream.*;
 import javax.imageio.*;
-import javax.activation.URLDataSource.*;
+//import javax.activation.URLDataSource.*;
 
 import java.awt.geom.Point2D.*;
 import javax.swing.text.*;
@@ -319,13 +319,16 @@ public class registrationinfo {
 			   lastLogonDetails = "";
 			   userCredit = 0;
 		}
-		public void initUserCredit() {
+		public void initUserCreditFromDB() {
 			if (getUserRegistered()) {
 				String data = supportFunctions.getDBConn().executeSQLQuery("SELECT sysEHSRegCredit FROM sysehsregistrations WHERE sysEHSRegProduct='"+appName+"' AND sysEHSRegName='"+ userName+"'","0");
 				try {
 					userCredit = Integer.parseInt(data);
 				} catch (Exception e) {userCredit = 0;}
 			} else {userCredit = 0;}
+		}
+		public void initUserCredit() {
+			userCredit = 0;
 		}
 		public int getUserCredit() {return userCredit;}
 		public void setUserCredit(int val) {
