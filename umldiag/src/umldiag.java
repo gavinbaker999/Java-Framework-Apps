@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 17-June-2020 05:15 PM Build Number: 24@@@";
+	public		static final String		buildDate = "@@@Build Date: 25-June-2020 03:29 PM Build Number: 33@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -302,7 +302,8 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			System.out.println("Bounding Cords:" + String.valueOf(result[0]) + "," + String.valueOf(result[1]) + "," + String.valueOf(result[2]) + "," + String.valueOf(result[3]));
 			int result1[] = supportFunctions.lineIntersectionPoint2D(1,1,5,5,2,4,7,4);
 			System.out.println("Intersection Cords:" + String.valueOf(result1[0]) + "," + String.valueOf(result1[1]));
-			supportFunctions.getShapeSideCords((Shape)new Rectangle(100,100,30,50),100);
+			int result2[] = supportFunctions.lineIntersectsShapeAtCords((Shape)new Rectangle(100,100,30,50),80,50,115,125);
+			System.out.println("IntersectionShape Cords:" + String.valueOf(result2[0]) + "," + String.valueOf(result2[1]) + "," + String.valueOf(result2[2]) + "," + String.valueOf(result2[3]));
 
 			extraStatusInfo();
 			

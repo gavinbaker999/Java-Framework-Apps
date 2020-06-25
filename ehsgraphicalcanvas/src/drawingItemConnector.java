@@ -33,12 +33,12 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.*;
 import javax.xml.transform.OutputKeys.*;
-import javax.xml.ws.*;
-import javax.xml.ws.handler.*;
-import javax.xml.ws.handler.soap.*;
-import javax.xml.soap.*;
+//import javax.xml.ws.*;
+//import javax.xml.ws.handler.*;
+//import javax.xml.ws.handler.soap.*;
+//import javax.xml.soap.*;
 import javax.xml.namespace.QName;
-import javax.xml.ws.handler.Handler;
+//import javax.xml.ws.handler.Handler;
 import org.w3c.dom.*;
 import org.w3c.dom.traversal.*;
 import org.xml.sax.*;
@@ -64,7 +64,7 @@ import javax.script.*;
 import javax.swing.filechooser.*;
 
 import javax.sound.sampled.*;
-import sun.audio.*;
+//import sun.audio.*;
 
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
@@ -80,7 +80,7 @@ import javax.imageio.plugins.bmp.*;
 import javax.imageio.spi.*;
 import javax.imageio.stream.*;
 import javax.imageio.*;
-import javax.activation.URLDataSource.*;
+//import javax.activation.URLDataSource.*;
 
 import java.awt.geom.Point2D.*;
 import javax.swing.text.*;
@@ -161,7 +161,7 @@ public class drawingItemConnector  extends Component {
 			supportFunctions.drawRotatedText(g2d,getTextEnd(),getTextEndPoint().x,getTextEndPoint().y,endAngle);
 
 			connectorPath = new GeneralPath();
-			connectorPath.moveTo(pt1.x,pt1.y);c
+			connectorPath.moveTo(pt1.x,pt1.y);
 			connectorPath.lineTo(pt2.x,pt2.y);
 			g2d.draw(connectorPath);
 			
