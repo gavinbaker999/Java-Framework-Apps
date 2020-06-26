@@ -154,28 +154,28 @@ public class supportFunctions extends Component {
 				case PathIterator.SEG_MOVETO:
 					curX = seg[0];
 					curY = seg[1];
-					System.out.println("(SEG_MOVETO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					//System.out.println("(SEG_MOVETO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
 					lastMoveX = curX;
 					lastMoveY = curY;
 					break;
 				case PathIterator.SEG_LINETO:
 					p = lineIntersectionPoint2D((int)curX,(int)curY,(int)seg[0],(int)seg[1],x0,y0,x1,y1);
 					if (p[0] != -maxBoundingBoxCordValue) {
-						System.out.println("(SEG_LINETO) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
+						//System.out.println("(SEG_LINETO) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
 						intersectCords[ (pointIndex * 2) ] = p[0];
 						intersectCords[ (pointIndex * 2) + 1] = p[1];
 						pointIndex++;
 					}
 					curX = seg[0];
 					curY = seg[1];
-					System.out.println("(SEG_LINETO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					//System.out.println("(SEG_LINETO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
 					break;
 				case PathIterator.SEG_CLOSE:
 					if (curX != lastMoveX || curY != lastMoveY) {
 						// only check if we are closing path to a different cord point						
 						p = lineIntersectionPoint2D((int)curX,(int)curY,(int)lastMoveX,(int)lastMoveY,x0,y0,x1,y1);
 						if (p[0] != -maxBoundingBoxCordValue) {
-							System.out.println("(SEG_CLOSE) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
+							//System.out.println("(SEG_CLOSE) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
 							intersectCords[ (pointIndex * 2) ] = p[0];
 							intersectCords[ (pointIndex * 2) + 1] = p[1];
 							pointIndex++;
@@ -183,31 +183,31 @@ public class supportFunctions extends Component {
 					}
 					curX = lastMoveX;
 					curY = lastMoveY;
-					System.out.println("(SEG_CLOSE) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					//System.out.println("(SEG_CLOSE) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
 					break;
 				case PathIterator.SEG_QUADTO:
 					p = lineIntersectionPoint2D((int)curX,(int)curY,(int)seg[2],(int)seg[3],x0,y0,x1,y1);
 					if (p[0] != -maxBoundingBoxCordValue) {
-						System.out.println("(SEG_QUADTO) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
+						//System.out.println("(SEG_QUADTO) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
 						intersectCords[ (pointIndex * 2) ] = p[0];
 						intersectCords[ (pointIndex * 2) + 1] = p[1];
 						pointIndex++;
 					}
 					curX = seg[2];
 					curY = seg[3];
-					System.out.println("(SEG_QUADTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					//System.out.println("(SEG_QUADTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
 					break;
 				case PathIterator.SEG_CUBICTO:
 					p = lineIntersectionPoint2D((int)curX,(int)curY,(int)seg[4],(int)seg[5],x0,y0,x1,y1);
 					if (p[0] != -maxBoundingBoxCordValue) {
-						System.out.println("(SEG_CUBICTO) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
+						//System.out.println("(SEG_CUBICTO) pointIndex=" + String.valueOf(pointIndex) + ",intersectCordsX=" + String.valueOf(p[0]) + ",intersectCordsY=" + String.valueOf(p[1]));
 						intersectCords[ (pointIndex * 2) ] = p[0];
 						intersectCords[ (pointIndex * 2) + 1] = p[1];
 						pointIndex++;
 					}
 					curX = seg[4];
 					curY = seg[5];
-					System.out.println("(SEG_CUBICTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
+					//System.out.println("(SEG_CUBICTO) curX=" + String.valueOf(curX) + ",curY=" + String.valueOf(curY));
 					break;
 			}
 

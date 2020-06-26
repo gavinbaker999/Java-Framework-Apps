@@ -143,11 +143,11 @@ public class drawingItemConnector  extends Component {
 			Rectangle r = new Rectangle(x-2,y-2,4,4);
 			return g2d.hit(r,connectorPath,true);
 		}
-		public Point getTextStartPoint() {
-			return new Point(0,0);
-		}
-		public Point getTextEndPoint() {
-			return new Point(0,0);
+		public Point getTextPoint(Shape s,int x0,int y0,int x1,int y1) {
+			int[] p = supportFunctions.lineIntersectsShapeAtCords(s,x0,y0,x1,y1);
+			Point pt = new Point(p[0],p[1]);
+
+			return pt;
 		}
 		public void drawConnector(Graphics2D g2d) {
 			Point pt1 = getStart().getOrigin();
@@ -157,16 +157,20 @@ public class drawingItemConnector  extends Component {
 				(supportFunctions.getQuad(pt1,pt2) * 90);
 			int endAngle = (int)Math.toDegrees(Math.atan2(Math.abs(pt2.y - pt1.y),Math.abs(pt2.x - pt1.x))) +
 				(supportFunctions.getQuad(pt1,pt2) * 90);
-			supportFunctions.drawRotatedText(g2d,getTextStart(),getTextStartPoint().x,getTextStartPoint().y,startAngle);
-			supportFunctions.drawRotatedText(g2d,getTextEnd(),getTextEndPoint().x,getTextEndPoint().y,endAngle);
+
+			Point textStart = getTextPoint((Shape)getStart().getBoundingRect(),pt1.x,pt1.y,pt2.x,pt2.y);
+			Point textEnd = getTextPoint((Shape)getEnd().getBoundingRect(),pt1.x,pt1.y,pt2.x,pt2.y);
+			
+			supportFunctions.drawRotatedText(g2d,getTextStart(),textStart.x,textStart.y,startAngle);
+			supportFunctions.drawRotatedText(g2d,getTextEnd(),textEnd.x,textEnd.y,endAngle);
 
 			connectorPath = new GeneralPath();
 			connectorPath.moveTo(pt1.x,pt1.y);
 			connectorPath.lineTo(pt2.x,pt2.y);
 			g2d.draw(connectorPath);
 			
-			connectorStartSymbol.draw(g2d,pt1,startAngle);
-			connectorEndSymbol.draw(g2d,pt2,endAngle);
+			connectorStartSymbol.draw(g2d,textStart,startAngle);
+			connectorEndSymbol.draw(g2d,textEnd,endAngle);
 		}
 		public int getLayer() {return connectorLayer;}
 		public void setTextStart(String s) {connectorTextStart = s;}
