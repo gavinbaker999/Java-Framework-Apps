@@ -983,6 +983,24 @@ public class supportFunctions extends Component {
 		
 		return -1;
 	}
+	public static void setAttributeWithXPath(org.w3c.dom.Document xmlDocument,String xPathExpr,String attrib,String value) {
+		NodeList n = executeXPathExpr(xmlDocument,xPathExpr);
+		if (n.getLength() > 0) {
+			org.w3c.dom.Element e = (org.w3c.dom.Element)n.item(0);
+			e.setAttribute(attrib,value);
+			//getXmlDataFile().saveXMLDataFile();
+		}
+	}
+	public static String getAttributeWithXPath(org.w3c.dom.Document xmlDocument,String xPathExpr,String attrib) {
+		String data = "";
+		
+		NodeList n = executeXPathExpr(xmlDocument,xPathExpr);
+		if (n.getLength() > 0) {
+			org.w3c.dom.Element e = (org.w3c.dom.Element)n.item(0);
+			data = e.getAttribute(attrib);
+		}
+		return data;
+	}
 	public static NodeList executeXPathExpr(org.w3c.dom.Document xmlDocument,String xPathExpr) {
 		try {
 			XPath xPath =  XPathFactory.newInstance().newXPath();

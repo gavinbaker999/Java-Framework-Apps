@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 25-June-2020 03:29 PM Build Number: 33@@@";
+	public		static final String		buildDate = "@@@Build Date: 22-July-2020 03:32 PM Build Number: 35@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -5301,6 +5301,15 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				if (r.regExpMatch(line,umlDiagram.getUMLCallingTree().getVarAssignRegExp())) {
 					String[] tmp = r.getFoundGroupsArray();	
 					umlDiagram.getUMLCallingTree().addCallingTreeNode("varassign",tmp[0],initalValue);
+				}
+				
+				NodeList nl = umlDiagram.getUMLCallingTree().getLangElementNodeList();
+				for (int i=0;i<nl.getLength();i++) {
+					org.w3c.dom.Element e =
+						(org.w3c.dom.Element)nl.item(i);
+					//if (r.regExpMatch(line,(String)v.elementAt(i))) {
+					//	String[] tmp1 = r.getFoundGroupsArray();
+					//}
 				}
 				
 				String tmp = umlDiagram.getUMLCallingTree().getLoopingRegExp();

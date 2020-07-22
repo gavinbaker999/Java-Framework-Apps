@@ -184,6 +184,12 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 			
 			return (String[])null;			
 		}
+		public NodeList getLangElementNodeList() {
+			NodeList n = supportFunctions.executeXPathExpr(getXmlDataFile().getXMLDocument(),
+				"/callingtree/languageblock[@lang='" + currentLanguageBlock + "']/langelements/element");
+
+			return n;
+		}
 		public String getVarDefRegExp() {
 			return getAttributeWithXPath("/callingtree/languageblock[@lang='" + currentLanguageBlock + "']/vardef","data");
 		}
@@ -219,13 +225,11 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 			return node;
 		}
 		public void startDefine(String type,String name) {
-			DefaultMutableTreeNode node = null;
-			if (type.equals("pushscopeclass")) {node = addCallingTreeNode("class",name,"");}			
-			if (type.equals("pushscopeclasstemplate")) {node = addCallingTreeNode("classtemplate",name,"");}			
-			if (type.equals("pushscopeinterface")) {node = addCallingTreeNode("interface",name,"");}			
-			if (type.equals("pushscopefunc")) {node = addCallingTreeNode("function",name,"");}			
-			if (type.equals("pushscopefuncps")) {node = addCallingTreeNode("function",name,"");}
-			if (!type.equals("pushscopefuncps")) {currentNode = node;}
+			if (type.equals("pushscopeclass")) {currentNode = addCallingTreeNode("class",name,"");}			
+			if (type.equals("pushscopeclasstemplate")) {currentNode = addCallingTreeNode("classtemplate",name,"");}			
+			if (type.equals("pushscopeinterface")) {currentNode = addCallingTreeNode("interface",name,"");}			
+			if (type.equals("pushscopefunc")) {currentNode = addCallingTreeNode("function",name,"");}			
+			if (type.equals("pushscopefuncps")) {addCallingTreeNode("function",name,"");} // note here we DO NOT change currentNode here
 		}
 		public void endDefine(String type) {
 			currentNode = (DefaultMutableTreeNode) currentNode.getParent();

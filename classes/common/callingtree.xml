@@ -15,6 +15,9 @@
 		</varassign>
 		<funccalls data='([a-zA-Z0-9_\.]+)\s*\((.*)\)'>
         </funccalls>
+        <langelements>
+            <element keyword="..." regexp="..." data1="..." data2="..."/>
+        </langelements>
     </languageblock>
     <currentblock lang='java'>
     </currentblock>

@@ -9,7 +9,6 @@ compileehsjars:
     [javac] C:\Users\Gavin\eclipse-workspace\build.xml:157: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
     [javac] Compiling 1 source file to C:\Users\Gavin\eclipse-workspace\ehscontrols\bin
     [javac] C:\Users\Gavin\eclipse-workspace\build.xml:164: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
-    [javac] Compiling 1 source file to C:\Users\Gavin\eclipse-workspace\ehsgraphicalcanvas\bin
 
 generateehsjars:
    [delete] Deleting: C:\Users\Gavin\eclipse-workspace\classes\ehscomplier.jar

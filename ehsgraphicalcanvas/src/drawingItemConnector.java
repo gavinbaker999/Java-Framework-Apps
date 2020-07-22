@@ -114,6 +114,7 @@ public class drawingItemConnector  extends Component {
 		private connSymbol connectorEndSymbol;
 		private	int		connectorLayer;
 		private GeneralPath connectorPath;
+		private boolean bRotatedTextLabels;
 	
 		public drawingItemConnector(drawingItem start,drawingItem end,String textStart,String textEnd,int symStart,int symEnd,String id,int layer) {
 			connectorStart = start;
@@ -124,6 +125,7 @@ public class drawingItemConnector  extends Component {
 			connectorStartSymbol = graphicalcanvasFunctions.symIDAsInt(symStart);
 			connectorEndSymbol = graphicalcanvasFunctions.symIDAsInt(symEnd);
 			connectorLayer = layer;
+			bRotatedTextLabels = true;
 		}
 		public drawingItemConnector(drawingItem start,drawingItem end,String textStart,String textEnd,String id) {
 			connectorStart = start;
@@ -133,6 +135,7 @@ public class drawingItemConnector  extends Component {
 			connectorID = id;
 			connectorStartSymbol = connSymbol.NONE;
 			connectorEndSymbol = connSymbol.NONE;
+			bRotatedTextLabels = true;
 		}
 		public String getID() {return connectorID;}
 		public void setID(String s) {connectorID = s;}
@@ -161,8 +164,13 @@ public class drawingItemConnector  extends Component {
 			Point textStart = getTextPoint((Shape)getStart().getBoundingRect(),pt1.x,pt1.y,pt2.x,pt2.y);
 			Point textEnd = getTextPoint((Shape)getEnd().getBoundingRect(),pt1.x,pt1.y,pt2.x,pt2.y);
 			
-			supportFunctions.drawRotatedText(g2d,getTextStart(),textStart.x,textStart.y,startAngle);
-			supportFunctions.drawRotatedText(g2d,getTextEnd(),textEnd.x,textEnd.y,endAngle);
+			if (getRotatedTextLabels()) {
+				supportFunctions.drawRotatedText(g2d,getTextStart(),textStart.x,textStart.y,startAngle);
+				supportFunctions.drawRotatedText(g2d,getTextEnd(),textEnd.x,textEnd.y,endAngle);
+			} else {
+				g2d.drawString(getTextStart(),textStart.x,textStart.y);
+				g2d.drawString(getTextEnd(),textEnd.x,textEnd.y);				
+			}
 
 			connectorPath = new GeneralPath();
 			connectorPath.moveTo(pt1.x,pt1.y);
@@ -183,4 +191,6 @@ public class drawingItemConnector  extends Component {
 		public connSymbol getEndSymbol() {return connectorEndSymbol;}
 		public void setStartSymbol(connSymbol ci) {connectorStartSymbol = ci;}
 		public void setEndSymbol(connSymbol ci) {connectorEndSymbol = ci;}
+		public void setRotatedTextLabels(boolean b) {bRotatedTextLabels = b;}
+		public boolean getRotatedTextLabels() {return bRotatedTextLabels;}
 	}
