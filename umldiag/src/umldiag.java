@@ -3508,12 +3508,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				org.w3c.dom.Element e = (org.w3c.dom.Element)n.item(i);
 				umlDiagram.setSequenceDiagramTitle(e.getAttribute("title"));
 			}
-			n = supportFunctions.executeXPathExpr(umlDiagram.getSequenceDocument(),"/umlstate/state");
-			for (int i=0;i<n.getLength();i++) {
-				org.w3c.dom.Element e = (org.w3c.dom.Element)n.item(i);
-				getDrawingCanvas().addDrawingItem(e.getAttribute("name"),dcTypeUMLState,0,0,e.getAttribute("name"),e.getAttribute("description"),
-						e.getAttribute("type"),e.getAttribute("conn")+":"+e.getAttribute("conntype"),false,Color.black);
-			}						
 		}
 		public void processSequenceCordData(Vector drawingItems) {			
 			for (int i=0;i<drawingItems.size();i++) {
@@ -3526,12 +3520,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				org.w3c.dom.Element e = (org.w3c.dom.Element)n.item(i);
 				umlDiagram.setSequenceDiagramTitle(e.getAttribute("title"));
 			}
-			n = supportFunctions.executeXPathExpr(umlDiagram.getSequenceDocument(),"/umlsequence/sequence");
-			for (int i=0;i<n.getLength();i++) {
-				org.w3c.dom.Element e = (org.w3c.dom.Element)n.item(i);
-				getDrawingCanvas().addDrawingItem(e.getAttribute("name"),dcTypeUMLSequence,0,0,e.getAttribute("name"),e.getAttribute("description"),
-						e.getAttribute("type"),e.getAttribute("conn")+":"+e.getAttribute("conntype"),false,Color.black);
-			}			
 		}
 		public void processUseCaseCordData(Vector drawingItems) {
 			int margin = 30;
@@ -4904,6 +4892,8 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						for (int i=0;i<funcCalls.length;i=i+2) {
 							if (tmp.indexOf("new ") == -1) {
 								umlDiagram.getUMLCallingTree().addCallingTreeNode("funccall",funcCalls[i],funcCalls[i+1]);						
+							} else {
+								umlDiagram.getUMLCallingTree().addCallingTreeNode("newvar",funcCalls[i],funcCalls[i+1]);
 							}
 						}
 					}
@@ -5320,7 +5310,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						String id = "loopstart," + String.valueOf(uniqueID++);
 						callTreeIDs.push(id);
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(loopStart,
-								id,"");
+								id,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
 					}
 				}
 				
@@ -5334,7 +5324,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						String id = key + "," + String.valueOf(uniqueID++);
 						callTreeIDs.push(id);
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
-								id,"");
+								id,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
 					}
 				}
 				

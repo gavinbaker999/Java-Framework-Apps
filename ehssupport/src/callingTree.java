@@ -317,10 +317,11 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 			if (node.isLeaf()) {
 				DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)node.getParent();
 				if (node.getRoot() != parentNode) {
-					// node text is in the form key:entry
+					// node text is in the form key:entry:data apart from the root node which is just the treename
 					Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
 					String key = (String)v1.elementAt(0);
 					String entry = (String)v1.elementAt(1);
+					String data = (String)v1.elementAt(2);
 				} else {
 					//TRACE("callTreeNodeClicked:Symbol type got no entries",4);
 				}
@@ -328,8 +329,42 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 				//TRACE("callTreeNodeClicked:Not clicked on a leaf node",4);
 			}
 		}
+		public DefaultMutableTreeNode getStartingNodeByKey(DefaultMutableTreeNode node1,String key1,String entry1) {
+			for (Enumeration e = node1.preorderEnumeration(); e.hasMoreElements();) {
+			    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+				// node text is in the form key:entry:data apart from the root node which is just the treename
+				Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
+				String key = (String)v1.elementAt(0);
+				String entry = (String)v1.elementAt(1);
+				String data = (String)v1.elementAt(2);
+
+				if (key1.equals(key) && entry1.equals(entry)) {
+					return node;
+				}
+			}	
+
+			return (DefaultMutableTreeNode)null;
+		}
+		public String[] getNodesByKey(DefaultMutableTreeNode node1,String key1) {
+		    ArrayList<String> 				data1 = new ArrayList<String>();
+
+			for (Enumeration e = node1.preorderEnumeration(); e.hasMoreElements();) {
+			    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+				// node text is in the form key:entry:data apart from the root node which is just the treename
+				Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
+				String key = (String)v1.elementAt(0);
+				String entry = (String)v1.elementAt(1);
+				String data = (String)v1.elementAt(2);
+
+				if (key1.equals(key)) {
+					data1.add(key);
+				}
+			}
+
+			return (String[])data1.toArray();
+		}
 		public String[] getCallingSequence(DefaultMutableTreeNode startNode,String text) {
-		    ArrayList<String> 				data = new ArrayList<String>();
+		    ArrayList<String> 				data1 = new ArrayList<String>();
 		    DefaultMutableTreeNode			foundNode = null;
 
 			// other enumerations: preorderEnumeration, postorderEnumeration, depthFirstEnumeration and breadthFirstEnumeration
@@ -344,35 +379,37 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 				for (Enumeration e = foundNode.preorderEnumeration(); e.hasMoreElements();) {
 				    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
 					if (!node.isLeaf()) { // inner class or interface or function defined
-						data.add("+" + node.toString());
+						data1.add("+" + node.toString());
 					} else {
-						// node text is in the form key:entry
+						// node text is in the form key:entry:data
 						//Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
 						//String key = (String)v1.elementAt(0);
-						//String entry = (String)v1.elementAt(1);	
-						data.add(node.toString());
+						//String entry = (String)v1.elementAt(1);
+						//String data = (String)v1.elementAt(2);
+						data1.add(node.toString());
 					}			    	
 			    }
 			}
 			
-			return (String[])data.toArray();
+			return (String[])data1.toArray();
 		}
 		public String[] getCallingReferences(DefaultMutableTreeNode startNode,String text) {
-		    ArrayList<String> 				data = new ArrayList<String>();
+		    ArrayList<String> 				data1 = new ArrayList<String>();
  			
 			// other enumerations: preorderEnumeration, postorderEnumeration, depthFirstEnumeration and breadthFirstEnumeration
 			for (Enumeration e = root.preorderEnumeration(); e.hasMoreElements();) {
 			    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
 			    if (text.equals(node.toString())) {
 			    	DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)node.getParent();
-					// node text is in the form key:entry
+					// node text is in the form key:entry:data
 					//Vector v1 = supportFunctions.splitIntoTokens(parentNode.toString(),":");
 					//String key = (String)v1.elementAt(0);
 					//String entry = (String)v1.elementAt(1);	
-					if (parentNode != null) {data.add(parentNode.toString());}
+					//String data = (String)v1.elementAt(2);
+					if (parentNode != null) {data1.add(parentNode.toString());}
 			    }
 			}
 			
-			return (String[])data.toArray();
+			return (String[])data1.toArray();
 		}
 	}
