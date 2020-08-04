@@ -5307,10 +5307,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				for (int i=0;i<v.size();i++) {
 					if (r.regExpMatch(line,(String)v.elementAt(i))) {
 						String[] tmp1 = r.getFoundGroupsArray();
-						String id = "loopstart," + String.valueOf(uniqueID++);
-						callTreeIDs.push(id);
+						String entry = String.valueOf(uniqueID++);
+						callTreeIDs.push(loopStart + "," + entry);
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(loopStart,
-								id,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
+								entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
 					}
 				}
 				
@@ -5321,10 +5321,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						String key = branchStart;
 						if (line.indexOf("else") != -1) {key = branchElse;}
 						String[] tmp1 = r.getFoundGroupsArray();
-						String id = key + "," + String.valueOf(uniqueID++);
-						callTreeIDs.push(id);
+						String entry = String.valueOf(uniqueID++);
+						callTreeIDs.push(key + "," + entry);
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
-								id,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
+								entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
 					}
 				}
 				
@@ -5336,7 +5336,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					String text = (String)v1.elementAt(0);
 					if(text.startsWith("branch")) {key = branchEnd;}
 					umlDiagram.getUMLCallingTree().addCallingTreeNode(
-							key,(String)v1.elementAt(1),"");					
+							key,(String)v1.elementAt(1),String.valueOf(mainTab.compilier.getLineNumber()));					
 				}
 			}			
 		}
