@@ -12,5 +12,5 @@ UML Work Bench Readme
 5) { for a function, class or interface must be end the end of a line,
    or on the next line on its own.
 
-(c) 2008-2019 End House Software
+(c) 2008-2020 End House Software
 

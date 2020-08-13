@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <callingtreedata>
-	<module data="test">
-	<lang="java">
-	<date data="01/02/18">
-	<time data="15:55">
+	<module data="test"/>
+	<language lang="java"/>
+	<date data="01/02/18"/>
+	<time data="15:55"/>
 		<test>
 			<function entry="main" data="-">
 				<classcreate entry="one" data="-"/>

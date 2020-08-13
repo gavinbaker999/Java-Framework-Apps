@@ -22,8 +22,13 @@
 	
 	
 	
-		<function scope="Mtest::Cone" access="public" returntype="void" name="func1" parameters="" />
+	
+	
+	
+	
 	</class>
+	<function scope="Mtest" access="public" returntype="void" name="func1" parameters="" />
+
 	<class scope="Mtest" access="public" name="two"  >
 		<function scope="Mtest::Ctwo" access="public" returntype="void" name="func2" parameters="" />
 		<function scope="Mtest::Ctwo" access="public" returntype="void" name="func3" parameters="" />

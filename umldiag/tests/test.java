@@ -20,6 +20,12 @@ public class one extends ClosableFrame {
 		int var56;
 		var1 = 6;
 		var2 = (two)var3.elementAt(0);
+
+		if (var1 == 6) {
+			var56 = 1;
+		} else {
+			var56 = 0;
+		}
 	}
 	public void func1() {;}
 }

@@ -1,5 +1,19 @@
 <?xml version='1.0'?>
 <ConfigurationSettings>
-    <totallines value='35'>
+    <totallines value='48'>
     </totallines>
+    <totalblanklines value='18'>
+    </totalblanklines>
+    <totalcommentlines value='0'>
+    </totalcommentlines>
+    <totalcodelines value='30'>
+    </totalcodelines>
+    <totaltemplates value='1'>
+    </totaltemplates>
+    <totalclasses value='4'>
+    </totalclasses>
+    <totalinterfaces value='0'>
+    </totalinterfaces>
+    <totalenums value='0'>
+    </totalenums>
 </ConfigurationSettings>

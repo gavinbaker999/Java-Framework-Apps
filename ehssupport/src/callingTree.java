@@ -226,7 +226,11 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 		}
 		public void startDefine(String type,String name) {
 			if (type.equals("pushscopeclass")) {currentNode = addCallingTreeNode("class",name,"");}			
-			if (type.equals("pushscopeclasstemplate")) {currentNode = addCallingTreeNode("classtemplate",name,"");}			
+			if (type.equals("pushscopeclasstemplate")) {
+				name = name.replace("<","&lt");
+				name = name.replace(">","&gt");
+				currentNode = addCallingTreeNode("classtemplate",name,"");
+			}			
 			if (type.equals("pushscopeinterface")) {currentNode = addCallingTreeNode("interface",name,"");}			
 			if (type.equals("pushscopefunc")) {currentNode = addCallingTreeNode("function",name,"");}			
 			if (type.equals("pushscopefuncps")) {addCallingTreeNode("function",name,"");} // note here we DO NOT change currentNode here
@@ -252,10 +256,10 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 				dataFile.saveFile("<?xml version=\"1.0\"?>"); // saveFile used to remove any existing file
 				dataFile.appendFile("\n<callingtreedata>");
 
-				dataFile.appendFile("\n\t<module data=\"" + supportFunctions.getFilenameNoExt(treeName) + "\">");
-				dataFile.appendFile("\n\t<lang=\"" + currentLanguageBlock + "\">");
-				dataFile.appendFile("\n\t<date data=\"" + supportFunctions.currentShortDate() + "\">");
-				dataFile.appendFile("\n\t<time data=\"" +supportFunctions.currentShortTime() + "\">");
+				dataFile.appendFile("\n\t<module data=\"" + supportFunctions.getFilenameNoExt(treeName) + "\"/>");
+				dataFile.appendFile("\n\t<language lang=\"" + currentLanguageBlock + "\"/>");
+				dataFile.appendFile("\n\t<date data=\"" + supportFunctions.currentShortDate() + "\"/>");
+				dataFile.appendFile("\n\t<time data=\"" +supportFunctions.currentShortTime() + "\"/>");
 				
 				
 				// other enumerations: preorderEnumeration, postorderEnumeration, depthFirstEnumeration and breadthFirstEnumeration

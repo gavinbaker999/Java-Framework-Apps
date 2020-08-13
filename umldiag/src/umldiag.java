@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 22-July-2020 03:32 PM Build Number: 35@@@";
+	public		static final String		buildDate = "@@@Build Date: 13-August-2020 03:38 PM Build Number: 36@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -4798,6 +4798,10 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	public String processFunctionDefinations(String line) {
 		// make sure every function definition (including the constructor)
 		// has an access specifier and a return type (default: public void)
+
+		// we don't want if(condition), for(condition) or while(condition) to be treated as a function defination!!!
+		if (line.indexOf("if") != -1 || line.indexOf("for") != -1 || line.indexOf("while") != -1) {return line;}
+
 		ehsRegExp r = new ehsRegExp();
 		if (!r.regExpMatch(line, "\\((.*)\\)\\s*\\{")) {return line;}
 		TRACE("processFunctionDefinations (before):"+line,4);
@@ -5233,6 +5237,12 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					supportFunctions.displayMessageDialog(null,"preCompleteLine {");
 				}
 			}
+
+			/*
+			index = line.indexOf("if");
+			if (index != -1) {
+
+			}
 			index = line.indexOf("else");
 			if (index != -1) {
 				addExtraLine(line.substring(index));
@@ -5247,6 +5257,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				updateSourceFileLine(line);
 				supportFunctions.displayMessageDialog(null,"preCompleteLine while");
 			}
+			*/
 		}
 		
 		protected	static final String branchStart = "branchstart";
