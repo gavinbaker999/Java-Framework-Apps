@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 14-August-2020 10:06 PM Build Number: 46@@@";
+	public		static final String		buildDate = "@@@Build Date: 14-August-2020 11:49 PM Build Number: 47@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -5292,14 +5292,18 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					//}
 				}
 
-				String[] keys = {"if",branchStart,"for",loopStart,"while",loopStart};
+				String[] keys = {"if",branchStart,"for",loopStart,"while",loopStart,"do",loopStart};
 				for (int i=0;i<keys.length;i=i+2) {
 					index = line.indexOf(keys[i]);
 					if(index != -1) {
 						String key = keys[i+1];
-						r.regExpMatch(line,keys[i] + "\\s*\\((.*)\\)");
-						String[] tmp1 = r.getFoundGroupsArray();
+						String[] tmp1 = {"true"}; // default condition for the do statment
 						String entry = String.valueOf(uniqueID++);
+						if (keys[i].equals("do")) {
+						} else {
+							r.regExpMatch(line,keys[i] + "\\s*\\((.*)\\)");
+							tmp1 = r.getFoundGroupsArray();
+						}
 						supportFunctions.displayMessageDialog(null,keys[i] + ":" + key + ":" + tmp1[0]);
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
 							entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
