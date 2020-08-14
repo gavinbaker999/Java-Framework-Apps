@@ -5,10 +5,6 @@
         </entrypoints>
         <eventhandlers data='actionPerformed'>
         </eventhandlers>
-        <looping data=''>
-        </looping>
-        <branching data=''>
-        </branching>
         <vardef data='([a-zA-Z0-9_\[\]]+)\s+([a-zA-Z0-9\s,]+)[=;]'>
         </vardef>
 		<varassign data='^\s*([a-zA-Z0-9_\[\]]+)\s*='>

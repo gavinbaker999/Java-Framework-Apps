@@ -23,6 +23,6 @@
 			</class>
 			<class entry="three" data="-"/>
 			<class entry="four" data="-"/>
-			<classtemplate entry="Node<T>" data="-"/>
+			<classtemplate entry="Node&ltT&gt" data="-"/>
 		</test>
 </callingtreedata>

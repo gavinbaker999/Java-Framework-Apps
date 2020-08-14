@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 13-August-2020 03:38 PM Build Number: 36@@@";
+	public		static final String		buildDate = "@@@Build Date: 14-August-2020 05:05 PM Build Number: 44@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -5237,27 +5237,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					supportFunctions.displayMessageDialog(null,"preCompleteLine {");
 				}
 			}
-
-			/*
-			index = line.indexOf("if");
-			if (index != -1) {
-
-			}
-			index = line.indexOf("else");
-			if (index != -1) {
-				addExtraLine(line.substring(index));
-				line = line.substring(0,index);
-				updateSourceFileLine(line);
-				supportFunctions.displayMessageDialog(null,"preCompleteLine else");
-			}
-			index = line.indexOf("while");
-			if (index != -1) {
-				addExtraLine(line.substring(index));
-				line = line.substring(0,index);
-				updateSourceFileLine(line);
-				supportFunctions.displayMessageDialog(null,"preCompleteLine while");
-			}
-			*/
 		}
 		
 		protected	static final String branchStart = "branchstart";
@@ -5312,37 +5291,24 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					//	String[] tmp1 = r.getFoundGroupsArray();
 					//}
 				}
-				
-				String tmp = umlDiagram.getUMLCallingTree().getLoopingRegExp();
-				Vector v = supportFunctions.splitIntoTokens(tmp,"::",false);
-				for (int i=0;i<v.size();i++) {
-					if (r.regExpMatch(line,(String)v.elementAt(i))) {
-						String[] tmp1 = r.getFoundGroupsArray();
-						String entry = String.valueOf(uniqueID++);
-						callTreeIDs.push(loopStart + "," + entry);
-						umlDiagram.getUMLCallingTree().addCallingTreeNode(loopStart,
-								entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
-					}
-				}
-				
-				tmp = umlDiagram.getUMLCallingTree().getBranchingRegExp();
-				v = supportFunctions.splitIntoTokens(tmp,"::",false);
-				for (int i=0;i<v.size();i++) {
-					if (r.regExpMatch(line,(String)v.elementAt(i))) {
-						String key = branchStart;
-						if (line.indexOf("else") != -1) {key = branchElse;}
-						String[] tmp1 = r.getFoundGroupsArray();
-						String entry = String.valueOf(uniqueID++);
-						callTreeIDs.push(key + "," + entry);
-						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
-								entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));
-					}
+				index = line.indexOf("if");
+				if(index != -1) {
+					String key = loopStart;
+					r.regExpMatch(line,"if\\s*\\((.*)\\)");
+					String[] tmp1 = r.getFoundGroupsArray();
+					String entry = String.valueOf(uniqueID++);
+					supportFunctions.displayMessageDialog(null,"if1:" + tmp1[0]);
+					callTreeIDs.push(key + "," + entry);
+					umlDiagram.getUMLCallingTree().addCallingTreeNode(loopStart,
+							entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
 				}
 				
 				// next two checks must be done following the checks for
 				// start of looping and branching source code lines
 				if (line.indexOf("}") != -1 && callTreeIDs.size() != 0) {
-					Vector v1 = supportFunctions.splitIntoTokens((String)callTreeIDs.pop(),",");
+					String s = (String)callTreeIDs.pop();
+					supportFunctions.displayMessageDialog(null,"if2:" + s);
+					Vector v1 = supportFunctions.splitIntoTokens(s,",");
 					String key = loopEnd;
 					String text = (String)v1.elementAt(0);
 					if(text.startsWith("branch")) {key = branchEnd;}

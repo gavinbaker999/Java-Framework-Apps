@@ -332,15 +332,18 @@ public void warningMsg(int line,String msg) {
 					//setLineNumber(line++);
 					setCompilerStatusMsg("Compiling Pass " + String.valueOf(getPassNumber()) + " Line " + String.valueOf(getLineNumber()+1) + " (" + moduleName + ")");
 					if (getPassNumber() == 1) {firstPassLine(getLineNumber(),sourceFileLine);}
-					if (sourceFileLine.charAt(0) == '&') {
-						writeDirectToOutput(sourceFileLine.substring(1));
-					} else {
-						if (!syntaxCheck(sourceFileLine)) {
-							msgD.destory();
-							msgD.dispose();
-							msgD = null;
-							return false;
+					if (sourceFileLine.length() != 0) {
+						if (sourceFileLine.charAt(0) == '&') {
+							writeDirectToOutput(sourceFileLine.substring(1));
+						} else {
+							if (!syntaxCheck(sourceFileLine)) {
+								msgD.destory();
+								msgD.dispose();
+								msgD = null;
+								return false;
+							}
 						}
+	
 					}
 				}
 			} while (sourceFileLine != null);

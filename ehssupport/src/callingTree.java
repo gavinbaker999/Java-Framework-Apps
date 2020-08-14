@@ -196,12 +196,6 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 		public String getVarAssignRegExp() {
 			return getAttributeWithXPath("/callingtree/languageblock[@lang='" + currentLanguageBlock + "']/varassign","data");
 		}
-		public String getLoopingRegExp() {
-			return getAttributeWithXPath("/callingtree/languageblock[@lang='" + currentLanguageBlock + "']/looping","data");
-		}
-		public String getBranchingRegExp() {
-			return getAttributeWithXPath("/callingtree/languageblock[@lang='" + currentLanguageBlock + "']/branching","data");
-		}
 		public org.w3c.dom.Element createNodePerformed(org.w3c.dom.Element e) {
 			return e;
 		}
