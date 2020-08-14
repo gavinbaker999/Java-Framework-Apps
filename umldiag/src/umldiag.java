@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 14-August-2020 05:05 PM Build Number: 44@@@";
+	public		static final String		buildDate = "@@@Build Date: 14-August-2020 10:06 PM Build Number: 46@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -5291,16 +5291,25 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					//	String[] tmp1 = r.getFoundGroupsArray();
 					//}
 				}
-				index = line.indexOf("if");
-				if(index != -1) {
-					String key = loopStart;
-					r.regExpMatch(line,"if\\s*\\((.*)\\)");
-					String[] tmp1 = r.getFoundGroupsArray();
-					String entry = String.valueOf(uniqueID++);
-					supportFunctions.displayMessageDialog(null,"if1:" + tmp1[0]);
-					callTreeIDs.push(key + "," + entry);
-					umlDiagram.getUMLCallingTree().addCallingTreeNode(loopStart,
+
+				String[] keys = {"if",branchStart,"for",loopStart,"while",loopStart};
+				for (int i=0;i<keys.length;i=i+2) {
+					index = line.indexOf(keys[i]);
+					if(index != -1) {
+						String key = keys[i+1];
+						r.regExpMatch(line,keys[i] + "\\s*\\((.*)\\)");
+						String[] tmp1 = r.getFoundGroupsArray();
+						String entry = String.valueOf(uniqueID++);
+						supportFunctions.displayMessageDialog(null,keys[i] + ":" + key + ":" + tmp1[0]);
+						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
 							entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
+						if (keys[i].equals("while")) {
+							umlDiagram.getUMLCallingTree().addCallingTreeNode(loopEnd,
+								entry,String.valueOf(mainTab.compilier.getLineNumber()));				
+						} else {
+							callTreeIDs.push(key + "," + entry);
+						}
+					}
 				}
 				
 				// next two checks must be done following the checks for
