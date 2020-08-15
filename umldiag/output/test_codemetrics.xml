@@ -1,12 +1,12 @@
 <?xml version='1.0'?>
 <ConfigurationSettings>
-    <totallines value='48'>
+    <totallines value='51'>
     </totallines>
     <totalblanklines value='18'>
     </totalblanklines>
     <totalcommentlines value='0'>
     </totalcommentlines>
-    <totalcodelines value='30'>
+    <totalcodelines value='33'>
     </totalcodelines>
     <totaltemplates value='1'>
     </totaltemplates>

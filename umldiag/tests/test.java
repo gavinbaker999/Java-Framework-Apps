@@ -23,6 +23,9 @@ public class one extends ClosableFrame {
 
 		if (var1 == 6) {
 			var56 = 1;
+			do {
+				var56 = 4;
+			} while(var56 == 1);
 		} else {
 			var56 = 0;
 		}

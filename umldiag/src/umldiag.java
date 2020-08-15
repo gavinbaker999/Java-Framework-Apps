@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 14-August-2020 11:49 PM Build Number: 47@@@";
+	public		static final String		buildDate = "@@@Build Date: 15-August-2020 06:16 PM Build Number: 48@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -4832,6 +4832,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		public		String lasttemplatename = "";
 		public		int numClasses,numInterfaces,numEnums;
 		public		int uniqueID = 0;
+		public		String lastIFID = "";
 
 		public UMLCompiler(String transTableName,String reservedWords) {
 			super(transTableName,systemUserReg.getAppName());
@@ -5242,6 +5243,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		protected	static final String branchStart = "branchstart";
 		protected	static final String branchEnd = "branchend";
 		protected	static final String branchElse = "branchelse";
+		protected	static final String bnranchElsif = "branchelsif";
 		protected	static final String loopStart = "loopstart";
 		protected	static final String loopEnd = "loopend";
 		public void postCompleteLine(String line) {
@@ -5297,9 +5299,11 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					index = line.indexOf(keys[i]);
 					if(index != -1) {
 						String key = keys[i+1];
-						String[] tmp1 = {"true"}; // default condition for the do statment
+						String[] tmp1 = {"true"}; // default condition for the do and else statments
 						String entry = String.valueOf(uniqueID++);
-						if (keys[i].equals("do")) {
+						if (keys[i].equals("if")) {lastIFID = entry;}
+						if (keys[i].equals("do") || keys[i].equals("else")) {
+							if (keys[i].equals("else") || keys[i].equals("elsif")) {entry = lastIFID;}
 						} else {
 							r.regExpMatch(line,keys[i] + "\\s*\\((.*)\\)");
 							tmp1 = r.getFoundGroupsArray();
@@ -5318,15 +5322,19 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				
 				// next two checks must be done following the checks for
 				// start of looping and branching source code lines
-				if (line.indexOf("}") != -1 && callTreeIDs.size() != 0) {
-					String s = (String)callTreeIDs.pop();
-					supportFunctions.displayMessageDialog(null,"if2:" + s);
-					Vector v1 = supportFunctions.splitIntoTokens(s,",");
-					String key = loopEnd;
-					String text = (String)v1.elementAt(0);
-					if(text.startsWith("branch")) {key = branchEnd;}
-					umlDiagram.getUMLCallingTree().addCallingTreeNode(
-							key,(String)v1.elementAt(1),String.valueOf(mainTab.compilier.getLineNumber()));					
+				int closingBraceCount = supportFunctions.strCount(line,'}');
+				for (int i=0;i<closingBraceCount;i++) {
+					if (callTreeIDs.size() != 0) {
+						String s = (String)callTreeIDs.pop();
+						supportFunctions.displayMessageDialog(null,"if2:" + s);
+						Vector v1 = supportFunctions.splitIntoTokens(s,",");
+						String key = loopEnd;
+						String text = (String)v1.elementAt(0);
+						if(text.startsWith("branch")) {key = branchEnd;}
+						umlDiagram.getUMLCallingTree().addCallingTreeNode(
+								key,(String)v1.elementAt(1),String.valueOf(mainTab.compilier.getLineNumber()));					
+					}
+	
 				}
 			}			
 		}
