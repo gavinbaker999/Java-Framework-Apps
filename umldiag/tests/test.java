@@ -29,6 +29,9 @@ public class one extends ClosableFrame {
 		} else {
 			var56 = 0;
 		}
+		while(var1 == 6) {
+			var56 = 1;
+		}
 	}
 	public void func1() {;}
 }
