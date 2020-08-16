@@ -47,6 +47,10 @@ Compile and build application JAR file (run from the application's base director
 	$ant -buildfile ..\build.xml compile -Dappname=umldiag -Dmainclass=umldiag -Dappdir=umldiag
 	$ant -buildfile ..\build.xml jar -Dappname=umldiag -Dmainclass=umldiag -Dappdir=umldiag
 
+or just,
+
+	$ant -buildfile ..\build.xml compile-jar -Dappname=umldiag -Dmainclass=umldiag -Dappdir=umldiag
+
 To run the application,
 
 	$java -jar umldiag.jar <args>

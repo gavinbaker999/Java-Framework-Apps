@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 15-August-2020 08:05 PM Build Number: 53@@@";
+	public		static final String		buildDate = "@@@Build Date: 16-August-2020 11:19 AM Build Number: 56@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -5295,6 +5295,11 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					//}
 				}
 
+				// the next check must be done first, expect in the case where
+				// the } character appears in the line after the keyword
+				boolean closingBraceCodeDone = true;
+				closingBraceCode(line);
+
 				String[] keys = {"if",branchStart,"for",loopStart,"while",loopStart,"do",loopStart,"else",branchStart,"elsif",branchStart};
 				for (int i=0;i<keys.length;i=i+2) {
 					index = line.indexOf(keys[i]);
@@ -5311,7 +5316,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 							tmp1 = r.getFoundGroupsArray();
 						}
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
-							entry,tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
+							entry,currentScope() + "::" + tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
 						if (keys[i].equals("while")) {
 							if (lastDOID.equals("")) { // while(cond) {} loop
 								callTreeIDs.push(key + "," + entry);
@@ -5327,24 +5332,26 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						supportFunctions.displayMessageDialog(null,entry + ":" + keys[i] + ":" + key + ":" + tmp1[0]);
 					}
 				}
-				
-				// next two checks must be done following the checks for
-				// start of looping and branching source code lines
-				int closingBraceCount = supportFunctions.strCount(line,'}');
-				for (int i=0;i<closingBraceCount;i++) {
-					if (callTreeIDs.size() != 0) {
-						String s = (String)callTreeIDs.pop();
-						Vector v1 = supportFunctions.splitIntoTokens(s,",");
-						String key = loopEnd;
-						String text = (String)v1.elementAt(0);
-						if(text.startsWith("branch")) {key = branchEnd;}
-						supportFunctions.displayMessageDialog(null,(String)v1.elementAt(1) + ":" + key);
-						umlDiagram.getUMLCallingTree().addCallingTreeNode(
-								key,(String)v1.elementAt(1),String.valueOf(mainTab.compilier.getLineNumber()));					
-					}
-	
-				}
+
+				if(!closingBraceCodeDone) {closingBraceCode(line);}
+
 			}			
+		}
+		public void closingBraceCode(String line) {
+			int closingBraceCount = supportFunctions.strCount(line,'}');
+			for (int i=0;i<closingBraceCount;i++) {
+				if (callTreeIDs.size() != 0) {
+					String s = (String)callTreeIDs.pop();
+					Vector v1 = supportFunctions.splitIntoTokens(s,",");
+					String key = loopEnd;
+					String text = (String)v1.elementAt(0);
+					if(text.startsWith("branch")) {key = branchEnd;}
+					supportFunctions.displayMessageDialog(null,(String)v1.elementAt(1) + ":" + key);
+					umlDiagram.getUMLCallingTree().addCallingTreeNode(
+							key,(String)v1.elementAt(1),String.valueOf(mainTab.compilier.getLineNumber()));					
+				}
+
+			}
 		}
 		public boolean completeLine(String line) {
 			line = line.trim();
