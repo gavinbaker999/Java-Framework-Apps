@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 16-August-2020 11:53 AM Build Number: 59@@@";
+	public		static final String		buildDate = "@@@Build Date: 16-August-2020 12:48 PM Build Number: 62@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -4832,8 +4832,6 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		public		String lasttemplatename = "";
 		public		int numClasses,numInterfaces,numEnums;
 		public		int uniqueID = 0;
-		public		String lastIFID = "";
-		public		String lastDOID = "";
 
 		public UMLCompiler(String transTableName,String reservedWords) {
 			super(transTableName,systemUserReg.getAppName());
@@ -5320,30 +5318,17 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					if(index != -1) {
 						String key = keys[i+1];
 						String[] tmp1 = {"true"}; // default condition for the do and else statments
-						String entry = String.valueOf(uniqueID++);
-						if (keys[i].equals("if")) {lastIFID = entry;}
-						if (keys[i].equals("do")) {lastDOID = entry;}
 						if (keys[i].equals("do") || keys[i].equals("else")) {
-							if (keys[i].equals("else") || keys[i].equals("elsif")) {entry = lastIFID;}
 						} else {
 							r.regExpMatch(line,keys[i] + "\\s*\\((.*)\\)");
 							tmp1 = r.getFoundGroupsArray();
 						}
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
-							entry,currentScope() + "::" + tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
-						if (keys[i].equals("while")) {
-							if (lastDOID.equals("")) { // while(cond) {} loop
-								callTreeIDs.push(key + "," + entry);
-							} else { // do {} while(cond) loop
-								entry = lastDOID;
-								umlDiagram.getUMLCallingTree().addCallingTreeNode(loopEnd,
-									entry,String.valueOf(mainTab.compilier.getLineNumber()));				
-								lastDOID = "";
-							}
-						} else {
-							callTreeIDs.push(key + "," + entry);
-						}
-						supportFunctions.displayMessageDialog(null,entry + ":" + keys[i] + ":" + key + ":" + tmp1[0]);
+							currentScope(),tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
+
+						callTreeIDs.push(key);
+						
+						supportFunctions.displayMessageDialog(null,keys[i] + ":" + key + ":" + tmp1[0]);
 					}
 				}
 
@@ -5356,13 +5341,11 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			for (int i=0;i<closingBraceCount;i++) {
 				if (callTreeIDs.size() != 0) {
 					String s = (String)callTreeIDs.pop();
-					Vector v1 = supportFunctions.splitIntoTokens(s,",");
 					String key = loopEnd;
-					String text = (String)v1.elementAt(0);
-					if(text.startsWith("branch")) {key = branchEnd;}
-					supportFunctions.displayMessageDialog(null,(String)v1.elementAt(1) + ":" + key);
+					if(s.startsWith("branch")) {key = branchEnd;}
+					supportFunctions.displayMessageDialog(null,key);
 					umlDiagram.getUMLCallingTree().addCallingTreeNode(
-							key,(String)v1.elementAt(1),String.valueOf(mainTab.compilier.getLineNumber()));					
+							key,currentScope(),String.valueOf(mainTab.compilier.getLineNumber()));					
 				}
 
 			}
