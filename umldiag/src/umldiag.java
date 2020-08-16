@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 16-August-2020 11:19 AM Build Number: 56@@@";
+	public		static final String		buildDate = "@@@Build Date: 16-August-2020 11:53 AM Build Number: 59@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -5244,7 +5244,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		protected	static final String branchStart = "branchstart";
 		protected	static final String branchEnd = "branchend";
 		protected	static final String branchElse = "branchelse";
-		protected	static final String bnranchElsif = "branchelsif";
+		protected	static final String branchElsif = "branchelsif";
 		protected	static final String loopStart = "loopstart";
 		protected	static final String loopEnd = "loopend";
 		public void postCompleteLine(String line) {
@@ -5297,10 +5297,24 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 
 				// the next check must be done first, expect in the case where
 				// the } character appears in the line after the keyword
-				boolean closingBraceCodeDone = true;
-				closingBraceCode(line);
+				String[] keys = {"if",branchStart,"for",loopStart,"while",loopStart,"do",loopStart,"else",branchElse,"elsif",branchElsif};
+				boolean closingBraceCodeDone = false;
+				boolean bFound = false;
+				if (line.indexOf("}") != -1) {
+					for (int i=0;i<keys.length;i=i+2) {
+						if (line.indexOf(keys[i]) != -1) {
+							if (line.indexOf(keys[i]) < line.indexOf("}")) {
+								bFound = true;
+								break;
+							}	
+						}
+					}
+					if (!bFound) {							
+						closingBraceCode(line);
+						closingBraceCodeDone = true;
+					}	
+				}
 
-				String[] keys = {"if",branchStart,"for",loopStart,"while",loopStart,"do",loopStart,"else",branchStart,"elsif",branchStart};
 				for (int i=0;i<keys.length;i=i+2) {
 					index = line.indexOf(keys[i]);
 					if(index != -1) {
