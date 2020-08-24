@@ -368,6 +368,11 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 			// other enumerations: preorderEnumeration, postorderEnumeration, depthFirstEnumeration and breadthFirstEnumeration
 			for (Enumeration e = root.preorderEnumeration(); e.hasMoreElements();) {
 			    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+				Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
+				String key = (String)v1.elementAt(0);
+				String entry = (String)v1.elementAt(1);
+				String data = (String)v1.elementAt(2);
+				
 			    if (text.equals(node.toString())) {
 			    	foundNode = node;
 			    }

@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 16-August-2020 12:48 PM Build Number: 62@@@";
+	public		static final String		buildDate = "@@@Build Date: 24-August-2020 04:24 PM Build Number: 72@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -3480,7 +3480,32 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 		}
 		public void generateSequenceXMLData() {
-			
+			String[] classNames = umlDiagram.getUMLCallingTree().getNodesByKey(
+				umlDiagram.getUMLCallingTree().getRoot(),"class");
+
+			/*
+			Vector v = getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence);
+			String sequenceConnTypes = "";
+			int ii = 0;
+			for (UMLConnectorType p : UMLConnectorType.values()) {
+				if (p.type() == dcTypeUMLSequence) {
+					if (ii != 0) {sequenceConnTypes = sequenceConnTypes + ",";ii++;}
+					//sequenceConnTypes = sequenceConnTypes + p.description();					
+					sequenceConnTypes = sequenceConnTypes + p;	// just p, so we can use valueOf with the text to get an enum instance				
+				}
+			}
+			String sequenceNames = notConnectedString;
+			for(int i=0;i<v.size();i++) {
+				UMLSequenceDrawingItem d = (UMLSequenceDrawingItem)v.elementAt(i);
+				sequenceNames = sequenceNames + "," + d.getUserDefinedName();
+			}
+			String[] titles = new String[]{"Name","Description","Type","Connection","Connection Type"};			
+			String[] defaults = new String[] {"","",getEnumValues(sequenceType.NONE),sequenceNames,sequenceConnTypes};
+			String[] data = supportFunctions.getDataAsDialog("Add UML Sequence",titles,defaults);
+			if (data != null) {
+				addSequence1(String name,String desc,String type,String conn,String conntype);
+			}
+			*/
 		}
 		public void generateStateXMLData() {
 			
@@ -5320,8 +5345,15 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						String[] tmp1 = {"true"}; // default condition for the do and else statments
 						if (keys[i].equals("do") || keys[i].equals("else")) {
 						} else {
-							r.regExpMatch(line,keys[i] + "\\s*\\((.*)\\)");
+							r.regExpMatch(line,keys[i] + "\\s*\\((.*)\\)\\s*(.*)");
 							tmp1 = r.getFoundGroupsArray();
+							if (keys[i].equals("if")) {
+								if (!tmp1[1].trim().startsWith("{")) { // deals with if statment where we have one line code not in braces
+									String newLine = line.replace(tmp1[1],"{" + tmp1[1] + "}"); 
+									supportFunctions.displayMessageDialog(null,"New Line:" + newLine);
+									updateSourceFileLine(newLine);
+								}
+							}
 						}
 						umlDiagram.getUMLCallingTree().addCallingTreeNode(key,
 							currentScope(),tmp1[0] + "::" + String.valueOf(mainTab.compilier.getLineNumber()));				
@@ -5329,6 +5361,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						callTreeIDs.push(key);
 						
 						supportFunctions.displayMessageDialog(null,keys[i] + ":" + key + ":" + tmp1[0]);
+						//supportFunctions.displayMessageDialog(null,completeScope() + ":" + currentScope());
 					}
 				}
 
@@ -5343,7 +5376,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 					String s = (String)callTreeIDs.pop();
 					String key = loopEnd;
 					if(s.startsWith("branch")) {key = branchEnd;}
-					supportFunctions.displayMessageDialog(null,key);
+					supportFunctions.displayMessageDialog(null,key + ":" + completeScope() + ":" + currentScope());
 					umlDiagram.getUMLCallingTree().addCallingTreeNode(
 							key,currentScope(),String.valueOf(mainTab.compilier.getLineNumber()));					
 				}
@@ -5355,26 +5388,19 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			
 			// an empty line is a complete line
 			if (line.length()==0) {return true;}
-			TRACE("completeLine:line:"+line,4);
-			
-			// if line contains 'class' or 'interface' must also contain a '{' character
-			if (line.indexOf("class")!=-1 || line.indexOf("interface")!=-1) {
-				if (line.indexOf("{")!=-1) {return true;} else {return false;}
-			}
-			
 			
 			ehsRegExp r = new ehsRegExp();
-			// if line is a function def must also contain a '{' character
-			if (r.regExpMatch(line,umlDiagram.getAccessRegExp()+"(\\w+)\\s+(\\w+)\\s*\\(")) {
-				if (line.indexOf("{")!=-1) {return true;} else {return false;}
+			// if line is a function defination or contains the class or interface keyword must 
+			// also contain a '{' character
+			if (r.regExpMatch(line,umlDiagram.getAccessRegExp()+"(\\w+)\\s+(\\w+)\\s*\\(") ||
+				line.indexOf("class")!=-1 || line.indexOf("interface")!=-1) {
+					if (line.indexOf("{")!=-1) {return true;} else {return false;}
 			}
 			
 			// if the last character on the line is a ';' or a '}' or a '{' then a complete line
-			if (line.charAt(line.length()-1)==';' || line.charAt(line.length()-1)=='}' || line.charAt(line.length()-1)=='{') {return true;}
-			//if (line.charAt(line.length()-1)==')') {return true;}
-			
-			
-			TRACE("completeLine:return false",4);
+			if (line.charAt(line.length()-1)==';' || line.charAt(line.length()-1)=='}' || 
+				line.charAt(line.length()-1)=='{') {return true;}
+
 			return false;
 		}
 		public String tasteNextToken(Vector lineTokens) {
