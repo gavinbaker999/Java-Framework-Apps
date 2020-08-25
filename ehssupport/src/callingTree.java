@@ -33,10 +33,10 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.sax.*;
 import javax.xml.transform.stream.*;
 import javax.xml.transform.OutputKeys.*;
-import javax.xml.ws.*;
+//import javax.xml.ws.*;
 import javax.xml.ws.handler.*;
-import javax.xml.ws.handler.soap.*;
-import javax.xml.soap.*;
+//import javax.xml.ws.handler.soap.*;
+//import javax.xml.soap.*;
 import javax.xml.namespace.QName;
 import javax.xml.ws.handler.Handler;
 import org.w3c.dom.*;
@@ -64,7 +64,7 @@ import javax.script.*;
 import javax.swing.filechooser.*;
 
 import javax.sound.sampled.*;
-import sun.audio.*;
+//import sun.audio.*;
 
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
@@ -343,13 +343,16 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 
 			return (DefaultMutableTreeNode)null;
 		}
-		public String[] getNodesByKey(DefaultMutableTreeNode node1,String key1) {
+		public ArrayList<String> getNodesByKey(DefaultMutableTreeNode node1,String key1) {
 		    ArrayList<String> 				data1 = new ArrayList<String>();
 
 			for (Enumeration e = node1.preorderEnumeration(); e.hasMoreElements();) {
 			    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
 				// node text is in the form key:entry:data apart from the root node which is just the treename
 				Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
+
+				if (v1.size() == 1) {continue;} // ignore the tree root node
+
 				String key = (String)v1.elementAt(0);
 				String entry = (String)v1.elementAt(1);
 				String data = (String)v1.elementAt(2);
@@ -359,60 +362,6 @@ public class callingTree implements TreeSelectionListener,ActionListener,xmlBase
 				}
 			}
 
-			return (String[])data1.toArray();
-		}
-		public String[] getCallingSequence(DefaultMutableTreeNode startNode,String text) {
-		    ArrayList<String> 				data1 = new ArrayList<String>();
-		    DefaultMutableTreeNode			foundNode = null;
-
-			// other enumerations: preorderEnumeration, postorderEnumeration, depthFirstEnumeration and breadthFirstEnumeration
-			for (Enumeration e = root.preorderEnumeration(); e.hasMoreElements();) {
-			    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
-				Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
-				String key = (String)v1.elementAt(0);
-				String entry = (String)v1.elementAt(1);
-				String data = (String)v1.elementAt(2);
-				
-			    if (text.equals(node.toString())) {
-			    	foundNode = node;
-			    }
-			}
-			
-			if (foundNode != null) {
-				for (Enumeration e = foundNode.preorderEnumeration(); e.hasMoreElements();) {
-				    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
-					if (!node.isLeaf()) { // inner class or interface or function defined
-						data1.add("+" + node.toString());
-					} else {
-						// node text is in the form key:entry:data
-						//Vector v1 = supportFunctions.splitIntoTokens(node.toString(),":");
-						//String key = (String)v1.elementAt(0);
-						//String entry = (String)v1.elementAt(1);
-						//String data = (String)v1.elementAt(2);
-						data1.add(node.toString());
-					}			    	
-			    }
-			}
-			
-			return (String[])data1.toArray();
-		}
-		public String[] getCallingReferences(DefaultMutableTreeNode startNode,String text) {
-		    ArrayList<String> 				data1 = new ArrayList<String>();
- 			
-			// other enumerations: preorderEnumeration, postorderEnumeration, depthFirstEnumeration and breadthFirstEnumeration
-			for (Enumeration e = root.preorderEnumeration(); e.hasMoreElements();) {
-			    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
-			    if (text.equals(node.toString())) {
-			    	DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)node.getParent();
-					// node text is in the form key:entry:data
-					//Vector v1 = supportFunctions.splitIntoTokens(parentNode.toString(),":");
-					//String key = (String)v1.elementAt(0);
-					//String entry = (String)v1.elementAt(1);	
-					//String data = (String)v1.elementAt(2);
-					if (parentNode != null) {data1.add(parentNode.toString());}
-			    }
-			}
-			
-			return (String[])data1.toArray();
+			return data1;
 		}
 	}

@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 24-August-2020 04:24 PM Build Number: 72@@@";
+	public		static final String		buildDate = "@@@Build Date: 24-August-2020 10:06 PM Build Number: 81@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -3480,7 +3480,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 		}
 		public void generateSequenceXMLData() {
-			String[] classNames = umlDiagram.getUMLCallingTree().getNodesByKey(
+			ArrayList<String> classNames = umlDiagram.getUMLCallingTree().getNodesByKey(
 				umlDiagram.getUMLCallingTree().getRoot(),"class");
 
 			/*
@@ -4849,7 +4849,8 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		private		Stack scopes = new Stack();
 		private 	Stack callTreeIDs = new Stack();
 		private		String entityName;
-		private		boolean	bInternalBlock,bClassBlock,bInterfaceBlock,bFuncBlock; 
+		private		boolean	bClassBlock,bInterfaceBlock,bFuncBlock; 
+		private 	int iInternalBlock = 0;
 		protected 	UMLCompilerTokens tokenizer;
 		protected 	String	compiledLine = "";
 		protected	int	id = 0;
@@ -4869,7 +4870,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			setEndMultiLineCommentString("*//");
 			scopes.clear();
 			callTreeIDs.clear();
-			bInternalBlock = false;
+			iInternalBlock = 0;
 			bClassBlock = false;
 			bInterfaceBlock = false;
 			bFuncBlock = false;
@@ -4954,11 +4955,11 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			}
 			
 			if (tokens.contains("{")) {
-				bInternalBlock = true;
+				iInternalBlock++;
 			}
 			
 			if (tokens.contains("}")) {
-				if (!bInternalBlock) {
+				if (iInternalBlock == 0) {
 					// the following checks must be in the order of inner most to outer most
 					if (bFuncBlock) {bFuncBlock = false;return "popscopefunc";} 
 					if (bInterfaceBlock) {bInterfaceBlock = false;return "popscopeinterface";}
@@ -4968,7 +4969,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						return "popscopeclass";
 					}
 				}
-				bInternalBlock = false; // otherwise ignore internal block
+				iInternalBlock--; // otherwise ignore internal block
 			}
 						
 			return "none";
@@ -5027,7 +5028,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		
 		public boolean preCompile(String filename,boolean bHeaders) {
 			indentionCount = 0;
-			bInternalBlock = false;
+			iInternalBlock = 0;
 			bClassBlock = false;
 			bInterfaceBlock = false;
 			bFuncBlock = false;
@@ -5223,7 +5224,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			if (bProcessHeaders) {
 				compilerFile.appendFile("");
 			}
-			bInternalBlock = false;
+			iInternalBlock = 0;
 			bClassBlock = false;
 			bInterfaceBlock = false;
 			bFuncBlock = false;
@@ -5361,7 +5362,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 						callTreeIDs.push(key);
 						
 						supportFunctions.displayMessageDialog(null,keys[i] + ":" + key + ":" + tmp1[0]);
-						//supportFunctions.displayMessageDialog(null,completeScope() + ":" + currentScope());
+						supportFunctions.displayMessageDialog(null,completeScope() + ":" + currentScope());
 					}
 				}
 
