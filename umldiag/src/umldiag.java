@@ -165,7 +165,7 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 	protected	static final String		containerClassesFilename = "containerclasses.dat";
 	protected	static final String		globalDataClass = "GlobalData";
 		
-	public		static final String		buildDate = "@@@Build Date: 24-August-2020 10:06 PM Build Number: 81@@@";
+	public		static final String		buildDate = "@@@Build Date: 30-August-2020 06:56 PM Build Number: 89@@@";
 	public		static final String		frameworkBuildDate="###JAVA Framework (Version 1.41-RC3)###";
 	public 		static final String		gitVersionInfo = "!!!Git Version : 32.9525510.refactor-dirty.2019-08-09.22:37:17!!!";
 
@@ -2459,6 +2459,9 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 		private String					usecaseDiagramTitle = "";
 		private String					sequenceDiagramTitle = "";
 		private	String					stateDiagramTitle = "";
+
+		private panelDialog				sequenceDlg = null;
+		private panelDialog				stateDlg = null;
 		
 		umlDiagramStruct() {
 			reset();
@@ -3479,36 +3482,99 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 				}
 			}
 		}
-		public void generateSequenceXMLData() {
+		public void generateSequenceDlg() {
+			JPanel p = new JPanel();
+			Choice sequenceClassNames = new Choice();
+			Choice sequenceFunctionNames = new Choice();
 			ArrayList<String> classNames = umlDiagram.getUMLCallingTree().getNodesByKey(
 				umlDiagram.getUMLCallingTree().getRoot(),"class");
+			JButton but = new JButton("Generate");
 
-			/*
-			Vector v = getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence);
-			String sequenceConnTypes = "";
-			int ii = 0;
-			for (UMLConnectorType p : UMLConnectorType.values()) {
-				if (p.type() == dcTypeUMLSequence) {
-					if (ii != 0) {sequenceConnTypes = sequenceConnTypes + ",";ii++;}
-					//sequenceConnTypes = sequenceConnTypes + p.description();					
-					sequenceConnTypes = sequenceConnTypes + p;	// just p, so we can use valueOf with the text to get an enum instance				
-				}
-			}
-			String sequenceNames = notConnectedString;
-			for(int i=0;i<v.size();i++) {
-				UMLSequenceDrawingItem d = (UMLSequenceDrawingItem)v.elementAt(i);
-				sequenceNames = sequenceNames + "," + d.getUserDefinedName();
-			}
-			String[] titles = new String[]{"Name","Description","Type","Connection","Connection Type"};			
-			String[] defaults = new String[] {"","",getEnumValues(sequenceType.NONE),sequenceNames,sequenceConnTypes};
-			String[] data = supportFunctions.getDataAsDialog("Add UML Sequence",titles,defaults);
-			if (data != null) {
-				addSequence1(String name,String desc,String type,String conn,String conntype);
-			}
-			*/
+			sequenceClassNames.addItemListener(
+				new ItemListener() {
+					public void itemStateChanged(ItemEvent evt) {
+						if (evt.getStateChange() == ItemEvent.SELECTED) {
+
+						}
+					}
+			});
+			but.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						String s = sequenceClassNames.getSelectedItem();
+						
+						/*
+						Vector v = getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence);
+						String sequenceConnTypes = "";
+						int ii = 0;
+						for (UMLConnectorType p : UMLConnectorType.values()) {
+							if (p.type() == dcTypeUMLSequence) {
+								if (ii != 0) {sequenceConnTypes = sequenceConnTypes + ",";ii++;}
+								//sequenceConnTypes = sequenceConnTypes + p.description();					
+								sequenceConnTypes = sequenceConnTypes + p;	// just p, so we can use valueOf with the text to get an enum instance				
+							}
+						}
+						String sequenceNames = notConnectedString;
+						for(int i=0;i<v.size();i++) {
+							UMLSequenceDrawingItem d = (UMLSequenceDrawingItem)v.elementAt(i);
+							sequenceNames = sequenceNames + "," + d.getUserDefinedName();
+						}
+						String[] titles = new String[]{"Name","Description","Type","Connection","Connection Type"};			
+						String[] defaults = new String[] {"","",getEnumValues(sequenceType.NONE),sequenceNames,sequenceConnTypes};
+						String[] data = supportFunctions.getDataAsDialog("Add UML Sequence",titles,defaults);
+						if (data != null) {
+							addSequence1(String name,String desc,String type,String conn,String conntype);
+						}
+						*/
+						
+						umlDiagram.processSequenceDrawingItems();
+						umlDiagram.processSequenceCordData(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence));
+						umlDiagram.processSequenceConnectors(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence));
+
+						getDrawingCanvas().repaint();
+					}
+			});
+
+			p.add(sequenceClassNames);
+			p.add(sequenceFunctionNames);
+			p.add(but);
+
+			umlDiagram.sequenceDlg = supportFunctions.displayPanelDialog(null,p,"Sequence Diagram Controller",false);
 		}
-		public void generateStateXMLData() {
-			
+		public void generateStateDlg() {
+			JPanel p = new JPanel();
+			Choice stateClassNames = new Choice();
+			Choice stateFunctionNames = new Choice();
+			ArrayList<String> classNames = umlDiagram.getUMLCallingTree().getNodesByKey(
+				umlDiagram.getUMLCallingTree().getRoot(),"class");
+			JButton but = new JButton("Generate");
+
+			stateClassNames.addItemListener(
+				new ItemListener() {
+					public void itemStateChanged(ItemEvent evt) {
+						if (evt.getStateChange() == ItemEvent.SELECTED) {
+
+						}
+					}
+			});
+			but.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						String s = stateClassNames.getSelectedItem();
+
+						umlDiagram.processStateDrawingItems();
+						umlDiagram.processStateCordData(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLState));
+						umlDiagram.processStateConnectors(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLState));
+
+						getDrawingCanvas().repaint();
+					}
+			});
+
+			p.add(stateClassNames);
+			p.add(stateFunctionNames);
+			p.add(but);
+
+			umlDiagram.sequenceDlg = supportFunctions.displayPanelDialog(null,p,"State Diagram Controller",false);
 		}
 		public void processStateConnectors(Vector v) {
 			umlDiagram.deleteConnectorsOfType(UMLConnectorType.STATESTART);
@@ -3990,7 +4056,19 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
   	    		if (sdt.equals(dt.getDescription())) {
   	    			umlDiagram.setDiagramType(dt);
   	    		}
-  	    	}
+			}
+
+			if (umlDiagram.sequenceDlg != null) {
+				umlDiagram.sequenceDlg.destory();
+				umlDiagram.sequenceDlg.dispose();
+			}
+			if (umlDiagram.stateDlg != null) {
+				umlDiagram.stateDlg.destory();
+				umlDiagram.stateDlg.dispose();
+			}
+			if (sdt.equals("Sequence Diagram")) {umlDiagram.generateSequenceDlg();}
+			if (sdt.equals("State Diagram")) {umlDiagram.generateStateDlg();}
+
   	    	if (!umlDiagram.isDiagramLoaded()) {
 				int resp = JOptionPane.showConfirmDialog(null,"No Diagram Loaded, create Default Diagram",systemUserReg.getAppName(),JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
 				if (resp == JOptionPane.YES_OPTION) {
@@ -4371,14 +4449,14 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			msgD.setText("Processing Packages");
 			umlDiagram.processPackages(getDrawingCanvas().getDrawingItemsOfType(dcTypeUML));
 
-			umlDiagram.setDiagramType(UMLDiagramType.SEQUENCE);
-			msgD.setText("Processing Sequence DIs");
-			umlDiagram.generateSequenceXMLData();
-			umlDiagram.processSequenceDrawingItems();
-			msgD.setText("Processing Sequence Coordinate Data");
-			umlDiagram.processSequenceCordData(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence));
-			msgD.setText("Processing UML Sequence Connectors");
-			umlDiagram.processSequenceConnectors(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence));
+			//umlDiagram.setDiagramType(UMLDiagramType.SEQUENCE);
+			//msgD.setText("Processing Sequence DIs");
+			//umlDiagram.generateSequenceXMLData();
+			//umlDiagram.processSequenceDrawingItems();
+			//msgD.setText("Processing Sequence Coordinate Data");
+			//umlDiagram.processSequenceCordData(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence));
+			//msgD.setText("Processing UML Sequence Connectors");
+			//umlDiagram.processSequenceConnectors(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLSequence));
 			
 			umlDiagram.setDiagramType(UMLDiagramType.USECASE);
 			msgD.setText("Processing Use Case DIs");
@@ -4388,14 +4466,14 @@ public class umldiag extends JApplet implements ChangeListener,Runnable
 			msgD.setText("Processing UML Use Case Connectors");
 			umlDiagram.processUseCaseConnectors(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLUseCase));
 
-			umlDiagram.setDiagramType(UMLDiagramType.STATE);
-			msgD.setText("Processing State DIs");
-			umlDiagram.generateStateXMLData();
-			umlDiagram.processStateDrawingItems();
-			msgD.setText("Processing State Coordinate Data");
-			umlDiagram.processStateCordData(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLState));
-			msgD.setText("Processing UML State Connectors");
-			umlDiagram.processStateConnectors(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLState));
+			//umlDiagram.setDiagramType(UMLDiagramType.STATE);
+			//msgD.setText("Processing State DIs");
+			//umlDiagram.generateStateXMLData();
+			//umlDiagram.processStateDrawingItems();
+			//msgD.setText("Processing State Coordinate Data");
+			//umlDiagram.processStateCordData(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLState));
+			//msgD.setText("Processing UML State Connectors");
+			//umlDiagram.processStateConnectors(getDrawingCanvas().getDrawingItemsOfType(dcTypeUMLState));
 
 			umlDiagram.setDiagramType(UMLDiagramType.CLASS); // set default diagram type
 			updateDiagramSheetText();
