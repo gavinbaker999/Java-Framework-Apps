@@ -1657,6 +1657,12 @@ createConnector((drawingItem)selectedDrawingItems.elementAt(0),(drawingItem)sele
 		  public int countDrawingItemsOfType(int type) {
 			return getDrawingItemsOfType(type).size();
 		  }
+		  public void deleteDrawingItemsOfType(int type) {
+			for (int i=0;i<drawingItems.size();i++) {
+				drawingItem d = (drawingItem)drawingItems.elementAt(i);
+				if (d.getType() == type) {deleteDrawingItem(d);}
+			}
+		  }
 		  public Vector getDrawingItemsOfType(int type) {
 			Vector v = new Vector();
 			
