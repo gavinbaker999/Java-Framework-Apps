@@ -39,12 +39,12 @@ import org.xml.sax.helpers.*;
 
 import javax.script.*;
 import javax.swing.filechooser.*;
-import javax.xml.ws.*;
-import javax.xml.ws.handler.*;
-import javax.xml.ws.handler.soap.*;
-import javax.xml.soap.*;
+//import javax.xml.ws.*;
+//import javax.xml.ws.handler.*;
+//import javax.xml.ws.handler.soap.*;
+//import javax.xml.soap.*;
 import javax.xml.namespace.QName;
-import javax.xml.ws.handler.Handler;
+//import javax.xml.ws.handler.Handler;
 //import javax.xml.messaging.*;
 import javax.xml.xpath.XPath; 
 import javax.xml.xpath.XPathConstants; 
@@ -62,7 +62,7 @@ import javax.xml.stream.util.XMLEventAllocator;
 import javax.xml.transform.Source;
 
 import javax.sound.sampled.*;
-import sun.audio.*;
+//import sun.audio.*;
 
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
@@ -78,7 +78,7 @@ import javax.imageio.plugins.bmp.*;
 import javax.imageio.spi.*;
 import javax.imageio.stream.*;
 import javax.imageio.*;
-import javax.activation.URLDataSource.*;
+//import javax.activation.URLDataSource.*;
 
 import java.awt.geom.Point2D.*;
 import javax.swing.text.*;
@@ -113,7 +113,8 @@ import javax.naming.*;
 		private int charWidth = 8;
 		private int charHeight = 14;
 
-		private	float	fScalingFactor = 1;
+		   private Timer 	animateTimer = null;
+		   private	float	fScalingFactor = 1;
 		   private JList 	GCSheets = null;
 		   protected int	canvasMaxX,canvasMaxY;
 		   private boolean	gridVisible,dcFilled,dcOutline;
@@ -181,6 +182,31 @@ import javax.naming.*;
 		   public void zoomOut(float step){fScalingFactor = fScalingFactor - step;}
 		   public float zoomFactor() {return fScalingFactor;}
 		   
+		   public void startAnimate(String tag,int fps) {
+				for (int i=0;i<drawingItems.size();i++) {
+					drawingItem d = (drawingItem)drawingItems.elementAt(i);
+					if (d.canAnimate() && tag.equals(d.getAnimateTagName())) {
+						d.startAnimation();
+					}
+				}
+				ActionListener task = new ActionListener() {
+					public void actionPerformed(ActionEvent evt) {
+						paint();
+					}
+				};
+				animateTimer = new Timer(fps,task);    
+						animateTimer.start();
+			}
+			public void stopAnimate(String tag) {
+				for (int i=0;i<drawingItems.size();i++) {
+					drawingItem d = (drawingItem)drawingItems.elementAt(i);
+					if (d.canAnimate() && tag.equals(d.getAnimateTagName())) {
+						d.stopAnimation();
+					}
+				}
+				animateTimer.stop();
+			}
+
 			  public String[] getUserDefinedIDs(Vector drawingItems) {
 				  String[] data = new String[drawingItems.size()];
 				  for (int i=0;i<drawingItems.size();i++) {

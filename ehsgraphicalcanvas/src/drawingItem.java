@@ -123,6 +123,14 @@ public abstract class drawingItem extends Component {
 	  protected	Rectangle rcLastPos;
 	  protected	String userDefinedName = "";
 	  protected 	int			iSheet;
+	  protected boolean animate = false;
+	  public String animateTagName = "";
+
+	  public String getAnimateTagName() {return animateTagName;} // placeholder function
+	  public void setAnimateTagName(String tag) {animateTagName = tag;} // placeholder function
+	  public void startAnimate() {} // placeholder function
+	  public void stopAnimate() {} // placeholder function
+	  public boolean canAnimate() {return animate;} // placeholder function
 
 	  public boolean canDelete() {return true;}
 	  public void delete() {;}
