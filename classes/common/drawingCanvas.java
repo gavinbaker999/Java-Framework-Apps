@@ -113,7 +113,7 @@ import javax.naming.*;
 		private int charWidth = 8;
 		private int charHeight = 14;
 
-		   private Timer 	animateTimer = null;
+		   public	Map<String,Timer>		animateTimerMap = new HashMap<String,Timer>();
 		   private	float	fScalingFactor = 1;
 		   private JList 	GCSheets = null;
 		   protected int	canvasMaxX,canvasMaxY;
@@ -194,8 +194,9 @@ import javax.naming.*;
 						paint();
 					}
 				};
-				animateTimer = new Timer(fps,task);    
-						animateTimer.start();
+				Timer t = new Timer(fps,task);
+				animateTimerMap.put(tag,t);    
+				t.start();
 			}
 			public void stopAnimate(String tag) {
 				for (int i=0;i<drawingItems.size();i++) {
@@ -204,7 +205,8 @@ import javax.naming.*;
 						d.stopAnimation();
 					}
 				}
-				animateTimer.stop();
+				Timer t = animateTimerMap.get(tag);
+				if (t != null ) {t.stop();}
 			}
 
 			  public String[] getUserDefinedIDs(Vector drawingItems) {
