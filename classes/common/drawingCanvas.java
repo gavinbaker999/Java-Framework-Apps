@@ -206,7 +206,10 @@ import javax.naming.*;
 					}
 				}
 				Timer t = animateTimerMap.get(tag);
-				if (t != null ) {t.stop();}
+				if (t != null ) {
+					animateTimerMap.put(tag,(Timer)null);    
+					t.stop();
+				}
 			}
 
 			  public String[] getUserDefinedIDs(Vector drawingItems) {
